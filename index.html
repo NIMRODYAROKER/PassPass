@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261111153216">
+<meta name="build" content="20261111153511">
 <meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
@@ -288,7 +288,9 @@ svg{display:block}
 .pass-top,.turn-top{display:flex;flex-direction:column;align-items:center}
 .turn-top .who{font-size:clamp(2rem,9vw,2.6rem)!important}
 .g-top .rules{justify-content:center;margin:6px 0 0}
-.game .stage{flex:none;height:clamp(240px,36dvh,330px);display:flex;flex-direction:column}
+.game .stage{display:flex;flex-direction:column;min-height:0;transition:flex .45s var(--ease)}
+.game.mode-pass .stage{flex:.7 1 130px}
+.game.mode-turn .stage{flex:0 0 clamp(240px,36dvh,330px)}
 .sticker{
   font-family:var(--fun);font-size:1.2rem;background:var(--paper);color:var(--ink);padding:5px 16px 3px;border-radius:10px;
   border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg);margin-bottom:6px;animation:wobble 1.8s ease-in-out infinite;
@@ -388,7 +390,7 @@ svg{display:block}
 .game .pass .end-joint{height:42px;margin-top:6px}
 .game .sticker{margin-bottom:2px}
 .game .g-top .who{font-size:clamp(2.3rem,11vw,3.2rem);line-height:1.05}
-.game .g-top p{font-size:.92rem;margin-bottom:6px}
+.game .g-top p{font-size:.92rem;margin-bottom:0!important}
 .game .card-wrap{min-height:170px;margin-bottom:8px}
 .game .face{padding:14px 16px}
 .game .ctext{font-size:clamp(1.25rem,5.6vw,1.65rem);padding:6px 0}
@@ -512,7 +514,7 @@ svg{display:block}
   </section>
 
   <!-- ========== מסך המשחק: שולחן למעלה, קלף למטה ========== -->
-  <section class="screen game" id="game">
+  <section class="screen game mode-pass" id="game">
     <!-- למעלה: הטקסט (מי מקבל עכשיו / של מי התור) והחוקים -->
     <div class="g-top">
       <div class="pass-top" id="pass-top" aria-live="polite">
@@ -1009,6 +1011,7 @@ function refreshTable(){
 /* מצב העברה */
 function toPass(){
   refreshTable(); renderRules();
+  $("#game").classList.add("mode-pass"); $("#game").classList.remove("mode-turn");
   $("#turn").style.display="none"; $("#pass").style.display="flex"; $("#turn-top").style.display="none"; $("#pass-top").style.display="flex";
   const n=$("#pass-name"); n.textContent=current().name; n.style.animation="none"; n.offsetWidth; n.style.animation="";
   vibrate(50);
@@ -1029,6 +1032,7 @@ function drawCard(){
   $("#done-label").textContent=c.k==="r"?"קיבלנו, להעביר":"עשיתי, להעביר";
   $("#skip-btn").style.display=c.k==="r"?"none":"";
   $("#card").classList.remove("flipped"); $("#actions").classList.remove("show");
+  $("#game").classList.add("mode-turn"); $("#game").classList.remove("mode-pass");
   $("#pass").style.display="none"; $("#turn").style.display="flex"; $("#pass-top").style.display="none"; $("#turn-top").style.display="flex"; $("#turn-name").textContent=current().name;
 }
 function flipCard(){
