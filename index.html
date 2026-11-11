@@ -270,7 +270,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{margin:0 auto 38px;flex:none}
+.game .table{margin:40px auto 40px;flex:none}
 #setup .pad-top{flex:.6 1 0;min-height:0;max-height:64px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
@@ -281,19 +281,25 @@ svg{display:block}
 .rule b{font-family:var(--fun);font-weight:400;font-size:.72rem;margin-left:6px}
 
 .stage{flex:1;display:flex;flex-direction:column}
-.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0}
+.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 0 10%}
+/* מבנה מסך המשחק: טקסט למעלה (גמיש), שולחן באמצע, אזור תחתון בגובה קבוע – כך השולחן לא זז בין ההעברה לקלף */
+.g-top{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:6px}
+.pass-top,.turn-top{display:flex;flex-direction:column;align-items:center}
+.turn-top .who{font-size:clamp(2rem,9vw,2.6rem)!important}
+.g-top .rules{justify-content:center;margin:6px 0 0}
+.game .stage{flex:none;height:clamp(250px,38dvh,340px);display:flex;flex-direction:column}
 .sticker{
   font-family:var(--fun);font-size:1.2rem;background:var(--paper);color:var(--ink);padding:5px 16px 3px;border-radius:10px;
   border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg);margin-bottom:6px;animation:wobble 1.8s ease-in-out infinite;
 }
 @keyframes wobble{50%{transform:rotate(4deg) scale(1.06)}}
-.pass .to{color:var(--muted);font-weight:700}
-.pass .who{
+.g-top .to{color:var(--muted);font-weight:700}
+.g-top .who{
   font-family:var(--display);font-size:clamp(2.8rem,14vw,3.8rem);line-height:1.1;margin:0 0 2px;word-break:break-word;
   color:var(--ember);text-shadow:4px 4px 0 var(--ink);animation:smokeIn .8s var(--bounce);
 }
 @keyframes smokeIn{from{opacity:0;filter:blur(12px);transform:scale(.8)}to{opacity:1;filter:none;transform:none}}
-.pass p{color:var(--muted);max-width:290px;margin-bottom:10px;line-height:1.35}
+.g-top p{color:var(--muted);max-width:290px;margin-bottom:10px;line-height:1.35}
 .pass .btn{width:100%;max-width:340px}
 
 /* ========== קלף ========== */
@@ -380,14 +386,14 @@ svg{display:block}
 .game .btn{height:50px}
 .game .pass .end-joint{height:42px;margin-top:6px}
 .game .sticker{margin-bottom:2px}
-.game .pass .who{font-size:clamp(2.3rem,11vw,3.2rem);line-height:1.05}
-.game .pass p{font-size:.92rem;margin-bottom:6px}
+.game .g-top .who{font-size:clamp(2.3rem,11vw,3.2rem);line-height:1.05}
+.game .g-top p{font-size:.92rem;margin-bottom:6px}
 .game .card-wrap{min-height:170px;margin-bottom:8px}
 .game .face{padding:14px 16px}
 .game .ctext{font-size:clamp(1.25rem,5.6vw,1.65rem);padding:6px 0}
 /* טלפונים נמוכים: מקטינים קצת כדי שהכול ייכנס בלי גלילה */
 @media (max-height:780px){
-  .game .pass p{font-size:.85rem;margin-bottom:4px;line-height:1.25}
+  .game .g-top p{font-size:.85rem;margin-bottom:4px;line-height:1.25}
   .game .sticker{font-size:.9rem;padding:3px 12px 1px}
   .title{font-size:clamp(1.75rem,8vw,2.3rem)}
   .lead{font-size:.92rem}
@@ -395,9 +401,9 @@ svg{display:block}
   .opt{padding:5px 10px}
   .opt .ic{width:38px;height:38px}
   .table{margin:40px auto 40px}
-  .game .table{margin-bottom:32px}
-  .pass .who{font-size:clamp(2.3rem,11vw,3.1rem)}
-  .pass p{font-size:.92rem;margin-bottom:6px}
+  .game .table{margin:36px auto 36px}
+  .g-top .who{font-size:clamp(2.3rem,11vw,3.1rem)}
+  .g-top p{font-size:.92rem;margin-bottom:6px}
   .sticker{font-size:1rem;margin-bottom:4px}
   .pass .end-joint{height:42px;margin-top:6px}
   .card-wrap{min-height:190px}
@@ -406,6 +412,7 @@ svg{display:block}
   .podium{height:min(160px,17dvh)}
 }
 @media (max-height:690px){
+  .game .g-top p{display:none}
   .lead{display:none}
   .eyebrow{margin:4px 0 4px}
   .table{margin:36px auto 36px}
@@ -504,18 +511,28 @@ svg{display:block}
 
   <!-- ========== מסך המשחק: שולחן למעלה, קלף למטה ========== -->
   <section class="screen game" id="game">
-    <div class="table" id="game-table"></div>
-    <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
-
-    <div class="stage">
-      <!-- מצב א: העברת הטלפון -->
-      <div class="pass" id="pass" aria-live="polite">
+    <!-- למעלה: הטקסט (מי מקבל עכשיו / של מי התור) והחוקים -->
+    <div class="g-top">
+      <div class="pass-top" id="pass-top" aria-live="polite">
         <span class="sticker" dir="ltr">PASS!</span>
         <span class="to">הטלפון והג'וינט עוברים אל</span>
-        <div class="who-row">
-          <div class="who" id="pass-name">—</div>
-        </div>
+        <div class="who" id="pass-name">—</div>
         <p>רק כשהטלפון והג'וינט אצלך ביד – לוחצים. בלי להציץ.</p>
+      </div>
+      <div class="turn-top" id="turn-top" style="display:none">
+        <span class="to">התור של</span>
+        <div class="who" id="turn-name">—</div>
+      </div>
+      <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
+    </div>
+
+    <!-- באמצע: השולחן -->
+    <div class="table" id="game-table"></div>
+
+    <!-- למטה: כפתורים או קלף -->
+    <div class="stage">
+      <!-- מצב א: העברת הטלפון -->
+      <div class="pass" id="pass">
         <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
         <button class="btn btn-line end-joint" id="joint-out">נגמר הג'וינט · סיימנו לשחק</button>
       </div>
@@ -980,7 +997,7 @@ function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
   spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
-  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); placeGameTable(); toPass();
+  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
 }
 function refreshTable(){
   const cur=state.order[state.idx], nxt=state.order[(state.idx+1)%state.order.length];
@@ -990,7 +1007,7 @@ function refreshTable(){
 /* מצב העברה */
 function toPass(){
   refreshTable(); renderRules();
-  $("#turn").style.display="none"; $("#pass").style.display="flex";
+  $("#turn").style.display="none"; $("#pass").style.display="flex"; $("#turn-top").style.display="none"; $("#pass-top").style.display="flex";
   const n=$("#pass-name"); n.textContent=current().name; n.style.animation="none"; n.offsetWidth; n.style.animation="";
   vibrate(50);
 }
@@ -1010,7 +1027,7 @@ function drawCard(){
   $("#done-label").textContent=c.k==="r"?"קיבלנו, להעביר":"עשיתי, להעביר";
   $("#skip-btn").style.display=c.k==="r"?"none":"";
   $("#card").classList.remove("flipped"); $("#actions").classList.remove("show");
-  $("#pass").style.display="none"; $("#turn").style.display="flex";
+  $("#pass").style.display="none"; $("#turn").style.display="flex"; $("#pass-top").style.display="none"; $("#turn-top").style.display="flex"; $("#turn-name").textContent=current().name;
 }
 function flipCard(){
   if($("#card").classList.contains("flipped")) return;
