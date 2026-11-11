@@ -245,7 +245,7 @@ svg{display:block}
 .pass{position:relative}
 .who-row{position:relative;align-self:stretch}
 .side-note{
-  position:absolute;z-index:2;left:-12px;top:50%;width:104px;margin-top:-30px;transform:rotate(-7deg);
+  position:relative;z-index:2;width:118px;margin:8px 4px 0 0;transform:rotate(-5deg);
   background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
   font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.3rem;line-height:1;text-align:center;padding:9px 6px 6px;
   animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
@@ -270,7 +270,8 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{margin:0 auto 42px;flex:none}
+.game .table{margin:46px auto 40px;flex:none}
+#setup{padding-top:clamp(6px,3dvh,26px)}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -383,7 +384,7 @@ svg{display:block}
   .opt{padding:5px 10px}
   .opt .ic{width:38px;height:38px}
   .table{margin:40px auto 40px}
-  .game .table{margin-bottom:36px}
+  .game .table{margin:42px auto 34px}
   .pass .who{font-size:clamp(2.3rem,11vw,3.1rem)}
   .pass p{font-size:.92rem;margin-bottom:6px}
   .sticker{font-size:1rem;margin-bottom:4px}
@@ -394,6 +395,7 @@ svg{display:block}
   .podium{height:min(160px,17dvh)}
 }
 @media (max-height:690px){
+  #setup{padding-top:0}
   .lead{display:none}
   .eyebrow{margin:4px 0 4px}
   .table{margin:36px auto 36px}
@@ -493,6 +495,7 @@ svg{display:block}
   <section class="screen game" id="game">
     <div class="gbar">
       <span class="rd" id="g-round">סבב <b>1</b></span>
+      <div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
     </div>
     <div class="table" id="game-table"></div>
     <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
@@ -504,7 +507,6 @@ svg{display:block}
         <span class="to">הטלפון והג'וינט עוברים אל</span>
         <div class="who-row">
           <div class="who" id="pass-name">—</div>
-          <div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
         </div>
         <p>רק כשהטלפון והג'וינט אצלך ביד – לוחצים. בלי להציץ.</p>
         <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
@@ -971,7 +973,7 @@ function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
   spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
-  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); placeGameTable(); toPass();
+  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
 }
 function refreshTable(){
   const cur=state.order[state.idx], nxt=state.order[(state.idx+1)%state.order.length];
