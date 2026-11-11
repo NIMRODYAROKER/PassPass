@@ -239,10 +239,11 @@ svg{display:block}
 .rounds button[aria-pressed="true"]{background:var(--ember);color:var(--ink);transform:rotate(-4deg) translateY(-3px)}
 /* פתק בכתב יד בצד השם: "המשחק נגמר כשנגמר הג'וינט" */
 .pass{position:relative}
+.who-row{position:relative;align-self:stretch}
 .side-note{
-  position:absolute;z-index:2;left:-8px;top:calc(50% - 38px);width:100px;transform:rotate(-7deg);
+  position:absolute;z-index:2;left:-12px;top:50%;width:88px;margin-top:-32px;transform:rotate(-7deg);
   background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
-  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.35rem;line-height:1;text-align:center;padding:11px 8px 8px;
+  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.15rem;line-height:1;text-align:center;padding:9px 5px 6px;
   animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
 }
 .side-note::before{ /* סלוטייפ */
@@ -483,8 +484,10 @@ svg{display:block}
       <div class="pass" id="pass" aria-live="polite">
         <span class="sticker" dir="ltr">PASS!</span>
         <span class="to">הטלפון והג'וינט עוברים אל</span>
-        <div class="who" id="pass-name">—</div>
-        <div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
+        <div class="who-row">
+          <div class="who" id="pass-name">—</div>
+          <div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
+        </div>
         <p>רק כשהטלפון והג'וינט אצלך ביד – לוחצים. בלי להציץ.</p>
         <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
       </div>
