@@ -237,18 +237,19 @@ svg{display:block}
 .rounds b{font-family:var(--fun);font-weight:400;font-size:1.7rem;line-height:1.1}
 .rounds small{font-size:.76rem;font-weight:700;opacity:.8}
 .rounds button[aria-pressed="true"]{background:var(--ember);color:var(--ink);transform:rotate(-4deg) translateY(-3px)}
-/* פתק בכתב יד בצד השולחן: "המשחק נגמר כשנגמר הג'וינט" */
+/* פתק בכתב יד בצד השם: "המשחק נגמר כשנגמר הג'וינט" */
+.pass{position:relative}
 .side-note{
-  position:absolute;z-index:2;left:72%;top:132%;width:64%;transform:translate(-50%,-50%) rotate(-4deg);
+  position:absolute;z-index:2;left:-6px;top:calc(50% - 74px);width:106px;transform:rotate(-7deg);
   background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
-  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.45rem;line-height:1;text-align:center;padding:11px 10px 8px;
+  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.35rem;line-height:1;text-align:center;padding:11px 8px 8px;
   animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
 }
 .side-note::before{ /* סלוטייפ */
   content:"";position:absolute;top:-9px;left:50%;width:38px;height:15px;margin-left:-19px;transform:rotate(-4deg);
   background:rgba(246,241,231,.75);border:1.5px solid rgba(22,16,31,.35);
 }
-@keyframes noteSway{50%{transform:translate(-50%,-50%) rotate(-1.5deg)}}
+@keyframes noteSway{50%{transform:rotate(-3deg)}}
 /* כפתור "נגמר הג'וינט": מאפרה שמכבים בה את הג'וינט */
 .ash-btn{
   position:absolute;z-index:5;left:34%;top:64%;width:22%;transform:translate(-50%,-50%);
@@ -278,7 +279,9 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{width:min(60vw,240px);margin:32px auto 108px}
+.game .table{width:min(70vw,272px);margin:44px auto 54px}
+.game .table .rug{top:-15%;bottom:-15%}
+.game .tag{max-width:62px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -304,7 +307,7 @@ svg{display:block}
 .pass .btn{width:100%;max-width:340px}
 
 /* ========== קלף ========== */
-.card-wrap{perspective:1200px;flex:1;display:flex;min-height:300px;margin-bottom:16px}
+.card-wrap{perspective:1200px;flex:1;display:flex;min-height:250px;margin-bottom:14px}
 .card{position:relative;flex:1;transform-style:preserve-3d;transition:transform .75s var(--bounce)}
 .card.flipped{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px 20px;display:flex;flex-direction:column;overflow:hidden;border:var(--b);box-shadow:6px 6px 0 var(--ink)}
@@ -481,6 +484,7 @@ svg{display:block}
         <span class="sticker" dir="ltr">PASS!</span>
         <span class="to">הטלפון והג'וינט עוברים אל</span>
         <div class="who" id="pass-name">—</div>
+        <div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
         <p>רק כשהטלפון והג'וינט אצלך ביד – לוחצים. בלי להציץ.</p>
         <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
       </div>
@@ -842,13 +846,12 @@ function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   let html='<div class="rug"><i class="fr l"></i><i class="fr r"></i></div><div class="rail"></div><div class="felt"></div>'+DECO;
   if(!n){ el.innerHTML=html+'<div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
   list.forEach((p,i)=>{
-    const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46, RT=64;
+    const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=pointer?44:46, RT=pointer?57:64;
     const cls=i===current?" now":i===next?" next":"";
     html+=`<div class="seat${cls}" style="--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
     html+=`<span class="tag${i===current?" now":""}" style="left:${50+RT*c}%;top:${50+RT*sn}%">${esc(p.name)}</span>`;
   });
-  if(pointer) html+=`<div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
-    <button type="button" class="ash-btn" id="joint-out" aria-label="נגמר הג'וינט – סיום המשחק">
+  if(pointer) html+=`<button type="button" class="ash-btn" id="joint-out" aria-label="נגמר הג'וינט – סיום המשחק">
       <span class="ash">${ASHTRAY}</span><span class="lbl">נגמר הג'וינט</span>
     </button>`;
   if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
