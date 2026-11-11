@@ -93,7 +93,7 @@ svg{display:block}
 .lead{color:var(--muted);margin-bottom:16px}
 
 /* ========== השולחן – מגש עגול עם לבד ירוק ========== */
-.table{position:relative;width:min(80vw,290px);aspect-ratio:1;margin:14px auto 26px}
+.table{position:relative;width:min(72vw,270px);aspect-ratio:1;margin:40px auto 46px}
 .table .felt{
   position:absolute;inset:11%;border-radius:50%;
   background:
@@ -105,21 +105,30 @@ svg{display:block}
   box-shadow:0 0 0 8px var(--ember),0 0 0 12px var(--ink),9px 11px 0 12px var(--ink);
 }
 .table .felt::after{content:"";position:absolute;inset:13%;border-radius:50%;border:2.5px dashed rgba(246,241,231,.35)}
+/* דמות שיושבת ליד השולחן – מצוירת מלמעלה ופונה למרכז */
 .seat{
-  position:absolute;z-index:2;width:var(--sz,48px);height:var(--sz,48px);margin:calc(var(--sz,48px)/-2) 0 0 calc(var(--sz,48px)/-2);
-  border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:calc(var(--sz,48px)*.44);
-  background:var(--paper);color:var(--ink);border:var(--b);box-shadow:3px 3px 0 var(--ink);
-  transition:left .5s var(--ease),top .5s var(--ease),background .3s,transform .4s var(--bounce);
-  animation:pop .45s var(--bounce);
+  position:absolute;z-index:2;width:var(--sz);height:var(--sz);margin:calc(var(--sz)/-2) 0 0 calc(var(--sz)/-2);
+  animation:pop .5s var(--bounce) both;
 }
-.seat.now{background:var(--ember);transform:scale(1.22) rotate(-6deg);z-index:3}
-.seat.next{background:var(--paper);outline:3px dashed var(--ember);outline-offset:3px}
-.seat-label{
-  position:absolute;top:100%;margin-top:5px;font-family:"Assistant",sans-serif;font-size:.74rem;font-weight:800;
-  color:var(--text);text-shadow:1.5px 1.5px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink);
-  white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;
+.seat .fig{width:100%;height:100%;transform:rotate(var(--rot));transition:transform .4s var(--bounce)}
+.seat .fig svg{width:100%;height:100%;overflow:visible}
+/* הילה מתחת לדמות: ירוקה למי שתורו, מקווקוות לבא בתור */
+.seat::before{
+  content:"";position:absolute;inset:4%;border-radius:50%;background:var(--ember);border:3px solid var(--ink);
+  opacity:0;transform:scale(.5);transition:opacity .3s,transform .45s var(--bounce);
 }
-.seat.now .seat-label{transform:rotate(6deg) scale(.82)}
+.seat.now{z-index:3}
+.seat.now::before{opacity:1;transform:scale(1.12)}
+.seat.now .fig{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:rotate(var(--rot)) scale(1.1)}}
+.seat.next::before{opacity:1;background:transparent;border:3px dashed var(--ember);transform:scale(1.05)}
+/* תגית שם – תמיד ישרה, מחוץ לשולחן */
+.tag{
+  position:absolute;z-index:4;transform:translate(-50%,-50%);font-weight:800;font-size:.74rem;line-height:1.2;
+  background:var(--surface);color:var(--text);padding:3px 8px;border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--ink);
+  white-space:nowrap;max-width:84px;overflow:hidden;text-overflow:ellipsis;transition:background .3s,color .3s,transform .4s var(--bounce);
+}
+.tag.now{background:var(--ember);color:var(--ink);transform:translate(-50%,-50%) rotate(-4deg) scale(1.08)}
 .table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--text);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
 .pointer{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;transition:transform 1s var(--bounce)}
 .pointer svg{width:54%;overflow:visible;filter:drop-shadow(3px 3px 0 var(--ink))}
@@ -191,7 +200,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{width:min(66vw,240px);margin:18px auto 26px}
+.game .table{width:min(60vw,226px);margin:44px auto 44px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -665,16 +674,57 @@ const fx=(()=>{
    השולחן: מציב שחקנים במעגל ומסובב את הג'וינט
    ========================================================= */
 const JOINT=`<svg viewBox="0 0 120 40"><path d="M22 15 L100 11 Q106 20 100 29 L22 25 Z" fill="#f3efe6"/><path d="M8 15.5 L24 15 L24 25 L8 24.5 Q5 20 8 15.5Z" fill="#d9b886"/><circle class="tip" cx="103" cy="20" r="12" fill="url(#emberG)"/><ellipse cx="102.5" cy="20" rx="2.6" ry="7" fill="#ffc48a"/></svg>`;
+/* =========================================================
+   דמויות מצוירות מלמעלה – לכל שם דמות קבועה (לפי "חתימה" של השם)
+   הדמות מצוירת כשהיא פונה למעלה; מסובבים אותה כדי שתפנה לשולחן
+   ========================================================= */
+const SKIN=["#f7d9bd","#eec29a","#d39a6a","#a8704a","#7a4d33"];
+const HAIR=["#16101f","#4a2e1c","#8a5a2b","#d8a24a","#9c3b26","#f6f1e7"];
+const SHIRT=["#8fe35c","#f6f1e7","#fff3a8","#3d3258","#2f6e3c","#c7a6ff","#ff9f7a"];
+const STYLES=["short","bun","cap","long","beanie","curly"];
+function hashName(t){ let h=2166136261; for(const ch of t){ h^=ch.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; }
+function avatarSVG(name){
+  const h=hashName(name), pick=(arr,sh)=>arr[(h>>>sh)%arr.length];
+  const skin=pick(SKIN,0), hair=pick(HAIR,4), shirt=pick(SHIRT,8), style=pick(STYLES,12), hat=pick(["#8fe35c","#f6f1e7","#ff9f7a","#2f6e3c"],16);
+  const O='stroke="#16101f" stroke-width="3" stroke-linejoin="round"';
+  // ידיים מושטות לשולחן: קו מתאר כהה ואז צבע החולצה, ובקצה כף יד
+  const arm=(x1,x2)=>`<path d="M${x1} 8 Q${x1*1.05} -12 ${x2} -27" fill="none" stroke="#16101f" stroke-width="13" stroke-linecap="round"/>
+    <path d="M${x1} 8 Q${x1*1.05} -12 ${x2} -27" fill="none" stroke="${shirt}" stroke-width="7.5" stroke-linecap="round"/>
+    <circle cx="${x2}" cy="-29" r="5.2" fill="${skin}" stroke="#16101f" stroke-width="2.5"/>`;
+  let back="", top="";
+  if(style==="long")  back=`<ellipse cx="0" cy="14" rx="15" ry="15" fill="${hair}" ${O}/>`;
+  const capHair=`<path d="M-13.5 4 A13.5 13.5 0 1 0 13.5 4 Q13 -4 7 -6 Q0 -3 -7 -6 Q-13 -4 -13.5 4Z" fill="${hair}" stroke="#16101f" stroke-width="2.5"/>`;
+  if(style==="short"||style==="long") top=capHair;
+  if(style==="bun")   top=capHair+`<circle cx="0" cy="17" r="6.5" fill="${hair}" stroke="#16101f" stroke-width="2.5"/>`;
+  if(style==="curly") top=[[-8,6],[8,6],[0,12],[-10,-2],[10,-2],[0,2],[-5,-6],[5,-6]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="${hair}" stroke="#16101f" stroke-width="2"/>`).join("");
+  if(style==="cap")   top=`<ellipse cx="0" cy="-13" rx="10" ry="6" fill="${hat}" stroke="#16101f" stroke-width="2.5"/><circle cx="0" cy="3" r="13" fill="${hat}" stroke="#16101f" stroke-width="2.5"/><circle cx="0" cy="3" r="2.2" fill="#16101f"/>`;
+  if(style==="beanie")top=`<circle cx="0" cy="3" r="13.5" fill="${hat}" stroke="#16101f" stroke-width="2.5"/><path d="M-12 -2 Q0 -6 12 -2" fill="none" stroke="#16101f" stroke-width="2"/><circle cx="0" cy="5" r="4.5" fill="#f6f1e7" stroke="#16101f" stroke-width="2"/>`;
+  return `<svg viewBox="-40 -40 80 80" aria-hidden="true">
+    <ellipse cx="3" cy="10" rx="33" ry="17" fill="#16101f" opacity=".45"/>
+    ${arm(-24,-15)}${arm(24,15)}
+    <rect x="-30" y="-1" width="60" height="25" rx="12.5" fill="${shirt}" ${O}/>
+    ${back}
+    <circle cx="-13.5" cy="2" r="3.6" fill="${skin}" stroke="#16101f" stroke-width="2"/>
+    <circle cx="13.5" cy="2" r="3.6" fill="${skin}" stroke="#16101f" stroke-width="2"/>
+    <circle cx="0" cy="2" r="14" fill="${skin}" ${O}/>
+    <ellipse cx="0" cy="-12.5" rx="2.6" ry="2.2" fill="${skin}" stroke="#16101f" stroke-width="1.6"/>
+    ${top}
+  </svg>`;
+}
+
 function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   const list=state.order.length&&pointer ? state.order.map(i=>state.players[i]) : state.players;
   const n=list.length;
   if(!n){ el.innerHTML='<div class="felt"></div><div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
-  const sz=n<=6?50:n<=9?42:36;
+  const sz=n<=6?66:n<=9?54:44;
   let html='<div class="felt"></div>';
   list.forEach((p,i)=>{
-    const a=(-90+i*360/n)*Math.PI/180, R=46;  // אחוז מהרדיוס
+    const deg=-90+i*360/n, a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46;
     const cls=i===current?" now":i===next?" next":"";
-    html+=`<div class="seat${cls}" style="--sz:${sz}px;left:${50+R*Math.cos(a)}%;top:${50+R*Math.sin(a)}%">${esc(p.name.trim().charAt(0))}<span class="seat-label">${esc(p.name)}</span></div>`;
+    html+=`<div class="seat${cls}" style="--sz:${sz}px;--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
+    // תגית שם מחוץ לשולחן, מאחורי הדמות
+    const off=sz/2+14;
+    html+=`<span class="tag${i===current?" now":""}" style="left:calc(50% + (${R}% + ${off}px) * ${c.toFixed(4)});top:calc(50% + (${R}% + ${off}px) * ${sn.toFixed(4)})">${esc(p.name)}</span>`;
   });
   if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
   el.innerHTML=html;
