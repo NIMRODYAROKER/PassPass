@@ -3,26 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1e231f">
-<title>סבב | משחק להעביר הלאה</title>
+<meta name="theme-color" content="#2b2340">
+<title>PassPass | מעבירים את הטלפון, ממשיכים את הסבב</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Bungee&family=Secular+One&display=swap" rel="stylesheet">
 <style>
 /* ========== משתני עיצוב: גוונים מעושנים וחמים, הדגשה אחת – גחלת ========== */
 :root{
-  --bg:#1e231f;          /* ירוק-אפור מעושן, לא שחור */
-  --bg-2:#252b26;
-  --surface:#2c332d;
-  --surface-2:#353d36;
-  --line:#465047;
-  --text:#f3efe6;        /* קרם חם */
-  --muted:#b0b4a8;
-  --ember:#ff8a3d;       /* צבע ההדגשה היחיד */
-  --ember-soft:rgba(255,138,61,.14);
-  --ink:#1a1d19;
-  --paper:#efe9dc;       /* נייר גלגול */
-  --paper-line:#ddd5c3;
+  --bg:#2b2340;          /* סגול מעושן – Purple Haze */
+  --bg-2:#332a4a;
+  --surface:#3b3155;
+  --surface-2:#463b63;
+  --line:#5c4f7c;
+  --text:#f6f1e7;        /* קרם חם */
+  --muted:#c2b8d8;
+  --ember:#8fe35c;       /* ירוק עלה – צבע ההדגשה (שם המשתנה נשאר) */
+  --ember-soft:rgba(143,227,92,.16);
+  --fire:#ff8a3d;        /* כתום – רק לגחלת ולניצוצות */
+  --ink:#1d1430;
+  --paper:#f3ecdc;       /* נייר גלגול */
+  --paper-line:#e0d6c0;
   --danger:#ff7a6b;
   --ease:cubic-bezier(.2,.8,.2,1);
   --safe-b:env(safe-area-inset-bottom,0px);
@@ -39,14 +40,18 @@ body{
 body::before{
   content:"";position:fixed;inset:0;z-index:-2;
   background:
-    radial-gradient(70% 50% at 50% 0%,rgba(243,239,230,.07),transparent 70%),
-    radial-gradient(60% 40% at 50% 100%,rgba(255,138,61,.06),transparent 70%),
+    radial-gradient(70% 45% at 80% 0%,rgba(190,140,255,.22),transparent 70%),
+    radial-gradient(60% 40% at 0% 60%,rgba(143,227,92,.08),transparent 70%),
+    radial-gradient(70% 45% at 50% 110%,rgba(255,138,61,.10),transparent 70%),
     var(--bg);
 }
 body::after{
   content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.08;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+.leaves{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.leaves svg{position:absolute;color:var(--ember);opacity:.07;animation:drift var(--d) ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateY(0) rotate(var(--r0))}to{transform:translate(var(--dx),-50px) rotate(var(--r1))}}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 input{font:inherit;color:inherit}
@@ -67,8 +72,8 @@ svg{display:block}
 }
 .btn svg{width:20px;height:20px}
 .btn:active{transform:scale(.97)}
-.btn-primary{background:var(--ember);color:var(--ink);box-shadow:0 8px 24px -10px rgba(255,138,61,.7)}
-.btn-primary:hover{background:#ff9a55}
+.btn-primary{background:var(--ember);color:var(--ink);box-shadow:0 8px 24px -10px rgba(143,227,92,.75)}
+.btn-primary:hover{background:#a3ef72}
 .btn-primary:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
 .btn-line{border:1.5px solid var(--line);background:transparent}
 .btn-line:hover{border-color:var(--text)}
@@ -79,9 +84,12 @@ svg{display:block}
 
 /* ========== כותרת עליונה ========== */
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.wordmark{font-family:var(--display);font-size:1.6rem;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
-.wordmark i{width:9px;height:9px;border-radius:50%;background:var(--ember);box-shadow:0 0 12px var(--ember);animation:glow 2.4s ease-in-out infinite}
-@keyframes glow{50%{opacity:.5;box-shadow:0 0 4px var(--ember)}}
+/* לוגו: Pass + עלה + Pass, בסגנון מדבקה */
+.wordmark{font-family:"Bungee",var(--display);font-size:1.45rem;display:flex;align-items:center;gap:4px;direction:ltr;transform:rotate(-3deg)}
+.wordmark b{font-weight:400;text-shadow:3px 3px 0 var(--ink)}
+.wordmark b+svg+b{color:var(--ember)}
+.wordmark svg{width:24px;height:24px;color:var(--ember);animation:spinleaf 6s ease-in-out infinite}
+@keyframes spinleaf{50%{transform:rotate(25deg) scale(1.1)}}
 .steps{display:flex;gap:6px}
 .steps span{width:22px;height:4px;border-radius:2px;background:var(--line);transition:background .3s,width .3s}
 .steps span.on{background:var(--ember);width:34px}
@@ -190,6 +198,12 @@ svg{display:block}
 .stage{flex:1;display:flex;flex-direction:column}
 .pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 0}
 .pass .to{color:var(--muted);font-weight:700}
+.sticker{
+  font-family:"Bungee",var(--display);font-size:1.05rem;background:var(--fire);color:var(--ink);
+  padding:4px 14px 2px;border-radius:8px;transform:rotate(-6deg);margin-bottom:12px;
+  box-shadow:3px 3px 0 var(--ink);animation:wobble 1.8s ease-in-out infinite;
+}
+@keyframes wobble{50%{transform:rotate(4deg) scale(1.06)}}
 .pass .who{font-family:var(--display);font-size:clamp(2.6rem,13vw,3.6rem);line-height:1.1;margin:2px 0 6px;word-break:break-word;animation:smokeIn .8s var(--ease)}
 @keyframes smokeIn{from{opacity:0;filter:blur(14px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
 .pass p{color:var(--muted);max-width:290px;margin-bottom:22px}
@@ -202,11 +216,11 @@ svg{display:block}
 .face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px 20px;display:flex;flex-direction:column;overflow:hidden}
 .face.back{
   background:var(--surface);border:1.5px solid var(--line);align-items:center;justify-content:center;text-align:center;cursor:pointer;
-  background-image:repeating-linear-gradient(-45deg,rgba(243,239,230,.035) 0 2px,transparent 2px 14px);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%238fe35c' stroke-opacity='.13' stroke-width='3'%3E%3Cellipse cx='50' cy='40' rx='7' ry='34'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(-34 50 76)'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(34 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(-66 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(66 50 76)'/%3E%3C/g%3E%3C/svg%3E");
   transition:border-color .2s;
 }
 .face.back:hover{border-color:var(--ember)}
-.face.back .lf{width:84px;height:84px;color:var(--text);opacity:.85;margin-bottom:14px;animation:sway 3s ease-in-out infinite}
+.face.back .lf{width:84px;height:84px;color:var(--ember);opacity:.85;margin-bottom:14px;animation:sway 3s ease-in-out infinite}
 @keyframes sway{50%{transform:rotate(-6deg) translateY(-4px)}}
 .face.back h3{font-family:var(--display);font-size:1.6rem;font-weight:400}
 .face.back p{color:var(--muted)}
@@ -219,11 +233,11 @@ svg{display:block}
 }
 /* פס דבק בראש הנייר */
 .face.front::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,#e3dac6 0 6px,#ebe3d1 6px 12px)}
-.ctype{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.9rem;color:#6b5b45;margin-top:6px}
-.ctype svg{width:18px;height:18px;color:var(--ember)}
+.ctype{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.9rem;color:#5b4a6e;margin-top:6px}
+.ctype svg{width:18px;height:18px;color:#5a9c32}
 .ctext{flex:1;display:flex;align-items:center;font-family:var(--display);font-size:clamp(1.4rem,6.2vw,1.85rem);line-height:1.35;padding:12px 0;position:relative}
 .card.flipped .ctext{animation:smokeIn .7s .3s var(--ease) both}
-.ctext mark{background:linear-gradient(transparent 62%,rgba(255,138,61,.45) 62%);color:inherit;padding:0 2px}
+.ctext mark{background:linear-gradient(transparent 60%,rgba(143,227,92,.6) 60%);color:inherit;padding:0 2px}
 .chint{font-size:.9rem;color:#6e6a5f;border-top:1px dashed #cfc6b2;padding-top:10px;position:relative}
 
 /* טיימר על הנייר */
@@ -249,7 +263,7 @@ svg{display:block}
 .pod.p2 .bar{height:96px}
 .pod.p3 .bar{height:70px}
 .pod.p1{order:2;animation-delay:.2s}.pod.p2{order:1}.pod.p3{order:3;animation-delay:.1s}
-.crown{width:30px;height:30px;color:var(--ember)}
+.crown{width:30px;height:30px;color:var(--fire);animation:wobble 2s ease-in-out infinite}
 .board{list-style:none;border-top:1px solid var(--line)}
 .board li{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line)}
 .board .rk{width:24px;color:var(--muted);font-weight:800}
@@ -309,6 +323,7 @@ svg{display:block}
   </defs>
 </svg>
 
+<div class="leaves" id="leaves" aria-hidden="true"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <main class="app">
@@ -316,7 +331,7 @@ svg{display:block}
   <!-- ========== אשף הגדרות: 3 שלבים ========== -->
   <section class="screen active" id="setup">
     <div class="top">
-      <div class="wordmark"><i></i>סבב</div>
+      <div class="wordmark" aria-label="PassPass"><b>Pass</b><svg><use href="#i-leaf"/></svg><b>Pass</b></div>
       <div class="steps" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
     </div>
 
@@ -372,7 +387,7 @@ svg{display:block}
       <div class="spacer"></div>
       <div class="row">
         <button class="btn btn-line" data-go="2" style="flex:.6"><svg><use href="#i-back"/></svg> חזרה</button>
-        <button class="btn btn-primary" id="start-btn">מדליקים</button>
+        <button class="btn btn-primary" id="start-btn">מגלגלים ומדליקים</button>
       </div>
     </div>
   </section>
@@ -389,9 +404,10 @@ svg{display:block}
     <div class="stage">
       <!-- מצב א: העברת הטלפון -->
       <div class="pass" id="pass" aria-live="polite">
+        <span class="sticker" dir="ltr">PASS!</span>
         <span class="to">הטלפון והג'וינט עוברים אל</span>
         <div class="who" id="pass-name">—</div>
-        <p>רק כשהכול אצלך ביד – לוחצים.</p>
+        <p>רק כשהטלפון והג'וינט אצלך ביד – לוחצים. בלי להציץ.</p>
         <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
       </div>
 
@@ -426,8 +442,8 @@ svg{display:block}
 
   <!-- ========== סיום ========== -->
   <section class="screen" id="end">
-    <div class="top"><div class="wordmark"><i></i>סבב</div></div>
-    <h1 class="title" style="margin-top:14px">נגמר הסבב.</h1>
+    <div class="top"><div class="wordmark" aria-label="PassPass"><b>Pass</b><svg><use href="#i-leaf"/></svg><b>Pass</b></div></div>
+    <h1 class="title" style="margin-top:14px">ה-High Score של הערב</h1>
     <p class="lead" id="end-lead"></p>
     <div class="podium" id="podium"></div>
     <ol class="board" id="end-board"></ol>
@@ -597,6 +613,8 @@ const fx=(()=>{
   const SMOKE=mk(235,232,222,.9), EMBER=mk(255,138,61,1);
   function resize(){ const d=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*d; cv.height=H*d; ctx.setTransform(d,0,0,d,0,0); }
   const smoke=(x,y,o={})=>parts.push({t:0,x,y,amb:o.amb,vx:(Math.random()-.5)*(o.spread??.8),vy:-(o.rise??.5)-Math.random()*.4,r:o.r??(16+Math.random()*22),gr:o.grow??.32,a:o.a??.16,life:0,max:o.life??(150+Math.random()*120),ph:Math.random()*6.3});
+  // טבעת עשן – עיגול שמתרחב, עולה ונמוג
+  const ring=(x,y,o={})=>parts.push({t:2,x,y,vx:(Math.random()-.5)*.3,vy:-(o.rise??.9),r:o.r??10,gr:o.grow??.45,a:o.a??.5,life:0,max:o.life??110,ph:Math.random()*6.3});
   const ember=(x,y,o={})=>{ const a=o.ang??(-Math.PI/2+(Math.random()-.5)*(o.cone??2.4)), v=(o.speed??3)*(.4+Math.random()*.8);
     parts.push({t:1,x,y,amb:o.amb,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:o.r??(1+Math.random()*1.6),life:0,max:o.life??(45+Math.random()*45),ph:Math.random()*6.3}); };
   function ambient(){
@@ -611,6 +629,9 @@ const fx=(()=>{
     for(let i=parts.length-1;i>=0;i--){
       const p=parts[i]; if(++p.life>=p.max){ parts.splice(i,1); continue; }
       const k=p.life/p.max;
+      if(p.t===2){ p.x+=p.vx+Math.sin(p.life*.05+p.ph)*.4; p.y+=p.vy; p.vy*=.99; p.r+=p.gr;
+        ctx.globalAlpha=p.a*(1-k); ctx.strokeStyle="#ece6f7"; ctx.lineWidth=Math.max(1.5,p.r*.28);
+        ctx.beginPath(); ctx.ellipse(p.x,p.y,p.r,p.r*.55,Math.sin(p.life*.03+p.ph)*.25,0,6.3); ctx.stroke(); continue; }
       if(!p.t){ p.x+=p.vx+Math.sin(p.life*.02+p.ph)*.35; p.y+=p.vy; p.r+=p.gr;
         ctx.globalAlpha=p.a*Math.sin(Math.PI*k); ctx.drawImage(SMOKE,p.x-p.r,p.y-p.r,p.r*2,p.r*2);
       } else { p.vx*=.985; p.vy=p.vy*.985-.012; p.x+=p.vx; p.y+=p.vy;
@@ -626,6 +647,8 @@ const fx=(()=>{
   return {
     puff(el,n=12){ const [x,y,b]=at(el); for(let i=0;i<(reduce?3:n);i++) smoke(x+(Math.random()-.5)*b.width*.6,y+(Math.random()-.5)*b.height*.4,{spread:1.6,rise:.5+Math.random()*.6}); },
     sparks(el,n=24){ if(reduce) return; const [x,y]=at(el); for(let i=0;i<n;i++) ember(x,y,{cone:3}); },
+    rings(el,n=3){ if(reduce) return; const [x,y,b]=at(el); for(let i=0;i<n;i++) setTimeout(()=>ring(x+(Math.random()-.5)*30,y-b.height*.15,{r:12+i*2}),i*220); },
+    ringAt(x,y){ if(!reduce) ring(x,y,{r:5,grow:.3,a:.45,rise:.8,life:90}); },
     trail(x,y){ if(reduce) return; smoke(x,y,{r:5+Math.random()*4,grow:.22,a:.22,rise:.7,spread:.3,life:110+Math.random()*50}); },
     burst(){ if(reduce) return; for(let j=0;j<4;j++) setTimeout(()=>{ const x=W*(.2+Math.random()*.6), y=H*(.2+Math.random()*.3);
       for(let i=0;i<30;i++) ember(x,y,{cone:6.3,speed:4,life:70+Math.random()*40}); for(let i=0;i<4;i++) smoke(x,y,{r:26,spread:2}); },j*300); }
@@ -661,7 +684,9 @@ function pointTo(i){
 setInterval(()=>{
   const p=$("#pointer"); if(!p || !$("#game").classList.contains("active")) return;
   const b=p.getBoundingClientRect(), r=b.width*.22, a=state.angle*Math.PI/180;
-  fx.trail(b.left+b.width/2+Math.cos(a)*r, b.top+b.height/2+Math.sin(a)*r);
+  const tx=b.left+b.width/2+Math.cos(a)*r, ty=b.top+b.height/2+Math.sin(a)*r;
+  fx.trail(tx,ty);
+  if(Math.random()<.07) fx.ringAt(tx,ty-8);   // טבעת עשן קטנה, מדי פעם
 },260);
 
 /* ========== אשף ההגדרות ========== */
@@ -758,7 +783,7 @@ function drawCard(){
 }
 function flipCard(){
   if($("#card").classList.contains("flipped")) return;
-  $("#card").classList.add("flipped"); vibrate(20); fx.puff($("#card"),16);
+  $("#card").classList.add("flipped"); vibrate(20); fx.puff($("#card"),16); fx.rings($("#card"),3);
   setTimeout(()=>$("#actions").classList.add("show"),350);
 }
 function renderRules(){
@@ -824,6 +849,13 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape") closeSheet();
   if(e.key===" " && $("#turn").style.display==="flex" && !$("#card").classList.contains("flipped")){ e.preventDefault(); flipCard(); }
 });
+
+/* עלים מרחפים ברקע */
+(function(){
+  let h=""; for(let i=0;i<7;i++){ const z=50+Math.random()*90;
+    h+=`<svg style="width:${z}px;height:${z}px;top:${i*14+Math.random()*6}%;left:${Math.random()*85}%;--d:${10+Math.random()*10}s;--r0:${Math.random()*360|0}deg;--r1:${(Math.random()*360|0)+50}deg;--dx:${(Math.random()-.5)*70|0}px;animation-delay:-${Math.random()*10|0}s"><use href="#i-leaf"/></svg>`; }
+  $("#leaves").innerHTML=h;
+})();
 
 /* ========== אתחול ========== */
 load(); renderNames(); renderPacks();
