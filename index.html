@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2b2340">
+<meta name="theme-color" content="#173a3f">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="PassPass">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>PassPass | מעבירים את הטלפון, ממשיכים את הסבב</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,12 +19,12 @@
    צבעי הלוגו בלבד: קרם, ירוק עלה, דיו כהה. בלי זוהר ובלי אורות.
    ========================================================= */
 :root{
-  --bg:#2b2340;          /* סגול מעושן */
-  --bg-2:#342a4c;
-  --surface:#3d3258;
-  --line:#5c4f7c;
+  --bg:#173a3f;          /* טורקיז עמוק */
+  --bg-2:#1c444a;
+  --surface:#235158;
+  --line:#3f7076;
   --text:#f6f1e7;        /* קרם */
-  --muted:#cbc2de;
+  --muted:#b9d6d2;
   --ember:#8fe35c;       /* ירוק עלה – צבע ההדגשה */
   --leaf-dark:#2f6e3c;   /* ירוק לבד של שולחן */
   --ink:#16101f;         /* דיו – קווים וצללים */
@@ -94,20 +99,23 @@ svg{display:block}
 
 /* ========== השולחן – מגש עגול עם לבד ירוק ========== */
 .table{position:relative;width:min(72vw,270px);aspect-ratio:1;margin:40px auto 46px}
+/* שולחן עץ עגול: טבעות עץ, שפה כהה, קו דיו וצל קשיח */
 .table .felt{
   position:absolute;inset:11%;border-radius:50%;
   background:
-    radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 45%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='4' cy='4' r='1.6' fill='%2316101f' fill-opacity='.25'/%3E%3Ccircle cx='24' cy='24' r='1.6' fill='%2316101f' fill-opacity='.25'/%3E%3C/svg%3E"),
-    var(--leaf-dark);
+    radial-gradient(circle at 34% 28%,rgba(255,240,215,.38),transparent 42%),
+    repeating-radial-gradient(circle at 46% 54%,#c89058 0 7px,#be8550 7px 9px,#cc965f 9px 16px,#b67c48 16px 17px),
+    #c48a55;
   border:4px solid var(--ink);
-  /* שפה עבה: טבעת ירוקה + קו דיו + צל קשיח */
-  box-shadow:0 0 0 8px var(--ember),0 0 0 12px var(--ink),9px 11px 0 12px var(--ink);
+  box-shadow:inset 0 0 0 7px rgba(110,62,28,.35),0 0 0 9px #8a5631,0 0 0 13px var(--ink),9px 11px 0 13px var(--ink);
 }
-.table .felt::after{content:"";position:absolute;inset:13%;border-radius:50%;border:2.5px dashed rgba(246,241,231,.35)}
+.table .felt::after{content:"";position:absolute;inset:7%;border-radius:50%;border:2px solid rgba(90,48,18,.28)}
+/* חפצים על השולחן */
+.deco{position:absolute;z-index:1;pointer-events:none;transform:translate(-50%,-50%)}
+.deco svg{width:100%;height:100%;overflow:visible}
 /* דמות שיושבת ליד השולחן – מצוירת מלמעלה ופונה למרכז */
 .seat{
-  position:absolute;z-index:2;width:var(--sz);height:var(--sz);margin:calc(var(--sz)/-2) 0 0 calc(var(--sz)/-2);
+  position:absolute;z-index:2;width:22%;height:22%;margin:-11% 0 0 -11%;
   animation:pop .5s var(--bounce) both;
 }
 .seat .fig{width:100%;height:100%;transform:rotate(var(--rot));transition:transform .4s var(--bounce)}
@@ -126,10 +134,10 @@ svg{display:block}
 .tag{
   position:absolute;z-index:4;transform:translate(-50%,-50%);font-weight:800;font-size:.74rem;line-height:1.2;
   background:var(--surface);color:var(--text);padding:3px 8px;border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--ink);
-  white-space:nowrap;max-width:84px;overflow:hidden;text-overflow:ellipsis;transition:background .3s,color .3s,transform .4s var(--bounce);
+  white-space:nowrap;max-width:78px;overflow:hidden;text-overflow:ellipsis;transition:background .3s,color .3s,transform .4s var(--bounce);
 }
 .tag.now{background:var(--ember);color:var(--ink);transform:translate(-50%,-50%) rotate(-4deg) scale(1.08)}
-.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--text);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
+.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--ink);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
 .pointer{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;transition:transform 1s var(--bounce)}
 .pointer svg{width:54%;overflow:visible;filter:drop-shadow(3px 3px 0 var(--ink))}
 .pointer .tip{animation:burn 1.4s ease-in-out infinite}
@@ -156,6 +164,15 @@ svg{display:block}
 .names button{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
 .names button:hover{color:var(--danger)}
 .names button svg{width:14px;height:14px}
+.clear-all{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:6px;margin-top:14px;height:38px;padding:0 14px;border-radius:10px;
+  font-weight:800;font-size:.9rem;background:transparent;color:var(--text);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
+  transition:background .2s,color .2s,transform .12s;
+}
+.clear-all svg{width:14px;height:14px}
+.clear-all:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.clear-all[hidden]{display:none}
+.clear-all.sure{background:var(--danger);color:var(--ink)}
 
 /* ========== חבילות קלפים – כרטיסי מדבקה ========== */
 .list{display:flex;flex-direction:column;gap:12px}
@@ -362,6 +379,7 @@ svg{display:block}
         <button class="btn btn-primary" type="button" id="add-btn" aria-label="הוסף שחקן"><svg><use href="#i-plus"/></svg></button>
       </div>
       <ul class="names" id="names" aria-live="polite"></ul>
+      <button type="button" class="clear-all" id="clear-all" hidden><svg><use href="#i-x"/></svg><span>מחק הכל</span></button>
       <div class="spacer"></div>
       <button class="btn btn-primary" id="to-2" disabled>המשך לקלפים <svg><use href="#i-arrow"/></svg></button>
       <p class="hint" id="hint-1">צריך לפחות 2 שחקנים</p>
@@ -679,59 +697,118 @@ const JOINT=`<svg viewBox="0 0 120 40"><path d="M22 15 L100 11 Q106 20 100 29 L2
    הדמות מצוירת כשהיא פונה למעלה; מסובבים אותה כדי שתפנה לשולחן
    ========================================================= */
 const SKIN=["#f7d9bd","#eec29a","#d39a6a","#a8704a","#7a4d33"];
-const HAIR=["#16101f","#4a2e1c","#8a5a2b","#d8a24a","#9c3b26","#f6f1e7"];
-const SHIRT=["#8fe35c","#f6f1e7","#fff3a8","#3d3258","#2f6e3c","#c7a6ff","#ff9f7a"];
-const STYLES=["short","bun","cap","long","beanie","curly"];
-function hashName(t){ let h=2166136261; for(const ch of t){ h^=ch.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; }
+const HAIR=["#1d1626","#4a2e1c","#7a4a24","#d8a24a","#a3432a","#e9e2d4","#3b2a4f"];
+const SHIRT=["#8fe35c","#f6f1e7","#fff3a8","#ff9f7a","#c7a6ff","#7ec8ff","#ff7fae","#2b2340"];
+const HATS=["#8fe35c","#f6f1e7","#ff9f7a","#fff3a8","#c7a6ff","#ff7fae"];
+const STYLES=["short","bun","cap","long","beanie","curly","pony","buzz"];
+function hashName(t){ let h=2166136261; for(const ch of t){ h^=ch.codePointAt(0); h=Math.imul(h,16777619); } h^=h>>>13; h=Math.imul(h,0x5bd1e995); h^=h>>>15; return h>>>0; }
+/* מכהה/מבהיר צבע (f<0 מכהה, f>0 מבהיר) */
+function tone(hex,f){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255;
+  const t=f<0?0:255, k=Math.abs(f); r=Math.round(r+(t-r)*k); g=Math.round(g+(t-g)*k); b=Math.round(b+(t-b)*k);
+  return "#"+((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1); }
+
+/* =========================================================
+   דמות מלמעלה: כתפיים, ידיים על השולחן, ראש עם תסרוקת.
+   מצוירת כשהיא פונה למעלה (y שלילי = לכיוון השולחן).
+   ========================================================= */
 function avatarSVG(name){
   const h=hashName(name), pick=(arr,sh)=>arr[(h>>>sh)%arr.length];
-  const skin=pick(SKIN,0), hair=pick(HAIR,4), shirt=pick(SHIRT,8), style=pick(STYLES,12), hat=pick(["#8fe35c","#f6f1e7","#ff9f7a","#2f6e3c"],16);
-  const O='stroke="#16101f" stroke-width="3" stroke-linejoin="round"';
-  // ידיים מושטות לשולחן: קו מתאר כהה ואז צבע החולצה, ובקצה כף יד
-  const arm=(x1,x2)=>`<path d="M${x1} 8 Q${x1*1.05} -12 ${x2} -27" fill="none" stroke="#16101f" stroke-width="13" stroke-linecap="round"/>
-    <path d="M${x1} 8 Q${x1*1.05} -12 ${x2} -27" fill="none" stroke="${shirt}" stroke-width="7.5" stroke-linecap="round"/>
-    <circle cx="${x2}" cy="-29" r="5.2" fill="${skin}" stroke="#16101f" stroke-width="2.5"/>`;
+  const skin=pick(SKIN,0), hair=pick(HAIR,3), shirt=pick(SHIRT,7), style=pick(STYLES,11), hat=pick(HATS,15), hoodie=((h>>>19)&3)===0;
+  const K="#16101f", skinD=tone(skin,-.18), shirtD=tone(shirt,-.22), hairL=tone(hair,.28), hairD=tone(hair,-.25);
+  const S=(w=2.6)=>`stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+  // יד: שרוול, חפת, וכף יד עם אגודל
+  const arm=(side)=>{
+    const x1=29*side, x2=15*side, cx=x1*1.1;
+    const d=`M${x1} 7 Q${cx} -10 ${x2} -24`;
+    return `<path d="${d}" fill="none" stroke="${K}" stroke-width="13.5" stroke-linecap="round"/>
+      <path d="${d}" fill="none" stroke="${shirt}" stroke-width="8" stroke-linecap="round"/>
+      <path d="M${x1-3*side} 4 Q${cx-2*side} -9 ${x2+1*side} -20" fill="none" stroke="${shirtD}" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
+      <g transform="translate(${x2} -28) rotate(${-14*side})">
+        <ellipse cx="0" cy="0" rx="5.4" ry="6.2" fill="${skin}" ${S(2.4)}/>
+        <ellipse cx="${-4.6*side}" cy="1.6" rx="2.3" ry="3.1" fill="${skin}" ${S(2)} transform="rotate(${30*side} ${-4.6*side} 1.6)"/>
+        <path d="M${-2*side} -4 Q0 -5.5 ${2*side} -4" fill="none" stroke="${skinD}" stroke-width="1.3" stroke-linecap="round"/>
+      </g>
+      <ellipse cx="${x2+0.6*side}" cy="-21.5" rx="5.6" ry="2.6" fill="${shirtD}" ${S(2.2)} transform="rotate(${-20*side} ${x2} -21.5)"/>`;
+  };
+  // כתפיים
+  const body=`<path d="M-31 8 Q-31 -3 -17 -3 L17 -3 Q31 -3 31 8 L31 13 Q31 25 17 25 L-17 25 Q-31 25 -31 13Z" fill="${shirt}" ${S(3)}/>
+    <path d="M-28 16 Q-27 23 -17 23 L17 23 Q27 23 28 16 Q20 20 0 20 Q-20 20 -28 16Z" fill="${K}" opacity=".16"/>
+    <path d="M-24 2 Q-14 -1 -6 0" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".35"/>`;
+  // קפוצ'ון: ברדס מאחורי הראש ושרוכים מקדימה
+  const hood=hoodie?`<path d="M-15 6 Q-16 22 0 23 Q16 22 15 6 Q8 13 0 13 Q-8 13 -15 6Z" fill="${shirtD}" ${S(2.4)}/>`:"";
+  const strings=hoodie?`<path d="M-5 -3 L-6 3 M5 -3 L6 3" ${S(1.8)}/><circle cx="-6" cy="4" r="1.3" fill="${K}"/><circle cx="6" cy="4" r="1.3" fill="${K}"/>`:"";
+  // ראש: אוזניים, פנים, גבות קטנות ואף
+  const head=`<ellipse cx="-13.6" cy="2.5" rx="3.4" ry="4.2" fill="${skin}" ${S(2)}/><ellipse cx="13.6" cy="2.5" rx="3.4" ry="4.2" fill="${skin}" ${S(2)}/>
+    <ellipse cx="-13.4" cy="2.5" rx="1.3" ry="2" fill="${skinD}"/><ellipse cx="13.4" cy="2.5" rx="1.3" ry="2" fill="${skinD}"/>
+    <circle cx="0" cy="2" r="13.6" fill="${skin}" ${S(3)}/>
+    <path d="M-6.5 -8.6 Q-4 -10.4 -1.8 -9.4 M6.5 -8.6 Q4 -10.4 1.8 -9.4" fill="none" stroke="${K}" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+    <ellipse cx="0" cy="-12" rx="2.8" ry="2.4" fill="${skin}" ${S(1.8)}/>
+    <ellipse cx="-.8" cy="-12.7" rx=".9" ry=".7" fill="#fff" opacity=".6"/>`;
+  // תסרוקת בסיסית: מכסה את הגב של הראש, עם פוני משונן וקווי שיער
+  const crop=`<path d="M-13.8 3 A13.8 13.8 0 1 0 13.8 3 Q13.6 -4 9.5 -6.8 L7 -3.6 L4.6 -7.6 L1.6 -4.2 L-1.4 -7.8 L-4.4 -4 L-7 -7.2 L-9.6 -4 Q-13.6 -3 -13.8 3Z" fill="${hair}" ${S(2.6)}/>
+    <path d="M0 14 Q-2 4 -4.5 -3.5 M0 14 Q2.5 4 4.6 -6 M-6 12 Q-9 6 -9.6 -2.5 M6 12 Q9 6 9.5 -4.5" fill="none" stroke="${hairD}" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>
+    <path d="M-7 8 Q-8 2 -6.5 -2" fill="none" stroke="${hairL}" stroke-width="2.2" stroke-linecap="round" opacity=".8"/>`;
   let back="", top="";
-  if(style==="long")  back=`<ellipse cx="0" cy="14" rx="15" ry="15" fill="${hair}" ${O}/>`;
-  const capHair=`<path d="M-13.5 4 A13.5 13.5 0 1 0 13.5 4 Q13 -4 7 -6 Q0 -3 -7 -6 Q-13 -4 -13.5 4Z" fill="${hair}" stroke="#16101f" stroke-width="2.5"/>`;
-  if(style==="short"||style==="long") top=capHair;
-  if(style==="bun")   top=capHair+`<circle cx="0" cy="17" r="6.5" fill="${hair}" stroke="#16101f" stroke-width="2.5"/>`;
-  if(style==="curly") top=[[-8,6],[8,6],[0,12],[-10,-2],[10,-2],[0,2],[-5,-6],[5,-6]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="${hair}" stroke="#16101f" stroke-width="2"/>`).join("");
-  if(style==="cap")   top=`<ellipse cx="0" cy="-13" rx="10" ry="6" fill="${hat}" stroke="#16101f" stroke-width="2.5"/><circle cx="0" cy="3" r="13" fill="${hat}" stroke="#16101f" stroke-width="2.5"/><circle cx="0" cy="3" r="2.2" fill="#16101f"/>`;
-  if(style==="beanie")top=`<circle cx="0" cy="3" r="13.5" fill="${hat}" stroke="#16101f" stroke-width="2.5"/><path d="M-12 -2 Q0 -6 12 -2" fill="none" stroke="#16101f" stroke-width="2"/><circle cx="0" cy="5" r="4.5" fill="#f6f1e7" stroke="#16101f" stroke-width="2"/>`;
+  if(style==="short") top=crop;
+  if(style==="long"){ back=`<path d="M-15 0 Q-19 14 -15 27 Q-8 31 0 29 Q8 31 15 27 Q19 14 15 0Z" fill="${hair}" ${S(2.6)}/><path d="M-10 18 Q-11 24 -9 28 M10 18 Q11 24 9 28 M0 20 L0 28" fill="none" stroke="${hairD}" stroke-width="1.3" stroke-linecap="round"/>`;
+    top=crop+`<path d="M0 -6.5 L0 15" stroke="${hairD}" stroke-width="1.6" stroke-linecap="round"/>`; }
+  if(style==="bun")  top=crop+`<circle cx="0" cy="17.5" r="6.8" fill="${hair}" ${S(2.4)}/><path d="M-3.5 15.5 Q0 19.5 3.5 15.5" fill="none" stroke="${hairD}" stroke-width="1.3"/><path d="M-5.5 12.5 Q0 14.8 5.5 12.5" fill="none" stroke="${hat}" stroke-width="3" stroke-linecap="round"/>`;
+  if(style==="pony"){ back=`<path d="M-4 13 Q-7 22 -2 30 Q1 33 4 29 Q8 21 4 13Z" fill="${hair}" ${S(2.4)}/><path d="M0 16 Q-1 23 1 28" fill="none" stroke="${hairD}" stroke-width="1.3"/>`;
+    top=crop+`<ellipse cx="0" cy="14.6" rx="4" ry="2.2" fill="${hat}" ${S(1.8)}/>`; }
+  if(style==="curly") top=[[-9,8],[9,8],[0,13],[-11,0],[11,0],[-4,4],[4,4],[-7,-5],[0,-6],[7,-5],[0,9]].map(([x,y])=>
+      `<circle cx="${x}" cy="${y}" r="5.6" fill="${hair}" ${S(2)}/><circle cx="${x-1.6}" cy="${y-1.6}" r="1.6" fill="${hairL}" opacity=".9"/>`).join("");
+  if(style==="buzz") top=`<path d="M-13.4 4 A13.4 13.4 0 1 0 13.4 4 Q13 -3 9 -5.8 Q0 -3.4 -9 -5.8 Q-13 -3 -13.4 4Z" fill="${hair}" opacity=".55"/>`+
+      [[-6,8],[0,11],[6,8],[-9,1],[9,1],[-3,3],[3,3],[0,-2],[-6,-2],[6,-2]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".8" fill="${hairD}"/>`).join("");
+  if(style==="cap") top=`<path d="M-10 -9 Q0 -24 10 -9 Q0 -12 -10 -9Z" fill="${tone(hat,-.15)}" ${S(2.4)}/>
+      <circle cx="0" cy="3" r="13.4" fill="${hat}" ${S(2.6)}/>
+      <path d="M0 -10.4 L0 16.4 M-11.6 -3.6 Q0 6 11.6 -3.6 M-11.6 9.6 Q0 0 11.6 9.6" fill="none" stroke="${tone(hat,-.3)}" stroke-width="1.3" opacity=".8"/>
+      <circle cx="0" cy="3" r="2.4" fill="${tone(hat,-.3)}" ${S(1.6)}/>
+      <path d="M-7 -4 Q-9 2 -6 7" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".45"/>`;
+  if(style==="beanie") top=`<circle cx="0" cy="3" r="14" fill="${hat}" ${S(2.6)}/>
+      <circle cx="0" cy="3" r="10" fill="none" stroke="${tone(hat,-.22)}" stroke-width="1.4"/>
+      <circle cx="0" cy="3" r="6" fill="none" stroke="${tone(hat,-.22)}" stroke-width="1.4"/>
+      <path d="M-12.6 -3 Q0 -10.5 12.6 -3" fill="none" ${S(2.2)}/>
+      ${[0,60,120,180,240,300].map(a=>`<ellipse cx="${(Math.cos(a*Math.PI/180)*3.4).toFixed(1)}" cy="${(3+Math.sin(a*Math.PI/180)*3.4).toFixed(1)}" rx="2.6" ry="2.6" fill="#f6f1e7" ${S(1.4)}/>`).join("")}
+      <circle cx="0" cy="3" r="2.8" fill="#f6f1e7"/>`;
   return `<svg viewBox="-40 -40 80 80" aria-hidden="true">
-    <ellipse cx="3" cy="10" rx="33" ry="17" fill="#16101f" opacity=".45"/>
-    ${arm(-24,-15)}${arm(24,15)}
-    <rect x="-30" y="-1" width="60" height="25" rx="12.5" fill="${shirt}" ${O}/>
-    ${back}
-    <circle cx="-13.5" cy="2" r="3.6" fill="${skin}" stroke="#16101f" stroke-width="2"/>
-    <circle cx="13.5" cy="2" r="3.6" fill="${skin}" stroke="#16101f" stroke-width="2"/>
-    <circle cx="0" cy="2" r="14" fill="${skin}" ${O}/>
-    <ellipse cx="0" cy="-12.5" rx="2.6" ry="2.2" fill="${skin}" stroke="#16101f" stroke-width="1.6"/>
-    ${top}
+    <ellipse cx="4" cy="11" rx="34" ry="18" fill="${K}" opacity=".4"/>
+    ${arm(-1)}${arm(1)}
+    ${body}${hood}${back}${head}${top}${strings}
   </svg>`;
 }
 
+/* חפצים על השולחן: מאפרה וקערת חטיפים */
+const DECO=`<div class="deco" style="left:31%;top:69%;width:17%;height:17%"><svg viewBox="-20 -20 40 40">
+    <circle cx="2" cy="2" r="15" fill="#16101f" opacity=".35"/><circle r="15" fill="#9fb3b1" stroke="#16101f" stroke-width="2.6"/>
+    <circle r="9.5" fill="#6f8381" stroke="#16101f" stroke-width="2"/><path d="M-15 0h5M10 0h5M0 -15v5" stroke="#16101f" stroke-width="3"/>
+    <circle cx="-3" cy="2" r="2" fill="#3b4544"/><circle cx="3" cy="-1" r="1.4" fill="#3b4544"/><path d="M-11 -9 Q-6 -13 0 -13" fill="none" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/></svg></div>
+  <div class="deco" style="left:70%;top:68%;width:20%;height:20%"><svg viewBox="-20 -20 40 40">
+    <circle cx="2" cy="2" r="16" fill="#16101f" opacity=".35"/><circle r="16" fill="#ff9f7a" stroke="#16101f" stroke-width="2.6"/>
+    <circle r="12" fill="#f3c25b" stroke="#16101f" stroke-width="1.8"/>
+    ${[[-5,-4,20],[4,-5,-30],[-2,4,60],[6,3,10],[-7,3,-40],[1,-1,80]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="4.4" ry="3" transform="rotate(${r} ${x} ${y})" fill="#ffd77a" stroke="#16101f" stroke-width="1.3"/>`).join("")}
+    <path d="M-12 -8 Q-7 -14 0 -15" fill="none" stroke="#fff" stroke-width="2" opacity=".55" stroke-linecap="round"/></svg></div>`;
+
+/* מושבים קבועים: כל מי שמצטרף מתיישב ליד הקודם (12 כיסאות, 30° ביניהם) */
+const SEAT_STEP=30;
+const seatAngle=i=>-90+i*SEAT_STEP;
+
+/* current/next = אינדקס של השחקן ברשימת השחקנים (המקום שבו הוא יושב) */
 function renderTable(el,{current=-1,next=-1,pointer=false}={}){
-  const list=state.order.length&&pointer ? state.order.map(i=>state.players[i]) : state.players;
-  const n=list.length;
-  if(!n){ el.innerHTML='<div class="felt"></div><div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
-  const sz=n<=6?66:n<=9?54:44;
-  let html='<div class="felt"></div>';
+  const list=state.players, n=list.length;
+  let html='<div class="felt"></div>'+DECO;
+  if(!n){ el.innerHTML=html+'<div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
   list.forEach((p,i)=>{
-    const deg=-90+i*360/n, a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46;
+    const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46, RT=64;
     const cls=i===current?" now":i===next?" next":"";
-    html+=`<div class="seat${cls}" style="--sz:${sz}px;--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
-    // תגית שם מחוץ לשולחן, מאחורי הדמות
-    const off=sz/2+14;
-    html+=`<span class="tag${i===current?" now":""}" style="left:calc(50% + (${R}% + ${off}px) * ${c.toFixed(4)});top:calc(50% + (${R}% + ${off}px) * ${sn.toFixed(4)})">${esc(p.name)}</span>`;
+    html+=`<div class="seat${cls}" style="--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
+    html+=`<span class="tag${i===current?" now":""}" style="left:${50+RT*c}%;top:${50+RT*sn}%">${esc(p.name)}</span>`;
   });
   if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
   el.innerHTML=html;
 }
-/* מסובב תמיד קדימה (עם כיוון השעון) כדי שהג'וינט "יעבור" במעגל */
-function pointTo(i){
-  const n=state.order.length, target=-90+i*360/n;
+/* מסובב תמיד קדימה (עם כיוון השעון) אל הכיסא של השחקן */
+function pointTo(seat){
+  const target=seatAngle(seat);
   const norm=((state.angle%360)+360)%360, t=((target%360)+360)%360;
   state.angle+=((t-norm)+360)%360;
   const p=$("#pointer"); if(p) p.style.transform=`rotate(${state.angle}deg)`;
@@ -758,6 +835,7 @@ function renderNames(){
     <button type="button" data-i="${i}" aria-label="הסר את ${esc(p.name)}"><svg><use href="#i-x"/></svg></button></li>`).join("");
   state.order=[]; renderTable($("#setup-table"));
   const ok=state.players.length>=2;
+  $("#clear-all").hidden=state.players.length<2; resetClear();
   $("#to-2").disabled=!ok;
   $("#hint-1").textContent=ok?`${state.players.length} במעגל`:"צריך לפחות 2 שחקנים";
 }
@@ -786,6 +864,14 @@ function addPlayer(){
   const seats=$("#setup-table").querySelectorAll(".seat"); if(seats.length) fx.puff(seats[seats.length-1],5);
 }
 $("#add-btn").addEventListener("click",addPlayer);
+/* מחק הכל: לחיצה ראשונה מבקשת אישור, לחיצה שנייה מוחקת */
+let clearTimer=null;
+function resetClear(){ clearTimeout(clearTimer); const b=$("#clear-all"); b.classList.remove("sure"); b.querySelector("span").textContent="מחק הכל"; }
+$("#clear-all").addEventListener("click",()=>{
+  const b=$("#clear-all");
+  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.querySelector("span").textContent="בטוח? לחצו שוב"; clearTimer=setTimeout(resetClear,3000); return; }
+  fx.puff($("#setup-table"),18); state.players=[]; renderNames(); save(); toast("השולחן התפנה");
+});
 $("#name-input").addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.isComposing){ e.preventDefault(); addPlayer(); } });
 $("#names").addEventListener("click",e=>{ const b=e.target.closest("button[data-i]"); if(!b) return; state.players.splice(+b.dataset.i,1); renderNames(); save(); });
 $("#packs").addEventListener("click",e=>{ const b=e.target.closest(".opt"); if(!b) return; const k=b.dataset.k; state.packs.has(k)?state.packs.delete(k):state.packs.add(k); renderPacks(); });
@@ -806,12 +892,13 @@ const current=()=>state.players[state.order[state.idx]];
 function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
-  Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:-90});
+  Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
   buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
 }
 function refreshTable(){
-  renderTable($("#game-table"),{current:state.idx,next:(state.idx+1)%state.order.length,pointer:true});
-  requestAnimationFrame(()=>pointTo(state.idx));
+  const cur=state.order[state.idx], nxt=state.order[(state.idx+1)%state.order.length];
+  renderTable($("#game-table"),{current:cur,next:nxt,pointer:true});
+  requestAnimationFrame(()=>pointTo(cur));
 }
 /* מצב העברה */
 function toPass(){
