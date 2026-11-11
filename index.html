@@ -9,287 +9,294 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Bungee&family=Secular+One&display=swap" rel="stylesheet">
 <style>
-/* ========== משתני עיצוב: גוונים מעושנים וחמים, הדגשה אחת – גחלת ========== */
+/* =========================================================
+   PassPass – סגנון "מדבקות": קווי מתאר עבים, צללים קשיחים,
+   צבעי הלוגו בלבד: קרם, ירוק עלה, דיו כהה. בלי זוהר ובלי אורות.
+   ========================================================= */
 :root{
-  --bg:#2b2340;          /* סגול מעושן – Purple Haze */
-  --bg-2:#332a4a;
-  --surface:#3b3155;
-  --surface-2:#463b63;
+  --bg:#2b2340;          /* סגול מעושן */
+  --bg-2:#342a4c;
+  --surface:#3d3258;
   --line:#5c4f7c;
-  --text:#f6f1e7;        /* קרם חם */
-  --muted:#c2b8d8;
-  --ember:#8fe35c;       /* ירוק עלה – צבע ההדגשה (שם המשתנה נשאר) */
-  --ember-soft:rgba(143,227,92,.16);
-  --fire:#ff8a3d;        /* כתום – רק לגחלת ולניצוצות */
-  --ink:#1d1430;
-  --paper:#f3ecdc;       /* נייר גלגול */
-  --paper-line:#e0d6c0;
+  --text:#f6f1e7;        /* קרם */
+  --muted:#cbc2de;
+  --ember:#8fe35c;       /* ירוק עלה – צבע ההדגשה */
+  --leaf-dark:#2f6e3c;   /* ירוק לבד של שולחן */
+  --ink:#16101f;         /* דיו – קווים וצללים */
+  --paper:#f6f1e7;
   --danger:#ff7a6b;
+  --b:3px solid var(--ink);
+  --sh:4px 4px 0 var(--ink);
   --ease:cubic-bezier(.2,.8,.2,1);
+  --bounce:cubic-bezier(.34,1.56,.64,1);
   --safe-b:env(safe-area-inset-bottom,0px);
   --display:"Secular One","Assistant",system-ui,sans-serif;
+  --fun:"Bungee","Secular One",system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
-  font-family:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;
-  font-size:17px;background:var(--bg);color:var(--text);line-height:1.5;
-  min-height:100dvh;overflow-x:hidden;
+  font-family:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;font-size:17px;line-height:1.5;
+  color:var(--text);min-height:100dvh;overflow-x:hidden;
+  /* רקע שטוח עם טפט עלים עדין – בלי אורות */
+  background-color:var(--bg);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2316101f' stroke-opacity='.28' stroke-width='2.2'%3E%3Cg transform='translate(10 8) scale(.42)'%3E%3Cellipse cx='50' cy='40' rx='7' ry='34'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(-34 50 76)'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(34 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(-66 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(66 50 76)'/%3E%3C/g%3E%3Cg transform='translate(108 64) rotate(150) scale(.32)'%3E%3Cellipse cx='50' cy='40' rx='7' ry='34'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(-34 50 76)'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(34 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(-66 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(66 50 76)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
-/* רקע: ערפל עדין + גרעיניות כמו נייר */
-body::before{
-  content:"";position:fixed;inset:0;z-index:-2;
-  background:
-    radial-gradient(70% 45% at 80% 0%,rgba(190,140,255,.22),transparent 70%),
-    radial-gradient(60% 40% at 0% 60%,rgba(143,227,92,.08),transparent 70%),
-    radial-gradient(70% 45% at 50% 110%,rgba(255,138,61,.10),transparent 70%),
-    var(--bg);
-}
-body::after{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.08;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-.leaves{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.leaves svg{position:absolute;color:var(--ember);opacity:.07;animation:drift var(--d) ease-in-out infinite alternate}
-@keyframes drift{from{transform:translateY(0) rotate(var(--r0))}to{transform:translate(var(--dx),-50px) rotate(var(--r1))}}
-#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:50;pointer-events:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 input{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:10px}
+:focus-visible{outline:3px dashed var(--ember);outline-offset:4px;border-radius:10px}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 svg{display:block}
 
-.app{position:relative;z-index:1;max-width:500px;margin:0 auto;min-height:100dvh;padding:18px 18px calc(20px + var(--safe-b));display:flex;flex-direction:column}
+.app{position:relative;z-index:1;max-width:500px;margin:0 auto;min-height:100dvh;padding:18px 18px calc(22px + var(--safe-b));display:flex;flex-direction:column}
 .screen{display:none;flex:1;flex-direction:column;animation:fadeUp .45s var(--ease)}
 .screen.active{display:flex}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{transform:scale(.6) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
 
-/* ========== כפתורים ========== */
+/* ========== כפתורים בסגנון מדבקה – לוחצים והם "נכנסים" ========== */
 .btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 20px;
-  border-radius:14px;font-weight:800;font-size:1.08rem;
-  transition:transform .15s var(--ease),background .2s,border-color .2s,opacity .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;height:58px;padding:0 20px;
+  border-radius:16px;font-weight:800;font-size:1.1rem;border:var(--b);box-shadow:var(--sh);
+  transition:transform .12s var(--ease),box-shadow .12s var(--ease),background .2s,opacity .2s;
 }
 .btn svg{width:20px;height:20px}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--ember);color:var(--ink);box-shadow:0 8px 24px -10px rgba(143,227,92,.75)}
-.btn-primary:hover{background:#a3ef72}
-.btn-primary:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
-.btn-line{border:1.5px solid var(--line);background:transparent}
-.btn-line:hover{border-color:var(--text)}
-.btn-text{height:44px;padding:0 12px;color:var(--muted);font-weight:700}
-.btn-text:hover{color:var(--text)}
-.row{display:flex;gap:10px}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn-primary{background:var(--ember);color:var(--ink)}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:var(--sh)}
+.btn-line{background:var(--surface);color:var(--text)}
+.row{display:flex;gap:12px}
 .row>.btn{flex:1}
 
-/* ========== כותרת עליונה ========== */
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-/* לוגו: Pass + עלה + Pass, בסגנון מדבקה */
-.wordmark{font-family:"Bungee",var(--display);font-size:1.45rem;display:flex;align-items:center;gap:4px;direction:ltr;transform:rotate(-3deg)}
+/* ========== כותרת עליונה ולוגו ========== */
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.wordmark{font-family:var(--fun);font-size:1.45rem;display:flex;align-items:center;gap:4px;direction:ltr;transform:rotate(-3deg)}
 .wordmark b{font-weight:400;text-shadow:3px 3px 0 var(--ink)}
 .wordmark b+svg+b{color:var(--ember)}
-.wordmark svg{width:24px;height:24px;color:var(--ember);animation:spinleaf 6s ease-in-out infinite}
+.wordmark svg{width:24px;height:24px;color:var(--ember);filter:drop-shadow(2px 2px 0 var(--ink));animation:spinleaf 6s ease-in-out infinite}
 @keyframes spinleaf{50%{transform:rotate(25deg) scale(1.1)}}
 .steps{display:flex;gap:6px}
-.steps span{width:22px;height:4px;border-radius:2px;background:var(--line);transition:background .3s,width .3s}
-.steps span.on{background:var(--ember);width:34px}
+.steps span{width:16px;height:12px;border-radius:4px;background:var(--surface);border:2px solid var(--ink);transition:width .3s var(--bounce),background .3s}
+.steps span.on{background:var(--ember);width:30px}
 
-/* ========== אשף ההגדרות ========== */
+/* ========== אשף הגדרות ========== */
 .step{display:none;flex:1;flex-direction:column;animation:fadeUp .4s var(--ease)}
 .step.active{display:flex}
-.eyebrow{color:var(--ember);font-weight:800;font-size:.85rem;letter-spacing:.08em;margin:14px 0 2px}
-.title{font-family:var(--display);font-size:clamp(2rem,9vw,2.6rem);line-height:1.1;margin-bottom:6px}
-.lead{color:var(--muted);margin-bottom:18px}
-
-/* השולחן – שחקנים יושבים במעגל */
-.table{
-  position:relative;width:min(78vw,270px);aspect-ratio:1;margin:6px auto 18px;
+.eyebrow{
+  align-self:flex-start;font-family:var(--fun);font-size:.78rem;background:var(--ember);color:var(--ink);
+  padding:3px 10px 1px;border:2px solid var(--ink);border-radius:6px;box-shadow:2px 2px 0 var(--ink);
+  transform:rotate(-2deg);margin:12px 0 10px;
 }
+.title{font-family:var(--display);font-weight:400;font-size:clamp(2.1rem,9.5vw,2.8rem);line-height:1.08;margin-bottom:8px;text-shadow:3px 3px 0 var(--ink)}
+.lead{color:var(--muted);margin-bottom:16px}
+
+/* ========== השולחן – מגש עגול עם לבד ירוק ========== */
+.table{position:relative;width:min(80vw,290px);aspect-ratio:1;margin:14px auto 26px}
 .table .felt{
-  position:absolute;inset:16%;border-radius:50%;
-  background:radial-gradient(circle at 50% 40%,var(--surface-2),var(--bg-2));
-  border:1px dashed var(--line);
+  position:absolute;inset:11%;border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 45%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='4' cy='4' r='1.6' fill='%2316101f' fill-opacity='.25'/%3E%3Ccircle cx='24' cy='24' r='1.6' fill='%2316101f' fill-opacity='.25'/%3E%3C/svg%3E"),
+    var(--leaf-dark);
+  border:4px solid var(--ink);
+  /* שפה עבה: טבעת ירוקה + קו דיו + צל קשיח */
+  box-shadow:0 0 0 8px var(--ember),0 0 0 12px var(--ink),9px 11px 0 12px var(--ink);
 }
+.table .felt::after{content:"";position:absolute;inset:13%;border-radius:50%;border:2.5px dashed rgba(246,241,231,.35)}
 .seat{
-  position:absolute;width:var(--sz,46px);height:var(--sz,46px);margin:calc(var(--sz,46px)/-2) 0 0 calc(var(--sz,46px)/-2);
-  border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:calc(var(--sz,46px)*.38);
-  background:var(--surface);border:1.5px solid var(--line);color:var(--text);
-  transition:left .5s var(--ease),top .5s var(--ease),background .3s,border-color .3s,transform .3s var(--ease);
-  animation:seatIn .4s var(--ease);
+  position:absolute;z-index:2;width:var(--sz,48px);height:var(--sz,48px);margin:calc(var(--sz,48px)/-2) 0 0 calc(var(--sz,48px)/-2);
+  border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:calc(var(--sz,48px)*.44);
+  background:var(--paper);color:var(--ink);border:var(--b);box-shadow:3px 3px 0 var(--ink);
+  transition:left .5s var(--ease),top .5s var(--ease),background .3s,transform .4s var(--bounce);
+  animation:pop .45s var(--bounce);
 }
-@keyframes seatIn{from{transform:scale(0)}to{transform:none}}
-.seat.now{background:var(--ember);border-color:var(--ember);color:var(--ink);transform:scale(1.14);box-shadow:0 0 0 6px var(--ember-soft)}
-.seat.next{border-style:dashed;border-color:var(--ember)}
-.seat-label{position:absolute;top:100%;margin-top:3px;font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;max-width:76px;overflow:hidden;text-overflow:ellipsis}
-.seat.now .seat-label{color:var(--text)}
-.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:.9rem;padding:0 25%}
-
-/* ג'וינט במרכז השולחן – מסתובב אל מי שמחזיק */
-.pointer{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;transition:transform .9s var(--ease)}
-.pointer svg{width:46%;overflow:visible}
+.seat.now{background:var(--ember);transform:scale(1.22) rotate(-6deg);z-index:3}
+.seat.next{background:var(--paper);outline:3px dashed var(--ember);outline-offset:3px}
+.seat-label{
+  position:absolute;top:100%;margin-top:5px;font-family:"Assistant",sans-serif;font-size:.74rem;font-weight:800;
+  color:var(--text);text-shadow:1.5px 1.5px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink);
+  white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;
+}
+.seat.now .seat-label{transform:rotate(6deg) scale(.82)}
+.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--text);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
+.pointer{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;transition:transform 1s var(--bounce)}
+.pointer svg{width:54%;overflow:visible;filter:drop-shadow(3px 3px 0 var(--ink))}
 .pointer .tip{animation:burn 1.4s ease-in-out infinite}
 @keyframes burn{50%{opacity:.6}}
 
-/* הוספת שחקן */
-.add{display:flex;gap:8px}
+/* ========== הוספת שחקן ========== */
+.add{display:flex;gap:12px}
 .input{
-  flex:1;min-width:0;height:54px;padding:0 16px;border-radius:14px;font-size:1.05rem;
-  background:var(--bg-2);border:1.5px solid var(--line);transition:border-color .2s;
+  flex:1;min-width:0;height:58px;padding:0 16px;border-radius:16px;font-size:1.08rem;font-weight:700;
+  background:var(--paper);color:var(--ink);border:var(--b);box-shadow:var(--sh);transition:transform .15s;
 }
-.input::placeholder{color:#868c80}
-.input:focus{outline:none;border-color:var(--ember)}
-.add .btn{width:54px;padding:0}
-.names{list-style:none;margin-top:12px;display:flex;flex-direction:column}
-.names li{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid var(--line);animation:fadeUp .3s var(--ease)}
-.names .n{width:26px;color:var(--muted);font-weight:700;font-size:.9rem}
-.names .nm{flex:1;font-weight:700}
-.names button{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
-.names button:hover{color:var(--danger);background:rgba(255,122,107,.1)}
-.names button svg{width:16px;height:16px}
+.input::placeholder{color:#8a8197;font-weight:600}
+.input:focus{outline:none;transform:rotate(-.6deg)}
+.add .btn{width:58px;padding:0}
+.names{list-style:none;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px}
+.names li{
+  display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:12px;
+  background:var(--surface);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);animation:pop .35s var(--bounce);
+}
+.names li:nth-child(odd){transform:rotate(-1.5deg)}
+.names li:nth-child(even){transform:rotate(1.5deg)}
+.names .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--ember);color:var(--ink);font-weight:800;font-size:.8rem;border:2px solid var(--ink)}
+.names .nm{font-weight:800}
+.names button{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+.names button:hover{color:var(--danger)}
+.names button svg{width:14px;height:14px}
 
-/* חבילות – שורות עם מתג */
-.list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+/* ========== חבילות קלפים – כרטיסי מדבקה ========== */
+.list{display:flex;flex-direction:column;gap:12px}
 .opt{
-  display:flex;align-items:center;gap:14px;padding:16px 4px;border-bottom:1px solid var(--line);text-align:right;width:100%;
-  transition:background .2s;
+  display:flex;align-items:center;gap:14px;padding:14px;width:100%;text-align:right;border-radius:16px;
+  background:var(--surface);border:var(--b);box-shadow:var(--sh);
+  transition:transform .15s var(--ease),box-shadow .15s,background .2s,color .2s;
 }
-.opt:hover{background:rgba(243,239,230,.03)}
-.opt .ic{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--surface);color:var(--muted);transition:.25s}
+.opt:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.opt .ic{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--bg);border:2.5px solid var(--ink);color:var(--muted);transition:.25s}
 .opt .ic svg{width:22px;height:22px}
 .opt .tx{flex:1}
-.opt .tx b{display:block;font-size:1.05rem}
+.opt .tx b{display:block;font-size:1.08rem}
 .opt .tx small{color:var(--muted);font-size:.88rem}
-.opt .cnt{color:var(--muted);font-size:.8rem;margin-left:6px}
-.sw{position:relative;width:46px;height:28px;flex:none;border-radius:99px;background:var(--line);transition:background .25s}
-.sw::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:var(--text);transition:transform .25s var(--ease)}
-[aria-pressed="true"] .sw,[aria-checked="true"].sw,[aria-checked="true"] .sw{background:var(--ember)}
-[aria-pressed="true"] .sw::after,[aria-checked="true"].sw::after,[aria-checked="true"] .sw::after{transform:translateX(-18px);background:var(--ink)}
-.opt[aria-pressed="true"] .ic{background:var(--ember-soft);color:var(--ember)}
+.opt .cnt{font-size:.75rem;font-weight:700;opacity:.7;margin-right:6px}
+.opt[aria-pressed="true"]{background:var(--ember);color:var(--ink)}
+.opt[aria-pressed="true"] .tx small{color:#2c3b1e}
+.opt[aria-pressed="true"] .ic{background:var(--paper);color:var(--ink)}
+.sw{position:relative;width:50px;height:30px;flex:none;border-radius:99px;background:var(--bg);border:2.5px solid var(--ink);transition:background .25s}
+.sw::after{content:"";position:absolute;top:2px;right:2px;width:21px;height:21px;border-radius:50%;background:var(--muted);border:2px solid var(--ink);transition:transform .3s var(--bounce),background .2s}
+[aria-pressed="true"] .sw,[aria-checked="true"] .sw{background:var(--paper)}
+[aria-pressed="true"] .sw::after,[aria-checked="true"] .sw::after{transform:translateX(-20px);background:var(--ink)}
 
-/* בחירת סבבים – מספרים גדולים */
-.rounds{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px}
+/* ========== סבבים ========== */
+.rounds{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
 .rounds button{
-  height:84px;border-radius:14px;border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:border-color .2s,background .2s;
+  height:88px;border-radius:16px;background:var(--surface);border:var(--b);box-shadow:var(--sh);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .2s var(--bounce),background .2s;
 }
-.rounds b{font-family:var(--display);font-size:1.9rem;line-height:1}
-.rounds small{color:var(--muted);font-size:.78rem}
-.rounds button[aria-pressed="true"]{border-color:var(--ember);background:var(--ember-soft)}
-.rounds button[aria-pressed="true"] b{color:var(--ember)}
-.summary{background:var(--bg-2);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:.95rem;margin-top:16px}
+.rounds b{font-family:var(--fun);font-weight:400;font-size:1.7rem;line-height:1.1}
+.rounds small{font-size:.76rem;font-weight:700;opacity:.8}
+.rounds button[aria-pressed="true"]{background:var(--ember);color:var(--ink);transform:rotate(-4deg) translateY(-3px)}
+.summary{border:2.5px dashed var(--line);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:.95rem;margin-top:18px}
 .summary b{color:var(--text)}
+.spacer{flex:1;min-height:20px}
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:10px;min-height:1.3em}
 
-.spacer{flex:1;min-height:18px}
-.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:8px;min-height:1.3em}
-
-/* ========== מסך המשחק ========== */
-.gbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.gbar .rd{font-weight:800;color:var(--muted);font-size:.95rem}
-.gbar .rd b{color:var(--text)}
-.icon-sq{width:42px;height:42px;border-radius:12px;border:1.5px solid var(--line);display:grid;place-items:center}
-.icon-sq:hover{border-color:var(--text)}
+/* ========== מסך משחק ========== */
+.gbar{display:flex;align-items:center;justify-content:space-between}
+.gbar .rd{font-family:var(--fun);font-size:.85rem;background:var(--paper);color:var(--ink);padding:5px 12px 3px;border:2.5px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink);transform:rotate(2deg)}
+.gbar .rd b{font-weight:400}
+.icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
+.icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{width:min(62vw,220px);margin:4px auto 14px}
-.rules{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.rule{display:flex;gap:10px;align-items:baseline;font-size:.88rem;color:var(--muted);padding:8px 12px;border-right:3px solid var(--ember);background:var(--bg-2);border-radius:8px}
-.rule b{color:var(--ember);flex:none}
+.game .table{width:min(66vw,240px);margin:18px auto 26px}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.rule{
+  font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
+  border-radius:4px;box-shadow:2px 2px 0 var(--ink);max-width:100%;
+}
+.rule:nth-child(odd){transform:rotate(-1.5deg)}.rule:nth-child(even){transform:rotate(1.2deg)}
+.rule b{font-family:var(--fun);font-weight:400;font-size:.72rem;margin-left:6px}
 
-/* אזור תחתון: או "העבר" או קלף */
 .stage{flex:1;display:flex;flex-direction:column}
-.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 0}
-.pass .to{color:var(--muted);font-weight:700}
+.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px 0}
 .sticker{
-  font-family:"Bungee",var(--display);font-size:1.05rem;background:var(--fire);color:var(--ink);
-  padding:4px 14px 2px;border-radius:8px;transform:rotate(-6deg);margin-bottom:12px;
-  box-shadow:3px 3px 0 var(--ink);animation:wobble 1.8s ease-in-out infinite;
+  font-family:var(--fun);font-size:1.2rem;background:var(--paper);color:var(--ink);padding:5px 16px 3px;border-radius:10px;
+  border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg);margin-bottom:14px;animation:wobble 1.8s ease-in-out infinite;
 }
 @keyframes wobble{50%{transform:rotate(4deg) scale(1.06)}}
-.pass .who{font-family:var(--display);font-size:clamp(2.6rem,13vw,3.6rem);line-height:1.1;margin:2px 0 6px;word-break:break-word;animation:smokeIn .8s var(--ease)}
-@keyframes smokeIn{from{opacity:0;filter:blur(14px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
+.pass .to{color:var(--muted);font-weight:700}
+.pass .who{
+  font-family:var(--display);font-size:clamp(2.8rem,14vw,3.8rem);line-height:1.1;margin:4px 0 8px;word-break:break-word;
+  color:var(--ember);text-shadow:4px 4px 0 var(--ink);animation:smokeIn .8s var(--bounce);
+}
+@keyframes smokeIn{from{opacity:0;filter:blur(12px);transform:scale(.8)}to{opacity:1;filter:none;transform:none}}
 .pass p{color:var(--muted);max-width:290px;margin-bottom:22px}
 .pass .btn{width:100%;max-width:340px}
 
-/* קלף מנייר גלגול */
-.card-wrap{perspective:1200px;flex:1;display:flex;min-height:290px;margin-bottom:12px}
-.card{position:relative;flex:1;transform-style:preserve-3d;transition:transform .7s var(--ease)}
+/* ========== קלף ========== */
+.card-wrap{perspective:1200px;flex:1;display:flex;min-height:300px;margin-bottom:16px}
+.card{position:relative;flex:1;transform-style:preserve-3d;transition:transform .75s var(--bounce)}
 .card.flipped{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px 20px;display:flex;flex-direction:column;overflow:hidden}
+.face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px 20px;display:flex;flex-direction:column;overflow:hidden;border:var(--b);box-shadow:6px 6px 0 var(--ink)}
 .face.back{
-  background:var(--surface);border:1.5px solid var(--line);align-items:center;justify-content:center;text-align:center;cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%238fe35c' stroke-opacity='.13' stroke-width='3'%3E%3Cellipse cx='50' cy='40' rx='7' ry='34'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(-34 50 76)'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(34 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(-66 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(66 50 76)'/%3E%3C/g%3E%3C/svg%3E");
-  transition:border-color .2s;
-}
-.face.back:hover{border-color:var(--ember)}
-.face.back .lf{width:84px;height:84px;color:var(--ember);opacity:.85;margin-bottom:14px;animation:sway 3s ease-in-out infinite}
-@keyframes sway{50%{transform:rotate(-6deg) translateY(-4px)}}
-.face.back h3{font-family:var(--display);font-size:1.6rem;font-weight:400}
-.face.back p{color:var(--muted)}
-.face.front{
-  transform:rotateY(180deg);color:var(--ink);
+  align-items:center;justify-content:center;text-align:center;cursor:pointer;
   background:
-    linear-gradient(90deg,transparent calc(50% - 1px),var(--paper-line) 50%,transparent calc(50% + 1px)),  /* קיפול באמצע */
-    var(--paper);
-  box-shadow:0 18px 40px -16px rgba(0,0,0,.6);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='4' cy='4' r='1.6' fill='%2316101f' fill-opacity='.25'/%3E%3Ccircle cx='24' cy='24' r='1.6' fill='%2316101f' fill-opacity='.25'/%3E%3C/svg%3E"),
+    var(--leaf-dark);
 }
-/* פס דבק בראש הנייר */
-.face.front::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,#e3dac6 0 6px,#ebe3d1 6px 12px)}
-.ctype{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.9rem;color:#5b4a6e;margin-top:6px}
-.ctype svg{width:18px;height:18px;color:#5a9c32}
-.ctext{flex:1;display:flex;align-items:center;font-family:var(--display);font-size:clamp(1.4rem,6.2vw,1.85rem);line-height:1.35;padding:12px 0;position:relative}
+.face.back::before{content:"";position:absolute;inset:12px;border:2.5px dashed rgba(246,241,231,.35);border-radius:12px}
+.face.back .lf{width:96px;height:96px;color:var(--ember);filter:drop-shadow(3px 3px 0 var(--ink));margin-bottom:12px;animation:sway 2.6s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(-8deg) translateY(-5px) scale(1.05)}}
+.face.back h3{font-family:var(--fun);font-weight:400;font-size:1.6rem;color:var(--paper);text-shadow:3px 3px 0 var(--ink)}
+.face.back p{color:#d9ecd0;font-weight:700}
+.face.front{transform:rotateY(180deg);color:var(--ink);background:var(--paper)}
+/* פס דבק של נייר גלגול */
+.face.front::before{content:"";position:absolute;top:0;left:0;right:0;height:12px;background:repeating-linear-gradient(90deg,#e6dcc6 0 6px,#efe6d3 6px 12px);border-bottom:2px solid var(--ink)}
+.ctype{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-family:var(--fun);font-size:.78rem;
+  background:var(--ember);padding:4px 10px 2px;border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--ink);transform:rotate(-2deg);
+}
+.ctype svg{width:16px;height:16px}
+.ctext{flex:1;display:flex;align-items:center;font-family:var(--display);font-size:clamp(1.45rem,6.4vw,1.9rem);line-height:1.35;padding:14px 0}
 .card.flipped .ctext{animation:smokeIn .7s .3s var(--ease) both}
-.ctext mark{background:linear-gradient(transparent 60%,rgba(143,227,92,.6) 60%);color:inherit;padding:0 2px}
-.chint{font-size:.9rem;color:#6e6a5f;border-top:1px dashed #cfc6b2;padding-top:10px;position:relative}
-
-/* טיימר על הנייר */
-.timer{display:none;align-items:center;gap:12px;margin-bottom:10px;position:relative}
+.ctext mark{background:linear-gradient(transparent 55%,var(--ember) 55%);color:inherit;padding:0 3px}
+.chint{font-size:.92rem;font-weight:600;color:#5b5368;border-top:2.5px dashed #cfc5b0;padding-top:10px}
+.timer{display:none;align-items:center;gap:12px;margin-bottom:12px}
 .timer.show{display:flex}
-.tbar{flex:1;height:8px;border-radius:4px;background:#dcd3bf;overflow:hidden}
+.tbar{flex:1;height:14px;border-radius:8px;background:#e3d9c4;border:2px solid var(--ink);overflow:hidden}
 .tbar i{display:block;height:100%;width:100%;background:var(--ember);transform-origin:right;transition:transform 1s linear}
-.tnum{font-weight:800;min-width:34px;text-align:center}
-.tbtn{height:38px;padding:0 14px;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:800;font-size:.9rem}
+.tnum{font-family:var(--fun);min-width:34px;text-align:center}
+.tbtn{height:40px;padding:0 14px;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:800;font-size:.9rem}
 .tbtn:disabled{opacity:.6}
-
-.actions{display:flex;gap:10px;opacity:0;transform:translateY(8px);pointer-events:none;transition:.35s var(--ease)}
+.actions{display:flex;gap:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.35s var(--bounce)}
 .actions.show{opacity:1;transform:none;pointer-events:auto}
 .actions .btn-primary{flex:1.6}
 .actions .btn-line{flex:1}
 
 /* ========== סיום ========== */
-.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:20px 0 18px;height:190px}
-.pod{flex:1;max-width:110px;display:flex;flex-direction:column;align-items:center;gap:6px;animation:fadeUp .6s var(--ease) both}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:18px 0 22px;height:200px}
+.pod{flex:1;max-width:110px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp .7s var(--bounce) both}
 .pod .pn{font-weight:800;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pod .bar{width:100%;border-radius:12px 12px 4px 4px;background:var(--surface);border:1.5px solid var(--line);display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-family:var(--display);font-size:1.6rem}
-.pod.p1 .bar{height:130px;background:var(--ember);border-color:var(--ember);color:var(--ink)}
-.pod.p2 .bar{height:96px}
+.pod .bar{width:100%;border-radius:14px 14px 4px 4px;background:var(--surface);border:var(--b);box-shadow:var(--sh);display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-family:var(--fun);font-size:1.6rem}
+.pod.p1 .bar{height:136px;background:var(--ember);color:var(--ink)}
+.pod.p2 .bar{height:98px;background:var(--paper);color:var(--ink)}
 .pod.p3 .bar{height:70px}
-.pod.p1{order:2;animation-delay:.2s}.pod.p2{order:1}.pod.p3{order:3;animation-delay:.1s}
-.crown{width:30px;height:30px;color:var(--fire);animation:wobble 2s ease-in-out infinite}
-.board{list-style:none;border-top:1px solid var(--line)}
-.board li{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line)}
-.board .rk{width:24px;color:var(--muted);font-weight:800}
-.board .bn{flex:1;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.board .bt{display:block;font-weight:400;font-size:.82rem;color:var(--muted)}
-.board .sc{font-family:var(--display);font-size:1.3rem}
-.facts{display:flex;justify-content:space-around;color:var(--muted);font-size:.88rem;margin:16px 0 4px}
-.facts b{display:block;color:var(--text);font-family:var(--display);font-size:1.5rem;text-align:center;font-weight:400}
+.pod.p1{order:2;animation-delay:.25s}.pod.p2{order:1;animation-delay:.1s}.pod.p3{order:3}
+.crown{width:34px;height:34px;color:var(--ember);filter:drop-shadow(2px 2px 0 var(--ink));animation:wobble 2s ease-in-out infinite}
+.board{list-style:none;display:flex;flex-direction:column;gap:10px}
+.board li{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:var(--surface);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.board .rk{font-family:var(--fun);width:24px;color:var(--ember)}
+.board .bn{flex:1;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board .bt{display:block;font-weight:600;font-size:.82rem;color:var(--muted)}
+.board .sc{font-family:var(--fun);font-size:1.2rem}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px}
+.facts>div{text-align:center;font-size:.85rem;font-weight:700;color:var(--muted);border:2.5px dashed var(--line);border-radius:14px;padding:8px}
+.facts b{display:block;color:var(--text);font-family:var(--fun);font-size:1.5rem;font-weight:400}
 
-/* ========== מגירה תחתונה ========== */
-.backdrop{position:fixed;inset:0;z-index:20;background:rgba(10,12,10,.55);opacity:0;pointer-events:none;transition:opacity .3s}
+/* ========== מגירת ניקוד ========== */
+.backdrop{position:fixed;inset:0;z-index:20;background:rgba(22,16,31,.6);opacity:0;pointer-events:none;transition:opacity .3s}
 .backdrop.open{opacity:1;pointer-events:auto}
 .sheet{
   position:fixed;z-index:21;left:0;right:0;bottom:0;max-width:500px;margin:0 auto;background:var(--bg-2);
-  border-radius:22px 22px 0 0;padding:10px 18px calc(20px + var(--safe-b));max-height:85dvh;overflow:auto;
-  transform:translateY(105%);transition:transform .4s var(--ease);border-top:1px solid var(--line);
+  border:var(--b);border-bottom:0;border-radius:24px 24px 0 0;padding:12px 18px calc(22px + var(--safe-b));max-height:85dvh;overflow:auto;
+  transform:translateY(105%);transition:transform .45s var(--bounce);
 }
 .sheet.open{transform:none}
-.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px}
-.sheet h2{font-family:var(--display);font-weight:400;font-size:1.5rem;margin-bottom:6px}
-.sheet .row{margin-top:16px}
+.grab{width:46px;height:6px;border-radius:3px;background:var(--ink);margin:0 auto 14px}
+.sheet h2{font-family:var(--display);font-weight:400;font-size:1.6rem;margin-bottom:12px;text-shadow:2px 2px 0 var(--ink)}
+.sheet .row{margin-top:18px}
 
-.toast{position:fixed;z-index:30;left:50%;bottom:calc(24px + var(--safe-b));transform:translate(-50%,24px);background:var(--text);color:var(--ink);padding:10px 18px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:90vw;text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast{
+  position:fixed;z-index:60;left:50%;bottom:calc(26px + var(--safe-b));transform:translate(-50%,30px) rotate(-2deg);
+  background:var(--ember);color:var(--ink);padding:10px 18px;border-radius:12px;font-weight:800;border:var(--b);box-shadow:var(--sh);
+  opacity:0;pointer-events:none;transition:.35s var(--bounce);max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0) rotate(-2deg)}
 
-@media (min-width:700px){ .app{padding-top:40px} .card-wrap{min-height:340px} }
+@media (min-width:700px){ .app{padding-top:40px} .card-wrap{min-height:350px} }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important;transition-duration:.01ms!important} }
 </style>
 </head>
@@ -323,7 +330,6 @@ svg{display:block}
   </defs>
 </svg>
 
-<div class="leaves" id="leaves" aria-hidden="true"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <main class="app">
@@ -600,45 +606,45 @@ function save(){ try{ localStorage.setItem("sevev-players",JSON.stringify(state.
 function load(){ try{ const n=JSON.parse(localStorage.getItem("sevev-players")||"[]"); if(Array.isArray(n)) state.players=n.slice(0,12).map(x=>({name:String(x)})); }catch(e){} }
 
 /* =========================================================
-   אפקטים: עשן אפור וגחלים כתומות בלבד
+   אפקטים: עשן לבן, טבעות עשן וקונפטי של עלים. בלי אורות ברקע.
    ========================================================= */
 const fx=(()=>{
   const cv=$("#fx"), ctx=cv.getContext("2d");
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   const parts=[]; let W=0,H=0;
-  // ספרייטים רכים: עשן קרם וגחלת כתומה
-  const mk=(r,g,b,a)=>{ const s=document.createElement("canvas"); s.width=s.height=128; const c=s.getContext("2d");
-    const grd=c.createRadialGradient(64,64,0,64,64,64); grd.addColorStop(0,`rgba(${r},${g},${b},${a})`); grd.addColorStop(.45,`rgba(${r},${g},${b},${a*.35})`); grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
-    c.fillStyle=grd; c.fillRect(0,0,128,128); return s; };
-  const SMOKE=mk(235,232,222,.9), EMBER=mk(255,138,61,1);
+  const SMOKE=(()=>{ const s=document.createElement("canvas"); s.width=s.height=128; const c=s.getContext("2d");
+    const g=c.createRadialGradient(64,64,0,64,64,64); g.addColorStop(0,"rgba(246,241,231,.85)"); g.addColorStop(.45,"rgba(246,241,231,.3)"); g.addColorStop(1,"rgba(246,241,231,0)");
+    c.fillStyle=g; c.fillRect(0,0,128,128); return s; })();
+  const LEAF_COLORS=["#8fe35c","#8fe35c","#f6f1e7","#2f6e3c"];
   function resize(){ const d=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*d; cv.height=H*d; ctx.setTransform(d,0,0,d,0,0); }
-  const smoke=(x,y,o={})=>parts.push({t:0,x,y,amb:o.amb,vx:(Math.random()-.5)*(o.spread??.8),vy:-(o.rise??.5)-Math.random()*.4,r:o.r??(16+Math.random()*22),gr:o.grow??.32,a:o.a??.16,life:0,max:o.life??(150+Math.random()*120),ph:Math.random()*6.3});
-  // טבעת עשן – עיגול שמתרחב, עולה ונמוג
-  const ring=(x,y,o={})=>parts.push({t:2,x,y,vx:(Math.random()-.5)*.3,vy:-(o.rise??.9),r:o.r??10,gr:o.grow??.45,a:o.a??.5,life:0,max:o.life??110,ph:Math.random()*6.3});
-  const ember=(x,y,o={})=>{ const a=o.ang??(-Math.PI/2+(Math.random()-.5)*(o.cone??2.4)), v=(o.speed??3)*(.4+Math.random()*.8);
-    parts.push({t:1,x,y,amb:o.amb,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:o.r??(1+Math.random()*1.6),life:0,max:o.life??(45+Math.random()*45),ph:Math.random()*6.3}); };
-  function ambient(){
-    let s=0,e=0; for(const p of parts) if(p.amb) p.t?e++:s++;
-    if(s<12 && Math.random()<.06) smoke(Math.random()*W,H+70,{amb:1,r:80+Math.random()*90,a:.05,rise:.22,grow:.16,spread:.4,life:800+Math.random()*400});
-    if(e<6 && Math.random()<.02) ember(Math.random()*W,H+5,{amb:1,speed:.6,cone:.5,life:500+Math.random()*300});
+  const smoke=(x,y,o={})=>parts.push({t:0,x,y,vx:(Math.random()-.5)*(o.spread??.8),vy:-(o.rise??.5)-Math.random()*.4,r:o.r??(16+Math.random()*22),gr:o.grow??.32,a:o.a??.2,life:0,max:o.life??(150+Math.random()*120),ph:Math.random()*6.3});
+  const ring=(x,y,o={})=>parts.push({t:2,x,y,vx:(Math.random()-.5)*.3,vy:-(o.rise??.9),r:o.r??10,gr:o.grow??.45,a:o.a??.6,life:0,max:o.life??110,ph:Math.random()*6.3});
+  // עלה קונפטי: עף, מסתובב ונופל
+  const leaf=(x,y,o={})=>{ const a=o.ang??(-Math.PI/2+(Math.random()-.5)*(o.cone??2.6)), v=(o.speed??7)*(.45+Math.random()*.7);
+    parts.push({t:1,x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,s:o.s??(7+Math.random()*7),rot:Math.random()*6.3,vr:(Math.random()-.5)*.25,flip:Math.random()*6.3,
+      c:LEAF_COLORS[Math.random()*LEAF_COLORS.length|0],life:0,max:o.life??(110+Math.random()*60)}); };
+  // ציור עלה קטן עם קו מתאר כהה (סגנון מדבקה)
+  function drawLeaf(p){
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.scale(Math.cos(p.flip),1);
+    ctx.fillStyle=p.c; ctx.strokeStyle="#16101f"; ctx.lineWidth=1.6;
+    for(const [ang,len] of [[0,1],[-.6,.8],[.6,.8],[-1.15,.55],[1.15,.55]]){
+      ctx.save(); ctx.rotate(ang); ctx.beginPath(); ctx.ellipse(0,-p.s*len*.5,p.s*.17,p.s*len*.5,0,0,6.3); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+    ctx.restore();
   }
   function frame(){
-    requestAnimationFrame(frame); if(document.hidden) return;
-    if(!reduce) ambient();
+    requestAnimationFrame(frame); if(document.hidden || !parts.length){ if(!parts.length) ctx.clearRect(0,0,W,H); return; }
     ctx.clearRect(0,0,W,H);
     for(let i=parts.length-1;i>=0;i--){
       const p=parts[i]; if(++p.life>=p.max){ parts.splice(i,1); continue; }
       const k=p.life/p.max;
       if(p.t===2){ p.x+=p.vx+Math.sin(p.life*.05+p.ph)*.4; p.y+=p.vy; p.vy*=.99; p.r+=p.gr;
-        ctx.globalAlpha=p.a*(1-k); ctx.strokeStyle="#ece6f7"; ctx.lineWidth=Math.max(1.5,p.r*.28);
-        ctx.beginPath(); ctx.ellipse(p.x,p.y,p.r,p.r*.55,Math.sin(p.life*.03+p.ph)*.25,0,6.3); ctx.stroke(); continue; }
-      if(!p.t){ p.x+=p.vx+Math.sin(p.life*.02+p.ph)*.35; p.y+=p.vy; p.r+=p.gr;
-        ctx.globalAlpha=p.a*Math.sin(Math.PI*k); ctx.drawImage(SMOKE,p.x-p.r,p.y-p.r,p.r*2,p.r*2);
-      } else { p.vx*=.985; p.vy=p.vy*.985-.012; p.x+=p.vx; p.y+=p.vy;
-        const a=(1-k)*(.65+.35*Math.sin(p.life*.45+p.ph)), g=p.r*6;
-        ctx.globalCompositeOperation="lighter"; ctx.globalAlpha=a*.7; ctx.drawImage(EMBER,p.x-g,p.y-g,g*2,g*2);
-        ctx.globalAlpha=a; ctx.fillStyle="#ffe2b8"; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*.7,0,6.3); ctx.fill();
-        ctx.globalCompositeOperation="source-over"; }
+        ctx.globalAlpha=p.a*(1-k); ctx.strokeStyle="#f6f1e7"; ctx.lineWidth=Math.max(2,p.r*.3);
+        ctx.beginPath(); ctx.ellipse(p.x,p.y,p.r,p.r*.55,Math.sin(p.life*.03+p.ph)*.25,0,6.3); ctx.stroke(); }
+      else if(p.t===0){ p.x+=p.vx+Math.sin(p.life*.02+p.ph)*.35; p.y+=p.vy; p.r+=p.gr;
+        ctx.globalAlpha=p.a*Math.sin(Math.PI*k); ctx.drawImage(SMOKE,p.x-p.r,p.y-p.r,p.r*2,p.r*2); }
+      else { p.vx*=.97; p.vy=p.vy*.97+.22; if(p.vy>2.6) p.vy=2.6; p.x+=p.vx+Math.sin(p.life*.1)*.6; p.y+=p.vy; p.rot+=p.vr; p.flip+=.12;
+        ctx.globalAlpha=k>.8?(1-k)*5:1; drawLeaf(p); }
     }
     ctx.globalAlpha=1;
   }
@@ -646,12 +652,12 @@ const fx=(()=>{
   resize(); addEventListener("resize",resize); requestAnimationFrame(frame);
   return {
     puff(el,n=12){ const [x,y,b]=at(el); for(let i=0;i<(reduce?3:n);i++) smoke(x+(Math.random()-.5)*b.width*.6,y+(Math.random()-.5)*b.height*.4,{spread:1.6,rise:.5+Math.random()*.6}); },
-    sparks(el,n=24){ if(reduce) return; const [x,y]=at(el); for(let i=0;i<n;i++) ember(x,y,{cone:3}); },
+    sparks(el,n=18){ if(reduce) return; const [x,y]=at(el); for(let i=0;i<n;i++) leaf(x,y-10); },
     rings(el,n=3){ if(reduce) return; const [x,y,b]=at(el); for(let i=0;i<n;i++) setTimeout(()=>ring(x+(Math.random()-.5)*30,y-b.height*.15,{r:12+i*2}),i*220); },
-    ringAt(x,y){ if(!reduce) ring(x,y,{r:5,grow:.3,a:.45,rise:.8,life:90}); },
-    trail(x,y){ if(reduce) return; smoke(x,y,{r:5+Math.random()*4,grow:.22,a:.22,rise:.7,spread:.3,life:110+Math.random()*50}); },
-    burst(){ if(reduce) return; for(let j=0;j<4;j++) setTimeout(()=>{ const x=W*(.2+Math.random()*.6), y=H*(.2+Math.random()*.3);
-      for(let i=0;i<30;i++) ember(x,y,{cone:6.3,speed:4,life:70+Math.random()*40}); for(let i=0;i<4;i++) smoke(x,y,{r:26,spread:2}); },j*300); }
+    ringAt(x,y){ if(!reduce) ring(x,y,{r:5,grow:.3,a:.55,rise:.8,life:90}); },
+    trail(x,y){ if(reduce) return; smoke(x,y,{r:5+Math.random()*4,grow:.22,a:.25,rise:.7,spread:.3,life:110+Math.random()*50}); },
+    burst(){ if(reduce) return; for(let j=0;j<5;j++) setTimeout(()=>{ const x=W*(.15+Math.random()*.7);
+      for(let i=0;i<22;i++) leaf(x,H*.35,{cone:3.4,speed:9,life:140+Math.random()*60}); },j*260); }
   };
 })();
 
@@ -663,10 +669,10 @@ function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   const list=state.order.length&&pointer ? state.order.map(i=>state.players[i]) : state.players;
   const n=list.length;
   if(!n){ el.innerHTML='<div class="felt"></div><div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
-  const sz=n<=6?46:n<=9?40:34;
+  const sz=n<=6?50:n<=9?42:36;
   let html='<div class="felt"></div>';
   list.forEach((p,i)=>{
-    const a=(-90+i*360/n)*Math.PI/180, R=42;  // אחוז מהרדיוס
+    const a=(-90+i*360/n)*Math.PI/180, R=46;  // אחוז מהרדיוס
     const cls=i===current?" now":i===next?" next":"";
     html+=`<div class="seat${cls}" style="--sz:${sz}px;left:${50+R*Math.cos(a)}%;top:${50+R*Math.sin(a)}%">${esc(p.name.trim().charAt(0))}<span class="seat-label">${esc(p.name)}</span></div>`;
   });
@@ -773,7 +779,7 @@ function drawCard(){
   const c=state.card=state.deck.pop(), pk=PACKS[c.k]; state.stats.cards++;
   c.html=fillNames(c.x);
   $("#c-type").innerHTML=`<svg><use href="#${pk.icon}"/></svg>${pk.name} · ${esc(current().name)}`;
-  $("#c-text").innerHTML=c.html;
+  $("#c-text").innerHTML=`<span>${c.html}</span>`;
   $("#c-hint").textContent=pk.hint;
   resetTimer(); $("#timer").classList.toggle("show",c.t>0); $("#t-sec").textContent=c.t;
   $("#done-label").textContent=c.k==="r"?"קיבלנו, להעביר":"עשיתי, להעביר";
@@ -849,13 +855,6 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape") closeSheet();
   if(e.key===" " && $("#turn").style.display==="flex" && !$("#card").classList.contains("flipped")){ e.preventDefault(); flipCard(); }
 });
-
-/* עלים מרחפים ברקע */
-(function(){
-  let h=""; for(let i=0;i<7;i++){ const z=50+Math.random()*90;
-    h+=`<svg style="width:${z}px;height:${z}px;top:${i*14+Math.random()*6}%;left:${Math.random()*85}%;--d:${10+Math.random()*10}s;--r0:${Math.random()*360|0}deg;--r1:${(Math.random()*360|0)+50}deg;--dx:${(Math.random()-.5)*70|0}px;animation-delay:-${Math.random()*10|0}s"><use href="#i-leaf"/></svg>`; }
-  $("#leaves").innerHTML=h;
-})();
 
 /* ========== אתחול ========== */
 load(); renderNames(); renderPacks();
