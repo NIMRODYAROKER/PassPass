@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://nimrodyaroker.github.io/PassPass/og-floor.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Bungee&family=Secular+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Assistant:wght@400;600;700;800&family=Bungee&family=Secular+One&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
    PassPass – סגנון "מדבקות": קווי מתאר עבים, צללים קשיחים,
@@ -235,21 +235,35 @@ svg{display:block}
 .rounds b{font-family:var(--fun);font-weight:400;font-size:1.7rem;line-height:1.1}
 .rounds small{font-size:.76rem;font-weight:700;opacity:.8}
 .rounds button[aria-pressed="true"]{background:var(--ember);color:var(--ink);transform:rotate(-4deg) translateY(-3px)}
-.until{display:flex;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border:2.5px dashed var(--line);border-radius:14px}
-.until svg{width:34px;height:34px;flex:none;color:var(--ember)}
-.until p{font-size:.95rem;color:var(--muted);line-height:1.4}
-.until b{color:var(--text)}
-/* כפתור סיום המשחק בסרגל העליון */
-.joint-out{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;
-  padding:6px 12px;border-radius:12px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);
-  transition:transform .12s,background .2s,color .2s;
+/* פתק בכתב יד בצד השולחן: "המשחק נגמר כשנגמר הג'וינט" */
+.side-note{
+  position:absolute;z-index:5;left:112%;top:116%;width:44%;transform:translate(-50%,-50%) rotate(7deg);
+  background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
+  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.05rem;line-height:1.05;text-align:center;
+  animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
 }
-.joint-out span{font-weight:800;font-size:.9rem}
-.joint-out small{font-size:.7rem;color:var(--muted);font-weight:700}
-.joint-out:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.joint-out.sure{background:var(--danger);color:var(--ink)}
-.joint-out.sure small{color:var(--ink)}
+.side-note::before{ /* סלוטייפ */
+  content:"";position:absolute;top:-9px;left:50%;width:38px;height:15px;margin-left:-19px;transform:rotate(-4deg);
+  background:rgba(246,241,231,.75);border:1.5px solid rgba(22,16,31,.35);
+}
+@keyframes noteSway{50%{transform:translate(-50%,-50%) rotate(4deg)}}
+/* כפתור "נגמר הג'וינט": מאפרה שמכבים בה את הג'וינט */
+.ash-btn{
+  position:absolute;z-index:5;left:-14%;top:104%;width:34%;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
+}
+.ash-btn .ash{width:100%;aspect-ratio:1;transition:transform .15s var(--bounce)}
+.ash-btn .ash svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(3px 4px 0 var(--ink))}
+.ash-btn:hover .ash{transform:rotate(-8deg) scale(1.05)}
+.ash-btn:active .ash{transform:scale(.92)}
+.ash-btn .lbl{
+  font-weight:800;font-size:.72rem;line-height:1.1;white-space:nowrap;padding:3px 8px;border-radius:7px;
+  background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);transform:rotate(-3deg);
+  transition:background .2s;
+}
+.ash-btn.sure .lbl{background:var(--danger)}
+.ash-btn.sure .ash{animation:shake .35s ease-in-out infinite}
+@keyframes shake{25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
 .summary{border:2.5px dashed var(--line);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:.95rem;margin-top:18px}
 .summary b{color:var(--text)}
 .spacer{flex:1;min-height:20px}
@@ -442,10 +456,6 @@ svg{display:block}
           <span class="sw"></span>
         </button>
       </div>
-      <div class="until">
-        <svg><use href="#i-leaf"/></svg>
-        <p><b>אין מספר סבבים.</b> משחקים עד שנגמר הג'וינט, ואז לוחצים למעלה על "נגמר הג'וינט".</p>
-      </div>
       <div class="spacer"></div>
       <div class="row">
         <button class="btn btn-line" data-go="1" style="flex:.6"><svg><use href="#i-back"/></svg> חזרה</button>
@@ -459,9 +469,8 @@ svg{display:block}
   <section class="screen game" id="game">
     <div class="gbar">
       <span class="rd" id="g-round">סבב <b>1</b></span>
-      <button class="joint-out" id="joint-out"><span>נגמר הג'וינט</span><small>סיימנו לשחק</small></button>
     </div>
-    <div class="table" id="game-table" aria-hidden="true"></div>
+    <div class="table" id="game-table"></div>
     <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
 
     <div class="stage">
@@ -797,16 +806,23 @@ function avatarSVG(name){
 }
 
 /* חפצים על השולחן: מאפרה וקערת חטיפים */
-const DECO=`<div class="deco" style="left:31%;top:69%;width:17%;height:17%"><svg viewBox="-20 -20 40 40">
-    <circle cx="2" cy="2" r="15" fill="#16101f" opacity=".35"/><circle r="15" fill="#9fb3b1" stroke="#16101f" stroke-width="2.6"/>
-    <circle r="9.5" fill="#6f8381" stroke="#16101f" stroke-width="2"/><path d="M-15 0h5M10 0h5M0 -15v5" stroke="#16101f" stroke-width="3"/>
-    <circle cx="-3" cy="2" r="2" fill="#3b4544"/><circle cx="3" cy="-1" r="1.4" fill="#3b4544"/><path d="M-11 -9 Q-6 -13 0 -13" fill="none" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/></svg></div>
-  <div class="deco" style="left:70%;top:68%;width:20%;height:20%"><svg viewBox="-20 -20 40 40">
+const DECO=`<div class="deco" style="left:64%;top:70%;width:20%;height:20%"><svg viewBox="-20 -20 40 40">
     <circle cx="2" cy="2" r="16" fill="#16101f" opacity=".35"/><circle r="16" fill="#ff9f7a" stroke="#16101f" stroke-width="2.6"/>
     <circle r="12" fill="#f3c25b" stroke="#16101f" stroke-width="1.8"/>
     ${[[-5,-4,20],[4,-5,-30],[-2,4,60],[6,3,10],[-7,3,-40],[1,-1,80]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="4.4" ry="3" transform="rotate(${r} ${x} ${y})" fill="#ffd77a" stroke="#16101f" stroke-width="1.3"/>`).join("")}
     <path d="M-12 -8 Q-7 -14 0 -15" fill="none" stroke="#fff" stroke-width="2" opacity=".55" stroke-linecap="round"/></svg></div>`;
 
+/* מאפרה גדולה עם ג'וינט מכובה בתוכה – משמשת ככפתור סיום */
+const ASHTRAY=`<svg viewBox="-24 -24 48 48" aria-hidden="true">
+  <circle r="21" fill="#a9bcba" stroke="#16101f" stroke-width="2.6"/>
+  <circle r="14.5" fill="#6f8381" stroke="#16101f" stroke-width="2"/>
+  <path d="M-21 0h7M14 0h7M0 -21v7" stroke="#16101f" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M-15 -11 Q-9 -18 0 -19" fill="none" stroke="#fff" stroke-width="2.4" opacity=".55" stroke-linecap="round"/>
+  <circle cx="-4" cy="5" r="3" fill="#4a5453"/><circle cx="5" cy="7" r="2" fill="#4a5453"/><circle cx="2" cy="1" r="1.5" fill="#5c6766"/>
+  <g transform="rotate(-28)"><rect x="-12" y="-3" width="15" height="6" rx="2" fill="#f3efe6" stroke="#16101f" stroke-width="1.6"/>
+    <rect x="-12" y="-3" width="5" height="6" rx="1.5" fill="#d9b886" stroke="#16101f" stroke-width="1.6"/>
+    <path d="M3 -3 l2 1.5 -1.5 1.5 2 1.5 -2.5 1.5" fill="#3b4544"/></g>
+</svg>`;
 /* מושבים קבועים: כל מי שמצטרף מתיישב ליד הקודם (12 כיסאות, 30° ביניהם) */
 /* בזמן ההרשמה: כל מי שמצטרף מתיישב ליד הקודם, 45° ביניהם (אם יש הרבה – מצטופפים קצת כדי להיכנס).
    כשהמשחק מתחיל: כולם מתפזרים במרווחים שווים סביב השולחן. */
@@ -829,6 +845,10 @@ function renderTable(el,{current=-1,next=-1,pointer=false}={}){
     html+=`<div class="seat${cls}" style="--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
     html+=`<span class="tag${i===current?" now":""}" style="left:${50+RT*c}%;top:${50+RT*sn}%">${esc(p.name)}</span>`;
   });
+  if(pointer) html+=`<div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
+    <button type="button" class="ash-btn" id="joint-out" aria-label="נגמר הג'וינט – סיום המשחק">
+      <span class="ash">${ASHTRAY}</span><span class="lbl">נגמר הג'וינט</span>
+    </button>`;
   if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
   el.innerHTML=html;
 }
@@ -1002,11 +1022,11 @@ $("#done-btn").addEventListener("click",()=>resolve(true));
 $("#skip-btn").addEventListener("click",()=>resolve(false));
 /* נגמר הג'וינט: לחיצה ראשונה מבקשת אישור, שנייה מסיימת ומציגה את התוצאות */
 let outTimer=null;
-function resetOut(){ clearTimeout(outTimer); const b=$("#joint-out"); b.classList.remove("sure"); b.querySelector("span").textContent="נגמר הג'וינט"; b.querySelector("small").textContent="סיימנו לשחק"; }
-$("#joint-out").addEventListener("click",()=>{
-  const b=$("#joint-out");
-  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.querySelector("span").textContent="בטוח?"; b.querySelector("small").textContent="לחצו שוב לסיום"; outTimer=setTimeout(resetOut,3000); return; }
-  resetOut(); endGame();
+function resetOut(){ clearTimeout(outTimer); const b=$("#joint-out"); if(!b) return; b.classList.remove("sure"); b.querySelector(".lbl").textContent="נגמר הג'וינט"; }
+$("#game-table").addEventListener("click",e=>{
+  const b=e.target.closest("#joint-out"); if(!b) return;
+  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.querySelector(".lbl").textContent="בטוח? לחצו שוב"; outTimer=setTimeout(resetOut,3000); return; }
+  fx.puff(b,14); resetOut(); endGame();
 });
 $("#again-btn").addEventListener("click",startGame);
 $("#setup-btn").addEventListener("click",()=>{ renderNames(); goStep(1); show("setup"); });
