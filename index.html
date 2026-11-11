@@ -844,7 +844,7 @@ function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   const list=state.players, n=list.length;
   spreadSeats=pointer;
   let html='<div class="rug"><i class="fr l"></i><i class="fr r"></i></div><div class="rail"></div><div class="felt"></div>'+DECO;
-  if(!n){ el.innerHTML=html+'<div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
+  if(!n){ el.innerHTML=html; return; }
   list.forEach((p,i)=>{
     const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=pointer?44:46, RT=pointer?57:64;
     const cls=i===current?" now":i===next?" next":"";
