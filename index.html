@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261111152710">
+<meta name="build" content="20261111152829">
 <meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
@@ -1103,7 +1103,7 @@ document.addEventListener("keydown",e=>{
 });
 
 /* Service worker: גורם לאייקון במסך הבית לטעון תמיד את הגרסה החדשה */
-try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js"); }catch(e){}
+try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{}); }catch(e){}
 
 /* בדיקת עדכון: אם באתר יש גרסה חדשה יותר מזו שנפתחה מהזיכרון של הטלפון – טוענים מחדש פעם אחת */
 (async function checkUpdate(){
