@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1e231f">
+<title>סבב | משחק להעביר הלאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+/* ========== משתני עיצוב: גוונים מעושנים וחמים, הדגשה אחת – גחלת ========== */
+:root{
+  --bg:#1e231f;          /* ירוק-אפור מעושן, לא שחור */
+  --bg-2:#252b26;
+  --surface:#2c332d;
+  --surface-2:#353d36;
+  --line:#465047;
+  --text:#f3efe6;        /* קרם חם */
+  --muted:#b0b4a8;
+  --ember:#ff8a3d;       /* צבע ההדגשה היחיד */
+  --ember-soft:rgba(255,138,61,.14);
+  --ink:#1a1d19;
+  --paper:#efe9dc;       /* נייר גלגול */
+  --paper-line:#ddd5c3;
+  --danger:#ff7a6b;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --display:"Secular One","Assistant",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:17px;background:var(--bg);color:var(--text);line-height:1.5;
+  min-height:100dvh;overflow-x:hidden;
+}
+/* רקע: ערפל עדין + גרעיניות כמו נייר */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(70% 50% at 50% 0%,rgba(243,239,230,.07),transparent 70%),
+    radial-gradient(60% 40% at 50% 100%,rgba(255,138,61,.06),transparent 70%),
+    var(--bg);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.08;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:10px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+svg{display:block}
+
+.app{position:relative;z-index:1;max-width:500px;margin:0 auto;min-height:100dvh;padding:18px 18px calc(20px + var(--safe-b));display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;animation:fadeUp .45s var(--ease)}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ========== כפתורים ========== */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 20px;
+  border-radius:14px;font-weight:800;font-size:1.08rem;
+  transition:transform .15s var(--ease),background .2s,border-color .2s,opacity .2s;
+}
+.btn svg{width:20px;height:20px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--ember);color:var(--ink);box-shadow:0 8px 24px -10px rgba(255,138,61,.7)}
+.btn-primary:hover{background:#ff9a55}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.btn-line{border:1.5px solid var(--line);background:transparent}
+.btn-line:hover{border-color:var(--text)}
+.btn-text{height:44px;padding:0 12px;color:var(--muted);font-weight:700}
+.btn-text:hover{color:var(--text)}
+.row{display:flex;gap:10px}
+.row>.btn{flex:1}
+
+/* ========== כותרת עליונה ========== */
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.wordmark{font-family:var(--display);font-size:1.6rem;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.wordmark i{width:9px;height:9px;border-radius:50%;background:var(--ember);box-shadow:0 0 12px var(--ember);animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{50%{opacity:.5;box-shadow:0 0 4px var(--ember)}}
+.steps{display:flex;gap:6px}
+.steps span{width:22px;height:4px;border-radius:2px;background:var(--line);transition:background .3s,width .3s}
+.steps span.on{background:var(--ember);width:34px}
+
+/* ========== אשף ההגדרות ========== */
+.step{display:none;flex:1;flex-direction:column;animation:fadeUp .4s var(--ease)}
+.step.active{display:flex}
+.eyebrow{color:var(--ember);font-weight:800;font-size:.85rem;letter-spacing:.08em;margin:14px 0 2px}
+.title{font-family:var(--display);font-size:clamp(2rem,9vw,2.6rem);line-height:1.1;margin-bottom:6px}
+.lead{color:var(--muted);margin-bottom:18px}
+
+/* השולחן – שחקנים יושבים במעגל */
+.table{
+  position:relative;width:min(78vw,270px);aspect-ratio:1;margin:6px auto 18px;
+}
+.table .felt{
+  position:absolute;inset:16%;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,var(--surface-2),var(--bg-2));
+  border:1px dashed var(--line);
+}
+.seat{
+  position:absolute;width:var(--sz,46px);height:var(--sz,46px);margin:calc(var(--sz,46px)/-2) 0 0 calc(var(--sz,46px)/-2);
+  border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:calc(var(--sz,46px)*.38);
+  background:var(--surface);border:1.5px solid var(--line);color:var(--text);
+  transition:left .5s var(--ease),top .5s var(--ease),background .3s,border-color .3s,transform .3s var(--ease);
+  animation:seatIn .4s var(--ease);
+}
+@keyframes seatIn{from{transform:scale(0)}to{transform:none}}
+.seat.now{background:var(--ember);border-color:var(--ember);color:var(--ink);transform:scale(1.14);box-shadow:0 0 0 6px var(--ember-soft)}
+.seat.next{border-style:dashed;border-color:var(--ember)}
+.seat-label{position:absolute;top:100%;margin-top:3px;font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;max-width:76px;overflow:hidden;text-overflow:ellipsis}
+.seat.now .seat-label{color:var(--text)}
+.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:.9rem;padding:0 25%}
+
+/* ג'וינט במרכז השולחן – מסתובב אל מי שמחזיק */
+.pointer{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;transition:transform .9s var(--ease)}
+.pointer svg{width:46%;overflow:visible}
+.pointer .tip{animation:burn 1.4s ease-in-out infinite}
+@keyframes burn{50%{opacity:.6}}
+
+/* הוספת שחקן */
+.add{display:flex;gap:8px}
+.input{
+  flex:1;min-width:0;height:54px;padding:0 16px;border-radius:14px;font-size:1.05rem;
+  background:var(--bg-2);border:1.5px solid var(--line);transition:border-color .2s;
+}
+.input::placeholder{color:#868c80}
+.input:focus{outline:none;border-color:var(--ember)}
+.add .btn{width:54px;padding:0}
+.names{list-style:none;margin-top:12px;display:flex;flex-direction:column}
+.names li{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid var(--line);animation:fadeUp .3s var(--ease)}
+.names .n{width:26px;color:var(--muted);font-weight:700;font-size:.9rem}
+.names .nm{flex:1;font-weight:700}
+.names button{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.names button:hover{color:var(--danger);background:rgba(255,122,107,.1)}
+.names button svg{width:16px;height:16px}
+
+/* חבילות – שורות עם מתג */
+.list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.opt{
+  display:flex;align-items:center;gap:14px;padding:16px 4px;border-bottom:1px solid var(--line);text-align:right;width:100%;
+  transition:background .2s;
+}
+.opt:hover{background:rgba(243,239,230,.03)}
+.opt .ic{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--surface);color:var(--muted);transition:.25s}
+.opt .ic svg{width:22px;height:22px}
+.opt .tx{flex:1}
+.opt .tx b{display:block;font-size:1.05rem}
+.opt .tx small{color:var(--muted);font-size:.88rem}
+.opt .cnt{color:var(--muted);font-size:.8rem;margin-left:6px}
+.sw{position:relative;width:46px;height:28px;flex:none;border-radius:99px;background:var(--line);transition:background .25s}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:var(--text);transition:transform .25s var(--ease)}
+[aria-pressed="true"] .sw,[aria-checked="true"].sw,[aria-checked="true"] .sw{background:var(--ember)}
+[aria-pressed="true"] .sw::after,[aria-checked="true"].sw::after,[aria-checked="true"] .sw::after{transform:translateX(-18px);background:var(--ink)}
+.opt[aria-pressed="true"] .ic{background:var(--ember-soft);color:var(--ember)}
+
+/* בחירת סבבים – מספרים גדולים */
+.rounds{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px}
+.rounds button{
+  height:84px;border-radius:14px;border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:border-color .2s,background .2s;
+}
+.rounds b{font-family:var(--display);font-size:1.9rem;line-height:1}
+.rounds small{color:var(--muted);font-size:.78rem}
+.rounds button[aria-pressed="true"]{border-color:var(--ember);background:var(--ember-soft)}
+.rounds button[aria-pressed="true"] b{color:var(--ember)}
+.summary{background:var(--bg-2);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:.95rem;margin-top:16px}
+.summary b{color:var(--text)}
+
+.spacer{flex:1;min-height:18px}
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:8px;min-height:1.3em}
+
+/* ========== מסך המשחק ========== */
+.gbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.gbar .rd{font-weight:800;color:var(--muted);font-size:.95rem}
+.gbar .rd b{color:var(--text)}
+.icon-sq{width:42px;height:42px;border-radius:12px;border:1.5px solid var(--line);display:grid;place-items:center}
+.icon-sq:hover{border-color:var(--text)}
+.icon-sq svg{width:20px;height:20px}
+.game .table{width:min(62vw,220px);margin:4px auto 14px}
+.rules{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.rule{display:flex;gap:10px;align-items:baseline;font-size:.88rem;color:var(--muted);padding:8px 12px;border-right:3px solid var(--ember);background:var(--bg-2);border-radius:8px}
+.rule b{color:var(--ember);flex:none}
+
+/* אזור תחתון: או "העבר" או קלף */
+.stage{flex:1;display:flex;flex-direction:column}
+.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 0}
+.pass .to{color:var(--muted);font-weight:700}
+.pass .who{font-family:var(--display);font-size:clamp(2.6rem,13vw,3.6rem);line-height:1.1;margin:2px 0 6px;word-break:break-word;animation:smokeIn .8s var(--ease)}
+@keyframes smokeIn{from{opacity:0;filter:blur(14px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
+.pass p{color:var(--muted);max-width:290px;margin-bottom:22px}
+.pass .btn{width:100%;max-width:340px}
+
+/* קלף מנייר גלגול */
+.card-wrap{perspective:1200px;flex:1;display:flex;min-height:290px;margin-bottom:12px}
+.card{position:relative;flex:1;transform-style:preserve-3d;transition:transform .7s var(--ease)}
+.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px 20px;display:flex;flex-direction:column;overflow:hidden}
+.face.back{
+  background:var(--surface);border:1.5px solid var(--line);align-items:center;justify-content:center;text-align:center;cursor:pointer;
+  background-image:repeating-linear-gradient(-45deg,rgba(243,239,230,.035) 0 2px,transparent 2px 14px);
+  transition:border-color .2s;
+}
+.face.back:hover{border-color:var(--ember)}
+.face.back .lf{width:84px;height:84px;color:var(--text);opacity:.85;margin-bottom:14px;animation:sway 3s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(-6deg) translateY(-4px)}}
+.face.back h3{font-family:var(--display);font-size:1.6rem;font-weight:400}
+.face.back p{color:var(--muted)}
+.face.front{
+  transform:rotateY(180deg);color:var(--ink);
+  background:
+    linear-gradient(90deg,transparent calc(50% - 1px),var(--paper-line) 50%,transparent calc(50% + 1px)),  /* קיפול באמצע */
+    var(--paper);
+  box-shadow:0 18px 40px -16px rgba(0,0,0,.6);
+}
+/* פס דבק בראש הנייר */
+.face.front::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,#e3dac6 0 6px,#ebe3d1 6px 12px)}
+.ctype{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.9rem;color:#6b5b45;margin-top:6px}
+.ctype svg{width:18px;height:18px;color:var(--ember)}
+.ctext{flex:1;display:flex;align-items:center;font-family:var(--display);font-size:clamp(1.4rem,6.2vw,1.85rem);line-height:1.35;padding:12px 0;position:relative}
+.card.flipped .ctext{animation:smokeIn .7s .3s var(--ease) both}
+.ctext mark{background:linear-gradient(transparent 62%,rgba(255,138,61,.45) 62%);color:inherit;padding:0 2px}
+.chint{font-size:.9rem;color:#6e6a5f;border-top:1px dashed #cfc6b2;padding-top:10px;position:relative}
+
+/* טיימר על הנייר */
+.timer{display:none;align-items:center;gap:12px;margin-bottom:10px;position:relative}
+.timer.show{display:flex}
+.tbar{flex:1;height:8px;border-radius:4px;background:#dcd3bf;overflow:hidden}
+.tbar i{display:block;height:100%;width:100%;background:var(--ember);transform-origin:right;transition:transform 1s linear}
+.tnum{font-weight:800;min-width:34px;text-align:center}
+.tbtn{height:38px;padding:0 14px;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:800;font-size:.9rem}
+.tbtn:disabled{opacity:.6}
+
+.actions{display:flex;gap:10px;opacity:0;transform:translateY(8px);pointer-events:none;transition:.35s var(--ease)}
+.actions.show{opacity:1;transform:none;pointer-events:auto}
+.actions .btn-primary{flex:1.6}
+.actions .btn-line{flex:1}
+
+/* ========== סיום ========== */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:20px 0 18px;height:190px}
+.pod{flex:1;max-width:110px;display:flex;flex-direction:column;align-items:center;gap:6px;animation:fadeUp .6s var(--ease) both}
+.pod .pn{font-weight:800;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .bar{width:100%;border-radius:12px 12px 4px 4px;background:var(--surface);border:1.5px solid var(--line);display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-family:var(--display);font-size:1.6rem}
+.pod.p1 .bar{height:130px;background:var(--ember);border-color:var(--ember);color:var(--ink)}
+.pod.p2 .bar{height:96px}
+.pod.p3 .bar{height:70px}
+.pod.p1{order:2;animation-delay:.2s}.pod.p2{order:1}.pod.p3{order:3;animation-delay:.1s}
+.crown{width:30px;height:30px;color:var(--ember)}
+.board{list-style:none;border-top:1px solid var(--line)}
+.board li{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line)}
+.board .rk{width:24px;color:var(--muted);font-weight:800}
+.board .bn{flex:1;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board .bt{display:block;font-weight:400;font-size:.82rem;color:var(--muted)}
+.board .sc{font-family:var(--display);font-size:1.3rem}
+.facts{display:flex;justify-content:space-around;color:var(--muted);font-size:.88rem;margin:16px 0 4px}
+.facts b{display:block;color:var(--text);font-family:var(--display);font-size:1.5rem;text-align:center;font-weight:400}
+
+/* ========== מגירה תחתונה ========== */
+.backdrop{position:fixed;inset:0;z-index:20;background:rgba(10,12,10,.55);opacity:0;pointer-events:none;transition:opacity .3s}
+.backdrop.open{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;z-index:21;left:0;right:0;bottom:0;max-width:500px;margin:0 auto;background:var(--bg-2);
+  border-radius:22px 22px 0 0;padding:10px 18px calc(20px + var(--safe-b));max-height:85dvh;overflow:auto;
+  transform:translateY(105%);transition:transform .4s var(--ease);border-top:1px solid var(--line);
+}
+.sheet.open{transform:none}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px}
+.sheet h2{font-family:var(--display);font-weight:400;font-size:1.5rem;margin-bottom:6px}
+.sheet .row{margin-top:16px}
+
+.toast{position:fixed;z-index:30;left:50%;bottom:calc(24px + var(--safe-b));transform:translate(-50%,24px);background:var(--text);color:var(--ink);padding:10px 18px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (min-width:700px){ .app{padding-top:40px} .card-wrap{min-height:340px} }
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important;transition-duration:.01ms!important} }
+</style>
+</head>
+<body>
+
+<!-- אייקונים -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-q" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></symbol>
+    <symbol id="i-point" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></symbol>
+    <!-- עלה – קו מתאר בלבד -->
+    <symbol id="i-leaf" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.4">
+      <ellipse cx="50" cy="40" rx="7" ry="38"/>
+      <ellipse cx="50" cy="48" rx="6.5" ry="31" transform="rotate(-32 50 80)"/>
+      <ellipse cx="50" cy="48" rx="6.5" ry="31" transform="rotate(32 50 80)"/>
+      <ellipse cx="50" cy="57" rx="5.5" ry="23" transform="rotate(-64 50 80)"/>
+      <ellipse cx="50" cy="57" rx="5.5" ry="23" transform="rotate(64 50 80)"/>
+      <path d="M50 80v18" stroke-linecap="round"/>
+    </symbol>
+    <radialGradient id="emberG"><stop offset="0" stop-color="#ffe2b8"/><stop offset=".45" stop-color="#ff8a3d"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/></radialGradient>
+  </defs>
+</svg>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<main class="app">
+
+  <!-- ========== אשף הגדרות: 3 שלבים ========== -->
+  <section class="screen active" id="setup">
+    <div class="top">
+      <div class="wordmark"><i></i>סבב</div>
+      <div class="steps" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+    </div>
+
+    <!-- שלב 1: מי במעגל -->
+    <div class="step active" data-step="1">
+      <p class="eyebrow">שלב 1 מתוך 3</p>
+      <h1 class="title">מי יושב במעגל?</h1>
+      <p class="lead">תכניסו שמות לפי סדר הישיבה. ככה הטלפון והג'וינט ילכו בסבב.</p>
+      <div class="table" id="setup-table" aria-hidden="true"></div>
+      <form class="add" id="add-form" autocomplete="off">
+        <label for="name-input" class="sr-only">שם שחקן</label>
+        <input class="input" id="name-input" maxlength="14" placeholder="שם ואנטר" enterkeyhint="done">
+        <button class="btn btn-primary" type="submit" aria-label="הוסף שחקן"><svg><use href="#i-plus"/></svg></button>
+      </form>
+      <ul class="names" id="names" aria-live="polite"></ul>
+      <div class="spacer"></div>
+      <button class="btn btn-primary" id="to-2" disabled>המשך לקלפים <svg><use href="#i-arrow"/></svg></button>
+      <p class="hint" id="hint-1">צריך לפחות 2 שחקנים</p>
+    </div>
+
+    <!-- שלב 2: חבילות -->
+    <div class="step" data-step="2">
+      <p class="eyebrow">שלב 2 מתוך 3</p>
+      <h1 class="title">מה יוצא בקלפים?</h1>
+      <p class="lead">מדליקים ומכבים. אפשר לשלב כמה שרוצים.</p>
+      <div class="list" id="packs"></div>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn btn-line" data-go="1" style="flex:.6"><svg><use href="#i-back"/></svg> חזרה</button>
+        <button class="btn btn-primary" id="to-3">המשך <svg><use href="#i-arrow"/></svg></button>
+      </div>
+      <p class="hint" id="hint-2"></p>
+    </div>
+
+    <!-- שלב 3: אורך משחק -->
+    <div class="step" data-step="3">
+      <p class="eyebrow">שלב 3 מתוך 3</p>
+      <h1 class="title">כמה סבבים?</h1>
+      <p class="lead">סבב אחד = כל אחד במעגל מקבל קלף פעם אחת.</p>
+      <div class="rounds" id="rounds" role="group" aria-label="מספר סבבים">
+        <button type="button" data-v="3"><b>3</b><small>קצר</small></button>
+        <button type="button" data-v="5" aria-pressed="true"><b>5</b><small>רגיל</small></button>
+        <button type="button" data-v="8"><b>8</b><small>ארוך</small></button>
+        <button type="button" data-v="0"><b>∞</b><small>עד שנמאס</small></button>
+      </div>
+      <div class="list">
+        <button class="opt" id="shuffle-sw" role="switch" aria-checked="false">
+          <span class="tx"><b>לערבב את הסדר</b><small>במקום ללכת לפי סדר הישיבה</small></span>
+          <span class="sw"></span>
+        </button>
+      </div>
+      <div class="summary" id="summary"></div>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn btn-line" data-go="2" style="flex:.6"><svg><use href="#i-back"/></svg> חזרה</button>
+        <button class="btn btn-primary" id="start-btn">מדליקים</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== מסך המשחק: שולחן למעלה, קלף למטה ========== -->
+  <section class="screen game" id="game">
+    <div class="gbar">
+      <span class="rd" id="g-round">סבב <b>1</b></span>
+      <button class="icon-sq" id="menu-btn" aria-label="טבלת ניקוד"><svg><use href="#i-list"/></svg></button>
+    </div>
+    <div class="table" id="game-table" aria-hidden="true"></div>
+    <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
+
+    <div class="stage">
+      <!-- מצב א: העברת הטלפון -->
+      <div class="pass" id="pass" aria-live="polite">
+        <span class="to">הטלפון והג'וינט עוברים אל</span>
+        <div class="who" id="pass-name">—</div>
+        <p>רק כשהכול אצלך ביד – לוחצים.</p>
+        <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
+      </div>
+
+      <!-- מצב ב: קלף -->
+      <div id="turn" style="display:none;flex:1;flex-direction:column">
+        <div class="card-wrap">
+          <div class="card" id="card">
+            <button class="face back" id="card-back" aria-label="הפוך קלף">
+              <svg class="lf"><use href="#i-leaf"/></svg>
+              <h3>תהפכו</h3>
+              <p>שאיפה עמוקה, ו...</p>
+            </button>
+            <div class="face front" aria-live="polite">
+              <div class="ctype" id="c-type"></div>
+              <div class="ctext" id="c-text"></div>
+              <div class="timer" id="timer">
+                <span class="tnum" id="t-sec">30</span>
+                <div class="tbar"><i id="t-bar"></i></div>
+                <button class="tbtn" id="t-start">התחל</button>
+              </div>
+              <div class="chint" id="c-hint"></div>
+            </div>
+          </div>
+        </div>
+        <div class="actions" id="actions">
+          <button class="btn btn-line" id="skip-btn">פס</button>
+          <button class="btn btn-primary" id="done-btn"><svg><use href="#i-check"/></svg> <span id="done-label">עשיתי, להעביר</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== סיום ========== -->
+  <section class="screen" id="end">
+    <div class="top"><div class="wordmark"><i></i>סבב</div></div>
+    <h1 class="title" style="margin-top:14px">נגמר הסבב.</h1>
+    <p class="lead" id="end-lead"></p>
+    <div class="podium" id="podium"></div>
+    <ol class="board" id="end-board"></ol>
+    <div class="facts">
+      <div><b id="s-cards">0</b>קלפים</div>
+      <div><b id="s-done">0</b>בוצעו</div>
+      <div><b id="s-pass">0</b>פסים</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="row">
+      <button class="btn btn-line" id="setup-btn">שינוי שחקנים</button>
+      <button class="btn btn-primary" id="again-btn">עוד משחק</button>
+    </div>
+  </section>
+</main>
+
+<!-- מגירת ניקוד -->
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="grab"></div>
+  <h2 id="sheet-title">איפה כולם עומדים</h2>
+  <ol class="board" id="live-board"></ol>
+  <div class="row">
+    <button class="btn btn-line" id="end-btn">לסיים משחק</button>
+    <button class="btn btn-primary" id="close-sheet">חזרה</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =========================================================
+   תוכן הקלפים
+   {p} = שחקן אקראי אחר · t = טיימר בשניות
+   ========================================================= */
+const PACKS = {
+  q: { name:"שאלות", desc:"כנות מלאה, בלי לברוח", icon:"i-q",
+    hint:"עונים בכנות. פס = מינוס נקודה.",
+    cards:[
+      "מה הדבר הכי מביך שקרה לך מול מישהו שרצית להרשים?",
+      "איזה הרגל שלך היית מסתיר/ה מהחברים אם היית יכול/ה?",
+      "מה השקר האחרון שסיפרת – ולמי?",
+      "אם היית צריך/ה לגור שבוע עם מישהו מהמעגל, את מי היית בוחר/ת – ואת מי לא?",
+      "מה הדבר הכי מטופש שעשית בגלל שמישהו אמר 'אין מצב שאתה עושה את זה'?",
+      "על מה את/ה חושב/ת יותר מדי לפני שנרדמים?",
+      "מה הדבר שהכי קשה לך להודות שאת/ה אוהב/ת?",
+      "איזו תכונה של {p} היית רוצה לגנוב לעצמך?",
+      "מה הזיכרון הכי טוב שלך עם {p}?",
+      "אם היית יכול/ה למחוק פוסט או סטורי אחד מהעבר – איזה?",
+      "מה העבודה הכי גרועה שהיית מוכן/ה לעשות בשביל מיליון שקל?",
+      "מתי בפעם האחרונה בכית מסרט או משיר? איזה?",
+      "מה החלום הכי מוזר שאת/ה זוכר/ת?",
+      "מה היית עושה ביום הראשון אם היית זוכה בלוטו?",
+      "איזו שאלה את/ה מפחד/ת שישאלו אותך עכשיו?",
+      "מה הדבר שאף אחד פה לא יודע עלייך?",
+      "את מי מהמעגל היית לוקח/ת איתך לטיול של חודש בחו\"ל?",
+      "מה הדעה הכי לא פופולרית שלך?",
+      "על מה היית מוציא/ה כסף בלי לחשוב פעמיים?",
+      "מה ההחלטה הכי טובה שקיבלת השנה?"
+    ]},
+  d: { name:"אתגרים", desc:"קומי, תופיע/י", icon:"i-bolt",
+    hint:"המעגל מחליט אם זה נחשב.",
+    cards:[
+      {x:"תעשה/י חיקוי של {p} עד שמישהו מנחש.", t:30},
+      {x:"דבר/י במבטא צרפתי עד התור הבא שלך."},
+      {x:"תמכור/י ל-{p} את הטלפון שבידך כאילו את/ה בערוץ קניות.", t:45},
+      {x:"תגיד/י 5 מילים שמתחרזות עם 'סבב' בלי לעצור.", t:20},
+      {x:"שיר/י את הפזמון של השיר האחרון ששמעת."},
+      {x:"תן/י ל-{p} לכתוב סטטוס בוואטסאפ שלך (מותר למחוק אחרי 10 דקות)."},
+      {x:"תסביר/י איך מכינים טוסט כאילו זה ניתוח לב פתוח.", t:40},
+      {x:"תעשה/י 10 סקוואטים תוך כדי שאת/ה מחמיא/ה לכל אחד במעגל.", t:30},
+      {x:"תספר/י בדיחה. אם אף אחד לא צוחק – {p} מספר/ת אחת במקומך."},
+      {x:"תחקה/י בעל חיים לבחירת {p} עד שמנחשים.", t:30},
+      {x:"תעשה/י כניסה דרמטית לחדר כאילו את/ה כוכב/ת על."},
+      {x:"דבר/י בלי לומר 'כן' או 'לא' עד התור הבא שלך."},
+      {x:"תנאם/י נאום ניצחון על משהו שלא ניצחת בו.", t:30},
+      {x:"שלח/י לאדם האחרון בצ'אט שלך: 'חשבתי עליך עכשיו'. בלי הסברים."},
+      {x:"תמציא/י ראפ של 4 שורות על {p}.", t:45},
+      {x:"תעשה/י פרצוף רציני 20 שניות בזמן ש-{p} מנסה להצחיק אותך.", t:20},
+      {x:"תתאר/י את {p} רק בתנועות ידיים עד שמנחשים מי זה.", t:30}
+    ]},
+  m: { name:"מי הכי?", desc:"סופרים 3 ומצביעים", icon:"i-point",
+    hint:"קוראים בקול, סופרים עד 3 וכולם מצביעים. מי שקיבל הכי הרבה – מסביר/ה.",
+    cards:[
+      "מי הכי סביר/ה להירדם ראשון/ה הערב?",
+      "מי הכי סביר/ה לשכוח איפה החנה את האוטו?",
+      "מי הכי סביר/ה להזמין פיצה בשלוש בלילה?",
+      "מי הכי סביר/ה להפוך למפורסם/ת?",
+      "מי הכי סביר/ה לצחוק בזמן הלא נכון?",
+      "מי הכי סביר/ה לפתוח עסק מוזר ולהצליח?",
+      "מי הכי סביר/ה לטוס לחו\"ל בהחלטה של רגע?",
+      "מי הכי סביר/ה להתאהב בטיול?",
+      "מי הכי סביר/ה לשרוד באי בודד?",
+      "מי הכי סביר/ה לחזור לאקס/ית?",
+      "מי הכי סביר/ה להיתקע בשיחה של שעה עם זר/ה?",
+      "מי הכי סביר/ה לחסל את כל החטיפים לבד?",
+      "מי הכי סביר/ה לשלוח הודעה קולית של 7 דקות?",
+      "מי הכי סביר/ה לבכות בחתונה של מישהו אחר?",
+      "מי הכי סביר/ה להמציא תירוץ כדי לא לבוא למסיבה?",
+      "מי הכי סביר/ה לפספס טיסה?",
+      "מי הכי סביר/ה להתחיל ויכוח פילוסופי בשתיים בלילה?"
+    ]},
+  r: { name:"חוקים", desc:"חוק חדש לכל המעגל", icon:"i-scroll",
+    hint:"בתוקף מעכשיו. מי ששובר – מינוס נקודה (המעגל שופט).",
+    cards:[
+      "אסור להגיד שמות. רק כינויים.",
+      "כל משפט חייב להסתיים ב'אחי'.",
+      "מי שמחזיק את הטלפון מדבר רק בגוף שלישי.",
+      "לפני כל שאלה אומרים 'סליחה שאני שואל'.",
+      "אסור להצביע עם האצבע. רק עם המרפק.",
+      "כל פעם ש-{p} צוחק/ת – כולם מוחאים כף.",
+      "אסור לגעת בטלפון האישי. מי שנתפס – מינוס נקודה.",
+      "מי שאומר/ת 'כאילו' – מינוס נקודה.",
+      "{p} הוא/היא המלך/ה. כולם פונים אליו/ה ב'הוד מעלתך'.",
+      "לפני שמעבירים את הג'וינט – מחמאה למי שמקבל.",
+      "מדברים רק בלחש עד שיוצא חוק חדש.",
+      "אסור להגיד 'ג'וינט'. רק 'הדבר'."
+    ]},
+  g: { name:"סבב קטגוריות", desc:"כולם משתתפים, מהר", icon:"i-users",
+    hint:"מתחילים ממך וממשיכים עם הסבב. מי שנתקע או חוזר על תשובה – מינוס נקודה.",
+    cards:[
+      "קטגוריה: מותגי חטיפים.",
+      "קטגוריה: שירים ישראליים שכולם יודעים בעל פה.",
+      "קטגוריה: דברים שמוצאים במקרר בשלוש בלילה.",
+      "קטגוריה: ערים בעולם שהייתם רוצים לטוס אליהן.",
+      "קטגוריה: תירוצים לאיחור.",
+      "קטגוריה: קבוצות כדורגל באירופה.",
+      "קטגוריה: סרטים שראיתם יותר מפעמיים.",
+      "קטגוריה: מילים שמתחילות ב-ש'.",
+      "קטגוריה: דברים שאסור להגיד בדייט ראשון.",
+      "קטגוריה: מקצועות שלא הייתם עושים בשום מצב.",
+      "סופרים בסבב: כל מספר שמתחלק ב-3 אומרים 'סבב' במקום. מתחילים מ-1.",
+      "סיפור בהמשכים: כל אחד מוסיף מילה אחת. שני סיבובים.",
+      {x:"נחשו את השיר: את/ה מזמזם/ת, מי שמנחש ראשון – נקודה.", t:30}
+    ]}
+};
+const TITLES = ["מלך/ת הסבב","ממש קרוב","רוח המעגל","יציב/ה","פעם הבאה","האגדה השקטה","הפס הרשמי"];
+
+/* ========== מצב ========== */
+const state = {
+  players:[], packs:new Set(Object.keys(PACKS)), rounds:5, shuffle:false,
+  order:[], idx:0, round:1, deck:[], card:null, rules:[],
+  stats:{cards:0,done:0,pass:0}, timer:null, angle:0
+};
+
+/* ========== עזרים ========== */
+const $ = s => document.querySelector(s);
+const shuffleArr = a => { for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const vibrate = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),2000); }
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id)); scrollTo({top:0}); }
+function save(){ try{ localStorage.setItem("sevev-players",JSON.stringify(state.players.map(p=>p.name))); }catch(e){} }
+function load(){ try{ const n=JSON.parse(localStorage.getItem("sevev-players")||"[]"); if(Array.isArray(n)) state.players=n.slice(0,12).map(x=>({name:String(x)})); }catch(e){} }
+
+/* =========================================================
+   אפקטים: עשן אפור וגחלים כתומות בלבד
+   ========================================================= */
+const fx=(()=>{
+  const cv=$("#fx"), ctx=cv.getContext("2d");
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const parts=[]; let W=0,H=0;
+  // ספרייטים רכים: עשן קרם וגחלת כתומה
+  const mk=(r,g,b,a)=>{ const s=document.createElement("canvas"); s.width=s.height=128; const c=s.getContext("2d");
+    const grd=c.createRadialGradient(64,64,0,64,64,64); grd.addColorStop(0,`rgba(${r},${g},${b},${a})`); grd.addColorStop(.45,`rgba(${r},${g},${b},${a*.35})`); grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+    c.fillStyle=grd; c.fillRect(0,0,128,128); return s; };
+  const SMOKE=mk(235,232,222,.9), EMBER=mk(255,138,61,1);
+  function resize(){ const d=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*d; cv.height=H*d; ctx.setTransform(d,0,0,d,0,0); }
+  const smoke=(x,y,o={})=>parts.push({t:0,x,y,amb:o.amb,vx:(Math.random()-.5)*(o.spread??.8),vy:-(o.rise??.5)-Math.random()*.4,r:o.r??(16+Math.random()*22),gr:o.grow??.32,a:o.a??.16,life:0,max:o.life??(150+Math.random()*120),ph:Math.random()*6.3});
+  const ember=(x,y,o={})=>{ const a=o.ang??(-Math.PI/2+(Math.random()-.5)*(o.cone??2.4)), v=(o.speed??3)*(.4+Math.random()*.8);
+    parts.push({t:1,x,y,amb:o.amb,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:o.r??(1+Math.random()*1.6),life:0,max:o.life??(45+Math.random()*45),ph:Math.random()*6.3}); };
+  function ambient(){
+    let s=0,e=0; for(const p of parts) if(p.amb) p.t?e++:s++;
+    if(s<12 && Math.random()<.06) smoke(Math.random()*W,H+70,{amb:1,r:80+Math.random()*90,a:.05,rise:.22,grow:.16,spread:.4,life:800+Math.random()*400});
+    if(e<6 && Math.random()<.02) ember(Math.random()*W,H+5,{amb:1,speed:.6,cone:.5,life:500+Math.random()*300});
+  }
+  function frame(){
+    requestAnimationFrame(frame); if(document.hidden) return;
+    if(!reduce) ambient();
+    ctx.clearRect(0,0,W,H);
+    for(let i=parts.length-1;i>=0;i--){
+      const p=parts[i]; if(++p.life>=p.max){ parts.splice(i,1); continue; }
+      const k=p.life/p.max;
+      if(!p.t){ p.x+=p.vx+Math.sin(p.life*.02+p.ph)*.35; p.y+=p.vy; p.r+=p.gr;
+        ctx.globalAlpha=p.a*Math.sin(Math.PI*k); ctx.drawImage(SMOKE,p.x-p.r,p.y-p.r,p.r*2,p.r*2);
+      } else { p.vx*=.985; p.vy=p.vy*.985-.012; p.x+=p.vx; p.y+=p.vy;
+        const a=(1-k)*(.65+.35*Math.sin(p.life*.45+p.ph)), g=p.r*6;
+        ctx.globalCompositeOperation="lighter"; ctx.globalAlpha=a*.7; ctx.drawImage(EMBER,p.x-g,p.y-g,g*2,g*2);
+        ctx.globalAlpha=a; ctx.fillStyle="#ffe2b8"; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*.7,0,6.3); ctx.fill();
+        ctx.globalCompositeOperation="source-over"; }
+    }
+    ctx.globalAlpha=1;
+  }
+  const at=el=>{ const b=el.getBoundingClientRect(); return [b.left+b.width/2,b.top+b.height/2,b]; };
+  resize(); addEventListener("resize",resize); requestAnimationFrame(frame);
+  return {
+    puff(el,n=12){ const [x,y,b]=at(el); for(let i=0;i<(reduce?3:n);i++) smoke(x+(Math.random()-.5)*b.width*.6,y+(Math.random()-.5)*b.height*.4,{spread:1.6,rise:.5+Math.random()*.6}); },
+    sparks(el,n=24){ if(reduce) return; const [x,y]=at(el); for(let i=0;i<n;i++) ember(x,y,{cone:3}); },
+    trail(x,y){ if(reduce) return; smoke(x,y,{r:5+Math.random()*4,grow:.22,a:.22,rise:.7,spread:.3,life:110+Math.random()*50}); },
+    burst(){ if(reduce) return; for(let j=0;j<4;j++) setTimeout(()=>{ const x=W*(.2+Math.random()*.6), y=H*(.2+Math.random()*.3);
+      for(let i=0;i<30;i++) ember(x,y,{cone:6.3,speed:4,life:70+Math.random()*40}); for(let i=0;i<4;i++) smoke(x,y,{r:26,spread:2}); },j*300); }
+  };
+})();
+
+/* =========================================================
+   השולחן: מציב שחקנים במעגל ומסובב את הג'וינט
+   ========================================================= */
+const JOINT=`<svg viewBox="0 0 120 40"><path d="M22 15 L100 11 Q106 20 100 29 L22 25 Z" fill="#f3efe6"/><path d="M8 15.5 L24 15 L24 25 L8 24.5 Q5 20 8 15.5Z" fill="#d9b886"/><circle class="tip" cx="103" cy="20" r="12" fill="url(#emberG)"/><ellipse cx="102.5" cy="20" rx="2.6" ry="7" fill="#ffc48a"/></svg>`;
+function renderTable(el,{current=-1,next=-1,pointer=false}={}){
+  const list=state.order.length&&pointer ? state.order.map(i=>state.players[i]) : state.players;
+  const n=list.length;
+  if(!n){ el.innerHTML='<div class="felt"></div><div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
+  const sz=n<=6?46:n<=9?40:34;
+  let html='<div class="felt"></div>';
+  list.forEach((p,i)=>{
+    const a=(-90+i*360/n)*Math.PI/180, R=42;  // אחוז מהרדיוס
+    const cls=i===current?" now":i===next?" next":"";
+    html+=`<div class="seat${cls}" style="--sz:${sz}px;left:${50+R*Math.cos(a)}%;top:${50+R*Math.sin(a)}%">${esc(p.name.trim().charAt(0))}<span class="seat-label">${esc(p.name)}</span></div>`;
+  });
+  if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
+  el.innerHTML=html;
+}
+/* מסובב תמיד קדימה (עם כיוון השעון) כדי שהג'וינט "יעבור" במעגל */
+function pointTo(i){
+  const n=state.order.length, target=-90+i*360/n;
+  const norm=((state.angle%360)+360)%360, t=((target%360)+360)%360;
+  state.angle+=((t-norm)+360)%360;
+  const p=$("#pointer"); if(p) p.style.transform=`rotate(${state.angle}deg)`;
+}
+/* עשן עולה מקצה הג'וינט – תמיד כלפי מעלה, לא משנה לאן הוא פונה */
+setInterval(()=>{
+  const p=$("#pointer"); if(!p || !$("#game").classList.contains("active")) return;
+  const b=p.getBoundingClientRect(), r=b.width*.22, a=state.angle*Math.PI/180;
+  fx.trail(b.left+b.width/2+Math.cos(a)*r, b.top+b.height/2+Math.sin(a)*r);
+},260);
+
+/* ========== אשף ההגדרות ========== */
+function goStep(n){
+  document.querySelectorAll(".step").forEach(s=>s.classList.toggle("active",+s.dataset.step===n));
+  document.querySelectorAll(".steps span").forEach((s,i)=>s.classList.toggle("on",i<n));
+  if(n===3) renderSummary();
+  scrollTo({top:0});
+}
+function renderNames(){
+  $("#names").innerHTML=state.players.map((p,i)=>`
+    <li><span class="n">${i+1}</span><span class="nm">${esc(p.name)}</span>
+    <button type="button" data-i="${i}" aria-label="הסר את ${esc(p.name)}"><svg><use href="#i-x"/></svg></button></li>`).join("");
+  state.order=[]; renderTable($("#setup-table"));
+  const ok=state.players.length>=2;
+  $("#to-2").disabled=!ok;
+  $("#hint-1").textContent=ok?`${state.players.length} במעגל`:"צריך לפחות 2 שחקנים";
+}
+function renderPacks(){
+  $("#packs").innerHTML=Object.entries(PACKS).map(([k,p])=>`
+    <button type="button" class="opt" data-k="${k}" aria-pressed="${state.packs.has(k)}">
+      <span class="ic"><svg><use href="#${p.icon}"/></svg></span>
+      <span class="tx"><b>${p.name}<span class="cnt">${p.cards.length} קלפים</span></b><small>${p.desc}</small></span>
+      <span class="sw"></span>
+    </button>`).join("");
+  $("#to-3").disabled=!state.packs.size;
+  $("#hint-2").textContent=state.packs.size?"":"תבחרו לפחות חבילה אחת";
+}
+function renderSummary(){
+  const names=[...state.packs].map(k=>PACKS[k].name).join(", ");
+  const r=state.rounds?`${state.rounds} סבבים, ${state.rounds*state.players.length} קלפים`:"בלי הגבלה";
+  $("#summary").innerHTML=`<b>${state.players.length} שחקנים</b> · ${r}<br>${names}`;
+}
+
+$("#add-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const inp=$("#name-input"), name=inp.value.trim(); if(!name) return;
+  if(state.players.length>=12) return toast("מקסימום 12 במעגל");
+  if(state.players.some(p=>p.name===name)) return toast("השם הזה כבר יושב");
+  state.players.push({name}); inp.value=""; inp.focus(); renderNames(); save();
+  const seats=$("#setup-table").querySelectorAll(".seat"); fx.puff(seats[seats.length-1],5);
+});
+$("#names").addEventListener("click",e=>{ const b=e.target.closest("button[data-i]"); if(!b) return; state.players.splice(+b.dataset.i,1); renderNames(); save(); });
+$("#packs").addEventListener("click",e=>{ const b=e.target.closest(".opt"); if(!b) return; const k=b.dataset.k; state.packs.has(k)?state.packs.delete(k):state.packs.add(k); renderPacks(); });
+$("#rounds").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return;
+  $("#rounds").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); state.rounds=+b.dataset.v; renderSummary(); });
+$("#shuffle-sw").addEventListener("click",e=>{ state.shuffle=!state.shuffle; e.currentTarget.setAttribute("aria-checked",state.shuffle); });
+$("#to-2").addEventListener("click",()=>goStep(2));
+$("#to-3").addEventListener("click",()=>goStep(3));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>goStep(+b.dataset.go)));
+
+/* ========== לוגיקת המשחק ========== */
+function buildDeck(){
+  const d=[]; state.packs.forEach(k=>PACKS[k].cards.forEach(c=>{ const o=typeof c==="string"?{x:c}:c; d.push({k,x:o.x,t:o.t||0}); }));
+  state.deck=shuffleArr(d.filter(c=>c.k!=="r"||Math.random()<.6)); if(!state.deck.length) state.deck=shuffleArr(d);
+}
+const current=()=>state.players[state.order[state.idx]];
+
+function startGame(){
+  state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
+  state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
+  Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:-90});
+  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
+}
+function refreshTable(){
+  renderTable($("#game-table"),{current:state.idx,next:(state.idx+1)%state.order.length,pointer:true});
+  requestAnimationFrame(()=>pointTo(state.idx));
+}
+/* מצב העברה */
+function toPass(){
+  $("#g-round").innerHTML=`סבב <b>${state.round}</b>${state.rounds?` מתוך ${state.rounds}`:""}`;
+  refreshTable(); renderRules();
+  $("#turn").style.display="none"; $("#pass").style.display="flex";
+  const n=$("#pass-name"); n.textContent=current().name; n.style.animation="none"; n.offsetWidth; n.style.animation="";
+  vibrate(50);
+}
+/* שליפת קלף */
+function fillNames(text){
+  const others=shuffleArr(state.players.filter(p=>p!==current())); let i=0;
+  return esc(text).replace(/\{p\}/g,()=>`<mark>${esc((others[i++%others.length]||current()).name)}</mark>`);
+}
+function drawCard(){
+  if(!state.deck.length) buildDeck();
+  const c=state.card=state.deck.pop(), pk=PACKS[c.k]; state.stats.cards++;
+  c.html=fillNames(c.x);
+  $("#c-type").innerHTML=`<svg><use href="#${pk.icon}"/></svg>${pk.name} · ${esc(current().name)}`;
+  $("#c-text").innerHTML=c.html;
+  $("#c-hint").textContent=pk.hint;
+  resetTimer(); $("#timer").classList.toggle("show",c.t>0); $("#t-sec").textContent=c.t;
+  $("#done-label").textContent=c.k==="r"?"קיבלנו, להעביר":"עשיתי, להעביר";
+  $("#skip-btn").style.display=c.k==="r"?"none":"";
+  $("#card").classList.remove("flipped"); $("#actions").classList.remove("show");
+  $("#pass").style.display="none"; $("#turn").style.display="flex";
+}
+function flipCard(){
+  if($("#card").classList.contains("flipped")) return;
+  $("#card").classList.add("flipped"); vibrate(20); fx.puff($("#card"),16);
+  setTimeout(()=>$("#actions").classList.add("show"),350);
+}
+function renderRules(){
+  $("#rules").innerHTML=state.rules.map((r,i)=>`<div class="rule"><b>חוק ${i+1}</b><span>${r}</span></div>`).join("");
+}
+function resolve(did){
+  const p=current(), c=state.card; resetTimer();
+  if(c.k==="r"){ state.rules.push(c.html.replace(/<[^>]+>/g,"")); if(state.rules.length>3){ state.rules.shift(); toast("החוק הכי ישן בוטל"); } }
+  if(did){ p.score+=c.k==="r"?1:2; p.done++; state.stats.done++; fx.sparks($("#done-btn"),26); }
+  else { p.score=Math.max(0,p.score-1); p.pass++; state.stats.pass++; fx.puff($("#skip-btn"),8); }
+  state.idx++;
+  if(state.idx>=state.order.length){
+    state.idx=0; state.round++;
+    if(state.rounds && state.round>state.rounds) return endGame();
+    toast(`סבב ${state.round} מתחיל`);
+  }
+  toPass();
+}
+
+/* ========== טיימר ========== */
+function resetTimer(){ clearInterval(state.timer); state.timer=null; $("#t-bar").style.transform="scaleX(1)"; $("#t-start").disabled=false; $("#t-start").textContent="התחל"; }
+$("#t-start").addEventListener("click",()=>{
+  const total=state.card.t; let left=total; $("#t-start").disabled=true; $("#t-start").textContent="רץ";
+  state.timer=setInterval(()=>{ left--; $("#t-sec").textContent=left; $("#t-bar").style.transform=`scaleX(${left/total})`;
+    if(left<=0){ clearInterval(state.timer); vibrate([120,80,120]); $("#t-start").textContent="נגמר"; toast("הזמן נגמר"); } },1000);
+});
+
+/* ========== ניקוד וסיום ========== */
+const ranked=()=>[...state.players].sort((a,b)=>b.score-a.score||b.done-a.done);
+function boardHTML(titles){
+  return ranked().map((p,i)=>{
+    const t=!titles?"": i===0?TITLES[0] : p.pass>=Math.max(2,p.done)?TITLES[6] : TITLES[1+(i%5)];
+    return `<li><span class="rk">${i+1}</span><span class="bn">${esc(p.name)}${t?`<span class="bt">${t}</span>`:""}</span><span class="sc">${p.score}</span></li>`;
+  }).join("");
+}
+function openSheet(){ $("#live-board").innerHTML=boardHTML(false); $("#sheet").classList.add("open"); $("#backdrop").classList.add("open"); }
+function closeSheet(){ $("#sheet").classList.remove("open"); $("#backdrop").classList.remove("open"); }
+function endGame(){
+  closeSheet(); resetTimer();
+  const r=ranked();
+  $("#end-lead").textContent=`${r[0].name} לוקח/ת את הערב עם ${r[0].score} נקודות.`;
+  $("#podium").innerHTML=r.slice(0,3).map((p,i)=>`
+    <div class="pod p${i+1}">${i===0?'<svg class="crown"><use href="#i-crown"/></svg>':""}
+      <span class="pn">${esc(p.name)}</span><div class="bar">${p.score}</div></div>`).join("");
+  $("#end-board").innerHTML=boardHTML(true);
+  $("#s-cards").textContent=state.stats.cards; $("#s-done").textContent=state.stats.done; $("#s-pass").textContent=state.stats.pass;
+  show("end"); vibrate([80,60,80,60,160]); setTimeout(fx.burst,300);
+}
+
+/* ========== חיבורים ========== */
+$("#start-btn").addEventListener("click",()=>{ fx.sparks($("#start-btn"),36); startGame(); });
+$("#ready-btn").addEventListener("click",()=>{ const p=$("#pointer"); if(p) fx.puff(p,10); drawCard(); });
+$("#card-back").addEventListener("click",flipCard);
+$("#done-btn").addEventListener("click",()=>resolve(true));
+$("#skip-btn").addEventListener("click",()=>resolve(false));
+$("#menu-btn").addEventListener("click",openSheet);
+$("#close-sheet").addEventListener("click",closeSheet);
+$("#backdrop").addEventListener("click",closeSheet);
+$("#end-btn").addEventListener("click",endGame);
+$("#again-btn").addEventListener("click",startGame);
+$("#setup-btn").addEventListener("click",()=>{ renderNames(); goStep(1); show("setup"); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeSheet();
+  if(e.key===" " && $("#turn").style.display==="flex" && !$("#card").classList.contains("flipped")){ e.preventDefault(); flipCard(); }
+});
+
+/* ========== אתחול ========== */
+load(); renderNames(); renderPacks();
+</script>
+</body>
+</html>
