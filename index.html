@@ -270,7 +270,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{margin:46px auto 40px;flex:none}
+.game .table{margin:0 auto 38px;flex:none}
 #setup .pad-top{flex:.6 1 0;min-height:0;max-height:64px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
@@ -376,15 +376,26 @@ svg{display:block}
 }
 .toast.show{opacity:1;transform:translate(-50%,0) rotate(-2deg)}
 
+/* מסך המשחק: השולחן באותו מקום כמו בפתיחה, והחלק התחתון קומפקטי יותר */
+.game .btn{height:50px}
+.game .pass .end-joint{height:42px;margin-top:6px}
+.game .sticker{margin-bottom:2px}
+.game .pass .who{font-size:clamp(2.3rem,11vw,3.2rem);line-height:1.05}
+.game .pass p{font-size:.92rem;margin-bottom:6px}
+.game .card-wrap{min-height:170px;margin-bottom:8px}
+.game .face{padding:14px 16px}
+.game .ctext{font-size:clamp(1.25rem,5.6vw,1.65rem);padding:6px 0}
 /* טלפונים נמוכים: מקטינים קצת כדי שהכול ייכנס בלי גלילה */
 @media (max-height:780px){
+  .game .pass p{font-size:.85rem;margin-bottom:4px;line-height:1.25}
+  .game .sticker{font-size:.9rem;padding:3px 12px 1px}
   .title{font-size:clamp(1.75rem,8vw,2.3rem)}
   .lead{font-size:.92rem}
   .btn{height:50px}
   .opt{padding:5px 10px}
   .opt .ic{width:38px;height:38px}
   .table{margin:40px auto 40px}
-  .game .table{margin:42px auto 34px}
+  .game .table{margin-bottom:32px}
   .pass .who{font-size:clamp(2.3rem,11vw,3.1rem)}
   .pass p{font-size:.92rem;margin-bottom:6px}
   .sticker{font-size:1rem;margin-bottom:4px}
@@ -493,10 +504,6 @@ svg{display:block}
 
   <!-- ========== מסך המשחק: שולחן למעלה, קלף למטה ========== -->
   <section class="screen game" id="game">
-    <div class="gbar">
-      <span class="rd" id="g-round">סבב <b>1</b></span>
-      <div class="side-note">המשחק נגמר<br>כשנגמר הג'וינט</div>
-    </div>
     <div class="table" id="game-table"></div>
     <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
 
@@ -973,7 +980,7 @@ function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
   spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
-  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
+  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); placeGameTable(); toPass();
 }
 function refreshTable(){
   const cur=state.order[state.idx], nxt=state.order[(state.idx+1)%state.order.length];
@@ -982,7 +989,6 @@ function refreshTable(){
 }
 /* מצב העברה */
 function toPass(){
-  $("#g-round").innerHTML=`סבב <b>${state.round}</b>`;
   refreshTable(); renderRules();
   $("#turn").style.display="none"; $("#pass").style.display="flex";
   const n=$("#pass-name"); n.textContent=current().name; n.style.animation="none"; n.offsetWidth; n.style.animation="";
