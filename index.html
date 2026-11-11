@@ -935,6 +935,7 @@ function buildDeck(){
 const current=()=>state.players[state.order[state.idx]];
 
 function startGame(){
+  if(state.players.length<2){ show("setup"); goStep(1); return toast("צריך לפחות 2 שחקנים"); }
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
   spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
