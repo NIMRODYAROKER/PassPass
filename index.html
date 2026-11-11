@@ -50,7 +50,6 @@
   --sh:4px 4px 0 var(--ink);
   --ease:cubic-bezier(.2,.8,.2,1);
   --bounce:cubic-bezier(.34,1.56,.64,1);
-  --cam-ease:cubic-bezier(.65,0,.35,1);
   --safe-b:env(safe-area-inset-bottom,0px);
   --display:"Secular One","Assistant",system-ui,sans-serif;
   --fun:"Bungee","Secular One",system-ui,sans-serif;
@@ -165,22 +164,13 @@ svg{display:block}
 .tag{
   position:absolute;z-index:4;transform:translate(-50%,-50%);font-weight:800;font-size:.74rem;line-height:1.2;
   background:var(--surface);color:var(--text);padding:3px 8px;border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--ink);
-  white-space:nowrap;max-width:78px;overflow:hidden;text-overflow:ellipsis;
-  transform:translate(-50%,-50%) rotate(calc(var(--cam,0deg) * -1)) scale(var(--tz,1));
-  transition:background .3s,color .3s,transform 1.4s var(--cam-ease);
+  white-space:nowrap;max-width:78px;overflow:hidden;text-overflow:ellipsis;transition:background .3s,color .3s,transform .4s var(--bounce);
 }
-.tag.now{background:var(--ember);color:var(--ink)}
+.tag.now{background:var(--ember);color:var(--ink);transform:translate(-50%,-50%) rotate(-4deg) scale(1.08)}
 .table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--paper);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
-/* הג'וינט: עובר מיד ליד ועולה לפה כשמעשנים */
-.jt{
-  position:absolute;z-index:3;width:34%;left:50%;top:50%;pointer-events:none;
-  transform:translate(-50%,-50%) rotate(var(--jr,0deg));
-  transition:left 1.1s var(--cam-ease),top 1.1s var(--cam-ease),transform 1.1s var(--cam-ease);
-}
-.jt svg{width:100%;overflow:visible;filter:drop-shadow(2px 2px 0 var(--ink))}
-.jt .tip{animation:burn 1.4s ease-in-out infinite;transform-origin:103px 20px;transition:transform .5s}
-.jt.puffing .tip{animation:none;transform:scale(1.6);filter:brightness(1.5)}
-.jt .tipmark{position:absolute;left:86%;top:50%;width:1px;height:1px}
+.pointer{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;transition:transform 1s var(--bounce)}
+.pointer svg{width:54%;overflow:visible;filter:drop-shadow(3px 3px 0 var(--ink))}
+.pointer .tip{animation:burn 1.4s ease-in-out infinite}
 @keyframes burn{50%{opacity:.6}}
 
 /* ========== הוספת שחקן ========== */
@@ -257,8 +247,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.tv{position:relative;overflow:hidden;height:300px;margin:4px -18px 12px;display:grid;place-items:center}
-.game .table{width:min(52vw,200px);margin:0;transform:translateY(var(--ty,0px)) scale(var(--zoom,1)) rotate(var(--cam,0deg));transition:transform 1.4s var(--cam-ease)}
+.game .table{width:min(52vw,200px);margin:48px auto 48px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -472,7 +461,7 @@ svg{display:block}
       <span class="rd" id="g-round">סבב <b>1</b></span>
       <button class="icon-sq" id="menu-btn" aria-label="טבלת ניקוד"><svg><use href="#i-list"/></svg></button>
     </div>
-    <div class="tv"><div class="table" id="game-table" aria-hidden="true"></div></div>
+    <div class="table" id="game-table" aria-hidden="true"></div>
     <div class="rules" id="rules" aria-label="חוקים פעילים"></div>
 
     <div class="stage">
@@ -848,45 +837,26 @@ function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   list.forEach((p,i)=>{
     const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46, RT=64;
     const cls=i===current?" now":i===next?" next":"";
-    html+=`<div class="seat${cls}" data-i="${i}" style="--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
-    html+=`<span class="tag${i===current?" now":""}" data-i="${i}" style="left:${50+RT*c}%;top:${50+RT*sn}%">${esc(p.name)}</span>`;
+    html+=`<div class="seat${cls}" style="--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
+    html+=`<span class="tag${i===current?" now":""}" style="left:${50+RT*c}%;top:${50+RT*sn}%">${esc(p.name)}</span>`;
   });
-  if(pointer) html+=`<div class="jt" id="jt">${JOINT}<span class="tipmark"></span></div>`;
+  if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
   el.innerHTML=html;
 }
-/* =========================================================
-   מצלמה: מתקרבת לשולחן ומסתובבת בתנועה רציפה כך שמי שתורו יושב מול המסך
-   ========================================================= */
-const CAM={zoom:1.45,ty:-44}, HAND_R=28, MOUTH_R=34;
-function setCam(rot,zoom,ty){ const t=$("#game-table"); t.style.setProperty("--cam",rot+"deg"); t.style.setProperty("--zoom",zoom); t.style.setProperty("--ty",ty+"px"); }
-function camTo(seat){
-  const target=90-seatAngle(seat);                       // מביאים את הכיסא לתחתית המסך
-  let d=(((target-state.cam)%360)+360)%360; if(d>0) d-=360; // תמיד באותו כיוון, בלי קפיצות
-  state.cam+=d; setCam(state.cam,CAM.zoom,CAM.ty);
-}
-/* הג'וינט ביד של השחקן (R קטן) או ליד הפה (R גדול). הגחלת פונה למרכז השולחן */
-function placeJoint(seat,R){
-  const j=$("#jt"); if(!j) return;
-  const deg=seatAngle(seat), a=deg*Math.PI/180, target=deg+180;
-  state.jr+=((((target-state.jr)%360)+540)%360)-180;      // הסיבוב הקצר ביותר
-  j.style.left=(50+R*Math.cos(a))+"%"; j.style.top=(50+R*Math.sin(a))+"%"; j.style.setProperty("--jr",state.jr+"deg");
-}
-/* הדמות מקרבת את הג'וינט לפה, הגחלת נדלקת, ואז נושפת עשן */
-function smokeTurn(seat){
-  const j=$("#jt"); if(!j || !$("#game").classList.contains("active")) return;
-  j.classList.add("puffing"); placeJoint(seat,MOUTH_R);
-  state.smokeT=setTimeout(()=>{
-    j.classList.remove("puffing"); placeJoint(seat,HAND_R);
-    const s=document.querySelector(`#game-table .seat[data-i="${seat}"]`);
-    if(s){ fx.puff(s,10); setTimeout(()=>fx.rings(s,2),250); }
-  },1200);
+/* מסובב תמיד קדימה (עם כיוון השעון) אל הכיסא של השחקן */
+function pointTo(seat){
+  const target=seatAngle(seat);
+  const norm=((state.angle%360)+360)%360, t=((target%360)+360)%360;
+  state.angle+=((t-norm)+360)%360;
+  const p=$("#pointer"); if(p) p.style.transform=`rotate(${state.angle}deg)`;
 }
 /* עשן עולה מקצה הג'וינט – תמיד כלפי מעלה, לא משנה לאן הוא פונה */
 setInterval(()=>{
-  const m=document.querySelector("#jt .tipmark"); if(!m || !$("#game").classList.contains("active")) return;
-  const b=m.getBoundingClientRect();
-  fx.trail(b.left,b.top);
-  if(Math.random()<.07) fx.ringAt(b.left,b.top-8);
+  const p=$("#pointer"); if(!p || !$("#game").classList.contains("active")) return;
+  const b=p.getBoundingClientRect(), r=b.width*.22, a=state.angle*Math.PI/180;
+  const tx=b.left+b.width/2+Math.cos(a)*r, ty=b.top+b.height/2+Math.sin(a)*r;
+  fx.trail(tx,ty);
+  if(Math.random()<.07) fx.ringAt(tx,ty-8);   // טבעת עשן קטנה, מדי פעם
 },260);
 
 /* ========== אשף ההגדרות ========== */
@@ -959,21 +929,13 @@ const current=()=>state.players[state.order[state.idx]];
 function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
-  spreadSeats=true; clearTimeout(state.smokeT);
-  Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},cam:0,jr:seatAngle(state.order[0])+180,intro:true});
-  buildDeck(); renderTable($("#game-table"),{pointer:true});
-  // פתיחה: מבט מלמעלה על כל השולחן, ואז המצלמה מתקרבת לשחקן הראשון
-  const t=$("#game-table"); t.style.transition="none"; setCam(0,1,0); t.offsetWidth; t.style.transition="";
-  $("#jt").style.setProperty("--jr",state.jr+"deg");
-  show("game"); toPass();
+  spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
+  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
 }
 function refreshTable(){
   const cur=state.order[state.idx], nxt=state.order[(state.idx+1)%state.order.length];
-  document.querySelectorAll("#game-table .seat").forEach(s=>{ const i=+s.dataset.i; s.classList.toggle("now",i===cur); s.classList.toggle("next",i===nxt); });
-  document.querySelectorAll("#game-table .tag").forEach(s=>s.classList.toggle("now",+s.dataset.i===cur));
-  clearTimeout(state.smokeT); $("#jt")?.classList.remove("puffing");
-  const wait=state.intro?700:0; state.intro=false;
-  setTimeout(()=>{ camTo(cur); placeJoint(cur,HAND_R); state.smokeT=setTimeout(()=>smokeTurn(cur),1500); },wait);
+  renderTable($("#game-table"),{current:cur,next:nxt,pointer:true});
+  requestAnimationFrame(()=>pointTo(cur));
 }
 /* מצב העברה */
 function toPass(){
@@ -1055,7 +1017,7 @@ function endGame(){
 
 /* ========== חיבורים ========== */
 $("#start-btn").addEventListener("click",()=>{ fx.sparks($("#start-btn"),36); startGame(); });
-$("#ready-btn").addEventListener("click",drawCard);
+$("#ready-btn").addEventListener("click",()=>{ const p=$("#pointer"); if(p) fx.puff(p,10); drawCard(); });
 $("#card-back").addEventListener("click",flipCard);
 $("#done-btn").addEventListener("click",()=>resolve(true));
 $("#skip-btn").addEventListener("click",()=>resolve(false));
