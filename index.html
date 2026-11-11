@@ -18,14 +18,14 @@
 <meta property="og:title" content="PassPass">
 <meta property="og:description" content="משחק סבב לחברים: מעבירים את הטלפון, ממשיכים את הסבב.">
 <meta property="og:url" content="https://nimrodyaroker.github.io/PassPass/">
-<meta property="og:image" content="https://nimrodyaroker.github.io/PassPass/og-image.jpg">
-<meta property="og:image:secure_url" content="https://nimrodyaroker.github.io/PassPass/og-image.jpg">
+<meta property="og:image" content="https://nimrodyaroker.github.io/PassPass/og-floor.jpg">
+<meta property="og:image:secure_url" content="https://nimrodyaroker.github.io/PassPass/og-floor.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="PassPass">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nimrodyaroker.github.io/PassPass/og-image.jpg">
+<meta name="twitter:image" content="https://nimrodyaroker.github.io/PassPass/og-floor.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Bungee&family=Secular+One&display=swap" rel="stylesheet">
@@ -117,16 +117,6 @@ svg{display:block}
 
 /* ========== השולחן – מגש עגול עם לבד ירוק ========== */
 .table{position:relative;width:min(70vw,262px);aspect-ratio:1;margin:56px auto 60px}
-/* שטיח עגול מתחת לשולחן */
-.table .rug{
-  position:absolute;inset:-13%;border-radius:50%;z-index:0;
-  background:
-    radial-gradient(circle,transparent 0 60%,#4e7a72 60% 62.5%,transparent 62.5% 84%,#4e7a72 84% 87%,transparent 87%),
-    repeating-conic-gradient(from 0deg,rgba(0,0,0,.045) 0 6deg,transparent 6deg 12deg),
-    #cdbd9e;
-  border:3px solid var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.45);
-}
-.table .rug::after{content:"";position:absolute;inset:3%;border-radius:50%;border:2px dashed rgba(60,40,25,.35)}
 /* מסגרת העץ של השולחן */
 .table .rail{
   position:absolute;inset:6%;border-radius:50%;z-index:0;
@@ -836,7 +826,7 @@ function seatAngle(i){
 function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   const list=state.players, n=list.length;
   spreadSeats=pointer;
-  let html='<div class="rug"></div><div class="rail"></div><div class="felt"></div>'+DECO;
+  let html='<div class="rail"></div><div class="felt"></div>'+DECO;
   if(!n){ el.innerHTML=html+'<div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
   list.forEach((p,i)=>{
     const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46, RT=64;
