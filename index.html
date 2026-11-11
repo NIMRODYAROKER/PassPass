@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#173a3f">
+<meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
 <link rel="apple-touch-icon" sizes="167x167" href="leaf-167.png">
@@ -35,12 +35,12 @@
    צבעי הלוגו בלבד: קרם, ירוק עלה, דיו כהה. בלי זוהר ובלי אורות.
    ========================================================= */
 :root{
-  --bg:#173a3f;          /* טורקיז עמוק */
-  --bg-2:#1c444a;
-  --surface:#235158;
-  --line:#3f7076;
+  --bg:#2e231b;          /* רצפת עץ כהה */
+  --bg-2:#2a2019;
+  --surface:#3f3128;
+  --line:#6a5646;
   --text:#f6f1e7;        /* קרם */
-  --muted:#b9d6d2;
+  --muted:#d6c8b6;
   --ember:#8fe35c;       /* ירוק עלה – צבע ההדגשה */
   --leaf-dark:#2f6e3c;   /* ירוק לבד של שולחן */
   --ink:#16101f;         /* דיו – קווים וצללים */
@@ -61,7 +61,9 @@ body{
   color:var(--text);min-height:100dvh;overflow-x:hidden;
   /* רקע שטוח עם טפט עלים עדין – בלי אורות */
   background-color:var(--bg);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2316101f' stroke-opacity='.28' stroke-width='2.2'%3E%3Cg transform='translate(10 8) scale(.42)'%3E%3Cellipse cx='50' cy='40' rx='7' ry='34'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(-34 50 76)'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(34 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(-66 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(66 50 76)'/%3E%3C/g%3E%3Cg transform='translate(108 64) rotate(150) scale(.32)'%3E%3Cellipse cx='50' cy='40' rx='7' ry='34'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(-34 50 76)'/%3E%3Cellipse cx='50' cy='48' rx='6' ry='27' transform='rotate(34 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(-66 50 76)'/%3E%3Cellipse cx='50' cy='56' rx='5' ry='19' transform='rotate(66 50 76)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  /* רקע: רצפת פרקט כהה ושקטה, עם הצללה בשוליים */
+  background-image:radial-gradient(ellipse at 50% 35%,transparent 35%,rgba(10,6,4,.55) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='768'%3E%3Crect x='0' y='0' width='64' height='384' fill='%23362920'/%3E%3Cpath d='M7.2 0 Q9.0 192 7.1 384' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M17.4 0 Q13.5 192 17.6 384' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M29.2 0 Q33.1 192 27.4 384' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M41.1 0 Q40.0 192 42.2 384' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M53.3 0 Q51.4 192 55.1 384' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='0' y='382' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='0' y='384' width='64' height='384' fill='%233a2c22'/%3E%3Cpath d='M9.3 384 Q11.8 576 10.5 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M17.8 384 Q16.3 576 18.3 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M30.9 384 Q33.8 576 32.4 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M39.3 384 Q40.2 576 40.0 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M52.0 384 Q49.4 576 51.9 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='0' y='766' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='62' y='0' width='2' height='768' fill='%23000' fill-opacity='.4'/%3E%3Crect x='0' y='0' width='1' height='768' fill='%23fff' fill-opacity='.04'/%3E%3Crect x='64' y='0' width='64' height='300' fill='%233a2c22'/%3E%3Cpath d='M73.8 0 Q76.3 150 75.5 300' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M84.4 0 Q80.4 150 83.5 300' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M94.8 0 Q93.3 150 95.9 300' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M103.8 0 Q103.2 150 102.9 300' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M115.8 0 Q113.7 150 114.8 300' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='64' y='298' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='64' y='300' width='64' height='384' fill='%233a2c22'/%3E%3Cpath d='M70.3 300 Q70.0 492 72.3 684' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M83.1 300 Q84.3 492 83.9 684' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M92.6 300 Q94.0 492 90.8 684' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M106.7 300 Q107.7 492 106.4 684' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M114.7 300 Q114.2 492 115.1 684' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='64' y='682' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='64' y='684' width='64' height='84' fill='%2334281f'/%3E%3Cpath d='M72.2 684 Q75.5 726 70.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M81.2 684 Q79.1 726 82.3 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M94.5 684 Q92.4 726 93.8 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M103.7 684 Q103.4 726 101.9 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M116.8 684 Q120.0 726 118.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='64' y='766' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='126' y='0' width='2' height='768' fill='%23000' fill-opacity='.4'/%3E%3Crect x='64' y='0' width='1' height='768' fill='%23fff' fill-opacity='.04'/%3E%3Crect x='128' y='0' width='64' height='150' fill='%2334281f'/%3E%3Cpath d='M136.7 0 Q135.3 75 136.0 150' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M146.3 0 Q143.5 75 146.9 150' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M159.4 0 Q162.4 75 160.2 150' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M167.3 0 Q168.3 75 168.9 150' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M179.2 0 Q177.2 75 179.6 150' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='128' y='148' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='128' y='150' width='64' height='384' fill='%23362920'/%3E%3Cpath d='M135.3 150 Q131.4 342 133.5 534' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M145.7 150 Q147.9 342 145.1 534' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M157.2 150 Q153.9 342 159.1 534' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M168.7 150 Q166.4 342 166.9 534' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M178.2 150 Q175.6 342 178.9 534' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='128' y='532' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='128' y='534' width='64' height='234' fill='%23362920'/%3E%3Cpath d='M136.4 534 Q136.8 651 136.8 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M146.3 534 Q142.6 651 147.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M157.2 534 Q161.1 651 157.8 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M167.8 534 Q165.4 651 167.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M180.0 534 Q177.7 651 179.7 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='128' y='766' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='190' y='0' width='2' height='768' fill='%23000' fill-opacity='.4'/%3E%3Crect x='128' y='0' width='1' height='768' fill='%23fff' fill-opacity='.04'/%3E%3Crect x='192' y='0' width='64' height='66' fill='%2334281f'/%3E%3Cpath d='M201.6 0 Q204.2 33 201.6 66' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M209.1 0 Q207.2 33 208.1 66' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M220.8 0 Q218.7 33 222.3 66' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M231.6 0 Q228.0 33 233.3 66' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M244.3 0 Q248.2 33 243.9 66' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='192' y='64' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='192' y='66' width='64' height='384' fill='%2334281f'/%3E%3Cpath d='M200.6 66 Q202.9 258 201.6 450' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M211.0 66 Q207.7 258 209.8 450' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M223.5 66 Q226.7 258 225.2 450' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M232.3 66 Q233.6 258 233.5 450' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M244.6 66 Q247.1 258 244.7 450' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='192' y='448' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='192' y='450' width='64' height='318' fill='%2334281f'/%3E%3Cpath d='M201.2 450 Q203.6 609 200.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M210.6 450 Q210.5 609 212.0 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M221.1 450 Q222.1 609 219.9 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M232.6 450 Q233.5 609 233.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Cpath d='M243.1 450 Q245.9 609 244.6 768' stroke='%23ffffff' stroke-opacity='.025' stroke-width='2' fill='none'/%3E%3Crect x='192' y='766' width='64' height='2' fill='%23000' fill-opacity='.35'/%3E%3Crect x='254' y='0' width='2' height='768' fill='%23000' fill-opacity='.4'/%3E%3Crect x='192' y='0' width='1' height='768' fill='%23fff' fill-opacity='.04'/%3E%3C/svg%3E");
+  background-attachment:fixed,scroll;
 }
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:50;pointer-events:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
@@ -114,19 +116,35 @@ svg{display:block}
 .lead{color:var(--muted);margin-bottom:16px}
 
 /* ========== השולחן – מגש עגול עם לבד ירוק ========== */
-.table{position:relative;width:min(72vw,270px);aspect-ratio:1;margin:40px auto 46px}
-/* שולחן עץ עגול: טבעות עץ, שפה כהה, קו דיו וצל קשיח */
-.table .felt{
-  position:absolute;inset:11%;border-radius:50%;
+.table{position:relative;width:min(70vw,262px);aspect-ratio:1;margin:56px auto 60px}
+/* שטיח עגול מתחת לשולחן */
+.table .rug{
+  position:absolute;inset:-13%;border-radius:50%;z-index:0;
   background:
-    radial-gradient(circle at 34% 28%,rgba(255,240,215,.38),transparent 42%),
-    repeating-radial-gradient(circle at 46% 54%,#c89058 0 7px,#be8550 7px 9px,#cc965f 9px 16px,#b67c48 16px 17px),
-    #c48a55;
-  border:4px solid var(--ink);
-  box-shadow:inset 0 0 0 7px rgba(110,62,28,.35),0 0 0 9px #8a5631,0 0 0 13px var(--ink),9px 11px 0 13px var(--ink);
+    radial-gradient(circle,transparent 0 60%,#4e7a72 60% 62.5%,transparent 62.5% 84%,#4e7a72 84% 87%,transparent 87%),
+    repeating-conic-gradient(from 0deg,rgba(0,0,0,.045) 0 6deg,transparent 6deg 12deg),
+    #cdbd9e;
+  border:3px solid var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.45);
 }
-.table .felt::after{content:"";position:absolute;inset:7%;border-radius:50%;border:2px solid rgba(90,48,18,.28)}
-/* חפצים על השולחן */
+.table .rug::after{content:"";position:absolute;inset:3%;border-radius:50%;border:2px dashed rgba(60,40,25,.35)}
+/* מסגרת העץ של השולחן */
+.table .rail{
+  position:absolute;inset:6%;border-radius:50%;z-index:0;
+  background:radial-gradient(circle at 35% 28%,#9a6a42,#6b4428 45%,#4a2c19 80%);
+  border:4px solid var(--ink);box-shadow:8px 11px 0 rgba(10,6,4,.6);
+}
+.table .rail::after{content:"";position:absolute;inset:3px;border-radius:50%;border:2px solid rgba(255,220,170,.28)}
+/* משטח הלבד הירוק – שקוע בתוך המסגרת */
+.table .felt{
+  position:absolute;inset:13%;border-radius:50%;z-index:0;
+  background:
+    radial-gradient(circle at 40% 32%,rgba(255,255,255,.12),transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect width='1' height='1' fill='%23000' fill-opacity='.12'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%23fff' fill-opacity='.05'/%3E%3C/svg%3E"),
+    #24683f;
+  border:3px solid var(--ink);
+  box-shadow:inset 0 8px 18px rgba(0,0,0,.45),inset 0 -3px 8px rgba(255,255,255,.06);
+}
+.table .felt::after{content:"";position:absolute;inset:9%;border-radius:50%;border:2px solid rgba(236,214,160,.35)}
 .deco{position:absolute;z-index:1;pointer-events:none;transform:translate(-50%,-50%)}
 .deco svg{width:100%;height:100%;overflow:visible}
 /* דמות שיושבת ליד השולחן – מצוירת מלמעלה ופונה למרכז */
@@ -153,7 +171,7 @@ svg{display:block}
   white-space:nowrap;max-width:78px;overflow:hidden;text-overflow:ellipsis;transition:background .3s,color .3s,transform .4s var(--bounce);
 }
 .tag.now{background:var(--ember);color:var(--ink);transform:translate(-50%,-50%) rotate(-4deg) scale(1.08)}
-.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--ink);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
+.table .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--paper);font-weight:700;font-size:.92rem;padding:0 26%;z-index:1}
 .pointer{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;transition:transform 1s var(--bounce)}
 .pointer svg{width:54%;overflow:visible;filter:drop-shadow(3px 3px 0 var(--ink))}
 .pointer .tip{animation:burn 1.4s ease-in-out infinite}
@@ -233,7 +251,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{width:min(60vw,226px);margin:44px auto 44px}
+.game .table{width:min(58vw,220px);margin:52px auto 52px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -805,13 +823,20 @@ const DECO=`<div class="deco" style="left:31%;top:69%;width:17%;height:17%"><svg
     <path d="M-12 -8 Q-7 -14 0 -15" fill="none" stroke="#fff" stroke-width="2" opacity=".55" stroke-linecap="round"/></svg></div>`;
 
 /* מושבים קבועים: כל מי שמצטרף מתיישב ליד הקודם (12 כיסאות, 30° ביניהם) */
-const SEAT_STEP=30;
-const seatAngle=i=>-90+i*SEAT_STEP;
+/* בזמן ההרשמה: כל מי שמצטרף מתיישב ליד הקודם, 45° ביניהם (אם יש הרבה – מצטופפים קצת כדי להיכנס).
+   כשהמשחק מתחיל: כולם מתפזרים במרווחים שווים סביב השולחן. */
+let spreadSeats=false;
+function seatAngle(i){
+  const n=Math.max(1,state.players.length);
+  const step=spreadSeats ? 360/n : Math.min(45,360/n);
+  return -90+i*step;
+}
 
 /* current/next = אינדקס של השחקן ברשימת השחקנים (המקום שבו הוא יושב) */
 function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   const list=state.players, n=list.length;
-  let html='<div class="felt"></div>'+DECO;
+  spreadSeats=pointer;
+  let html='<div class="rug"></div><div class="rail"></div><div class="felt"></div>'+DECO;
   if(!n){ el.innerHTML=html+'<div class="empty">השולחן ריק. תוסיפו את הראשון.</div>'; return; }
   list.forEach((p,i)=>{
     const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46, RT=64;
@@ -908,7 +933,7 @@ const current=()=>state.players[state.order[state.idx]];
 function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
-  Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
+  spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
   buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
 }
 function refreshTable(){
