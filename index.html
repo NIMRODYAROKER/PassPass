@@ -117,31 +117,11 @@ svg{display:block}
 
 /* ========== השולחן – מגש עגול עם לבד ירוק ========== */
 .table{position:relative;width:min(56vw,220px);aspect-ratio:1;margin:58px auto 62px}
-/* שטיח מלבני לרוחב בסגנון של פעם (שטיח פרסי) מתחת לשולחן */
+/* שטיח מלבני לרוחב, חלק ושקט: צבע אחד עמום ופס מסגרת דק */
 .table .rug{
   position:absolute;z-index:0;top:-5%;bottom:-5%;left:-28%;right:-28%;border-radius:6px;
-  background:
-    repeating-linear-gradient(45deg,rgba(226,206,160,.16) 0 3px,transparent 3px 12px),
-    repeating-linear-gradient(-45deg,rgba(226,206,160,.16) 0 3px,transparent 3px 12px),
-    #7a2e2a;
-  border:3px solid var(--ink);
-  /* פסי מסגרת: כחול כהה, קרם, אדום, חרדל */
-  box-shadow:inset 0 0 0 7px #2c3550,inset 0 0 0 10px #d9c7a3,inset 0 0 0 17px #7a2e2a,inset 0 0 0 20px #b88a3a,inset 0 0 0 24px #2c3550,
-             0 12px 24px rgba(0,0,0,.45);
-}
-/* שדה פנימי עם קישוט עדין */
-.table .rug::before{
-  content:"";position:absolute;inset:28px;border-radius:3px;
-  border:2px dashed rgba(217,199,163,.45);
-  background:radial-gradient(circle at 0 0,#b88a3a 0 14px,transparent 15px),radial-gradient(circle at 100% 0,#b88a3a 0 14px,transparent 15px),
-             radial-gradient(circle at 0 100%,#b88a3a 0 14px,transparent 15px),radial-gradient(circle at 100% 100%,#b88a3a 0 14px,transparent 15px);
-}
-/* מדליון מעוין במרכז – הקצוות שלו מציצים משני צדי השולחן */
-.table .rug::after{
-  content:"";position:absolute;left:6%;right:6%;top:14%;bottom:14%;
-  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
-  background:radial-gradient(ellipse at center,#d9c7a3 0 30%,#2c3550 30% 38%,#b88a3a 38% 42%,#2c3550 42% 60%,#d9c7a3 60% 63%,#7a2e2a 63%);
-  opacity:.9;
+  background:#5b2b25;border:3px solid var(--ink);
+  box-shadow:inset 0 0 0 9px #4b231e,inset 0 0 0 11px rgba(217,199,163,.55),0 12px 24px rgba(0,0,0,.45);
 }
 /* פרנזים (גדילים) בשני הצדדים הקצרים */
 .table .rug .fr{
