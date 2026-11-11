@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261111153710">
+<meta name="build" content="20261111154136">
 <meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
@@ -272,6 +272,7 @@ svg{display:block}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
 .game .table{margin:44px auto 44px;flex:none}
+#end .pad-top{flex:.6 1 0;min-height:0;max-height:70px}
 #setup .pad-top{flex:.6 1 0;min-height:0;max-height:64px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
@@ -572,6 +573,7 @@ svg{display:block}
 
   <!-- ========== סיום ========== -->
   <section class="screen" id="end">
+    <div class="pad-top"></div>
     <div class="top"><div class="wordmark" aria-label="PassPass"><b>Pass</b><svg><use href="#i-leaf"/></svg><b>Pass</b></div></div>
     <h1 class="title" style="margin-top:4px">ה-High Score של הערב</h1>
     <p class="lead" id="end-lead"></p>
