@@ -245,7 +245,7 @@ svg{display:block}
 .pass{position:relative}
 .who-row{position:relative;align-self:stretch}
 .side-note{
-  position:relative;z-index:2;width:118px;margin:8px 4px 0 0;transform:rotate(-5deg);
+  position:absolute;left:2px;top:2px;z-index:2;width:112px;transform:rotate(-5deg);
   background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
   font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.3rem;line-height:1;text-align:center;padding:9px 6px 6px;
   animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
@@ -264,14 +264,14 @@ svg{display:block}
 .hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:4px;min-height:1.3em}
 
 /* ========== מסך משחק ========== */
-.gbar{display:flex;align-items:center;justify-content:space-between}
+.gbar{display:flex;align-items:center;justify-content:space-between;position:relative;min-height:40px}
 .gbar .rd{font-family:var(--fun);font-size:.85rem;background:var(--paper);color:var(--ink);padding:5px 12px 3px;border:2.5px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink);transform:rotate(2deg)}
 .gbar .rd b{font-weight:400}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
 .game .table{margin:46px auto 40px;flex:none}
-#setup{padding-top:clamp(6px,3dvh,26px)}
+#setup .pad-top{flex:.3 1 0;min-height:0;max-height:36px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -395,7 +395,6 @@ svg{display:block}
   .podium{height:min(160px,17dvh)}
 }
 @media (max-height:690px){
-  #setup{padding-top:0}
   .lead{display:none}
   .eyebrow{margin:4px 0 4px}
   .table{margin:36px auto 36px}
@@ -445,6 +444,7 @@ svg{display:block}
 
   <!-- ========== אשף הגדרות: 3 שלבים ========== -->
   <section class="screen active" id="setup">
+    <div class="pad-top"></div>
     <div class="top">
       <div class="wordmark" aria-label="PassPass"><b>Pass</b><svg><use href="#i-leaf"/></svg><b>Pass</b></div>
       <div class="steps" aria-hidden="true"><span class="on"></span><span></span></div>
