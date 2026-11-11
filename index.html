@@ -74,7 +74,7 @@ input{font:inherit;color:inherit}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 svg{display:block}
 
-.app{position:relative;z-index:1;max-width:500px;margin:0 auto;min-height:100dvh;padding:18px 18px calc(22px + var(--safe-b));display:flex;flex-direction:column}
+.app{position:relative;z-index:1;max-width:500px;margin:0 auto;min-height:100dvh;padding:10px 16px calc(12px + var(--safe-b));display:flex;flex-direction:column}
 .screen{display:none;flex:1;flex-direction:column;animation:fadeUp .45s var(--ease)}
 .screen.active{display:flex}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -96,7 +96,7 @@ svg{display:block}
 .row>.btn{flex:1}
 
 /* ========== כותרת עליונה ולוגו ========== */
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
 .wordmark{font-family:var(--fun);font-size:1.45rem;display:flex;align-items:center;gap:4px;direction:ltr;transform:rotate(-3deg)}
 .wordmark b{font-weight:400;text-shadow:3px 3px 0 var(--ink)}
 .wordmark b+svg+b{color:var(--ember)}
@@ -112,13 +112,13 @@ svg{display:block}
 .eyebrow{
   align-self:flex-start;font-family:var(--fun);font-size:.78rem;background:var(--ember);color:var(--ink);
   padding:3px 10px 1px;border:2px solid var(--ink);border-radius:6px;box-shadow:2px 2px 0 var(--ink);
-  transform:rotate(-2deg);margin:12px 0 10px;
+  transform:rotate(-2deg);margin:6px 0 6px;
 }
-.title{font-family:var(--display);font-weight:400;font-size:clamp(2.1rem,9.5vw,2.8rem);line-height:1.08;margin-bottom:8px;text-shadow:3px 3px 0 var(--ink)}
-.lead{color:var(--muted);margin-bottom:16px}
+.title{font-family:var(--display);font-weight:400;font-size:clamp(2.1rem,9.5vw,2.8rem);line-height:1.05;margin-bottom:4px;text-shadow:3px 3px 0 var(--ink)}
+.lead{color:var(--muted);margin-bottom:4px;line-height:1.35}
 
 /* ========== השולחן – מגש עגול עם לבד ירוק ========== */
-.table{position:relative;width:min(56vw,220px);aspect-ratio:1;margin:58px auto 62px}
+.table{position:relative;width:min(56vw,220px);aspect-ratio:1;margin:46px auto 46px}
 /* שטיח מלבני לרוחב, חלק ושקט: צבע אחד עמום ופס מסגרת דק */
 .table .rug{
   position:absolute;z-index:0;top:-5%;bottom:-5%;left:-28%;right:-28%;border-radius:6px;
@@ -176,7 +176,7 @@ svg{display:block}
 @keyframes burn{50%{opacity:.6}}
 
 /* ========== הוספת שחקן ========== */
-.add{display:flex;gap:12px}
+.add{display:flex;gap:10px}
 .input{
   flex:1;min-width:0;height:58px;padding:0 16px;border-radius:16px;font-size:1.08rem;font-weight:700;
   background:var(--paper);color:var(--ink);border:var(--b);box-shadow:var(--sh);transition:transform .15s;
@@ -184,9 +184,10 @@ svg{display:block}
 .input::placeholder{color:#8a8197;font-weight:600}
 .input:focus{outline:none;transform:rotate(-.6deg)}
 .add .btn{width:58px;padding:0}
-.names{list-style:none;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px}
+.names-wrap{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.names{list-style:none;display:contents}
 .names li{
-  display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:12px;
+  display:flex;align-items:center;gap:5px;padding:2px 2px 2px 8px;border-radius:12px;
   background:var(--surface);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);animation:pop .35s var(--bounce);
 }
 .names li:nth-child(odd){transform:rotate(-1.5deg)}
@@ -197,7 +198,7 @@ svg{display:block}
 .names button:hover{color:var(--danger)}
 .names button svg{width:14px;height:14px}
 .clear-all{
-  align-self:flex-start;display:inline-flex;align-items:center;gap:6px;margin-top:14px;height:38px;padding:0 14px;border-radius:10px;
+  display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:10px;
   font-weight:800;font-size:.9rem;background:transparent;color:var(--text);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
   transition:background .2s,color .2s,transform .12s;
 }
@@ -207,9 +208,9 @@ svg{display:block}
 .clear-all.sure{background:var(--danger);color:var(--ink)}
 
 /* ========== חבילות קלפים – כרטיסי מדבקה ========== */
-.list{display:flex;flex-direction:column;gap:12px}
+.list{display:flex;flex-direction:column;gap:7px}
 .opt{
-  display:flex;align-items:center;gap:14px;padding:14px;width:100%;text-align:right;border-radius:16px;
+  display:flex;align-items:center;gap:12px;padding:7px 12px;width:100%;text-align:right;border-radius:16px;
   background:var(--surface);border:var(--b);box-shadow:var(--sh);
   transition:transform .15s var(--ease),box-shadow .15s,background .2s,color .2s;
 }
@@ -241,9 +242,9 @@ svg{display:block}
 .pass{position:relative}
 .who-row{position:relative;align-self:stretch}
 .side-note{
-  position:absolute;z-index:2;left:-12px;top:50%;width:88px;margin-top:-32px;transform:rotate(-7deg);
+  position:absolute;z-index:2;left:-12px;top:50%;width:104px;margin-top:-30px;transform:rotate(-7deg);
   background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
-  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.15rem;line-height:1;text-align:center;padding:9px 5px 6px;
+  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.3rem;line-height:1;text-align:center;padding:9px 6px 6px;
   animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
 }
 .side-note::before{ /* סלוטייפ */
@@ -251,27 +252,13 @@ svg{display:block}
   background:rgba(246,241,231,.75);border:1.5px solid rgba(22,16,31,.35);
 }
 @keyframes noteSway{50%{transform:rotate(-3deg)}}
-/* כפתור "נגמר הג'וינט": מאפרה שמכבים בה את הג'וינט */
-.ash-btn{
-  position:absolute;z-index:5;left:34%;top:64%;width:22%;transform:translate(-50%,-50%);
-  display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
-}
-.ash-btn .ash{width:100%;aspect-ratio:1;transition:transform .15s var(--bounce)}
-.ash-btn .ash svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(3px 4px 0 var(--ink))}
-.ash-btn:hover .ash{transform:rotate(-8deg) scale(1.05)}
-.ash-btn:active .ash{transform:scale(.92)}
-.ash-btn .lbl{
-  font-weight:800;font-size:.66rem;line-height:1.1;white-space:nowrap;padding:2px 7px;border-radius:7px;
-  background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);transform:rotate(-3deg);
-  transition:background .2s;
-}
-.ash-btn.sure .lbl{background:var(--danger)}
-.ash-btn.sure .ash{animation:shake .35s ease-in-out infinite}
-@keyframes shake{25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
+/* כפתור "נגמר הג'וינט": כפתור משני רגיל מתחת לכפתור הראשי */
+.pass .end-joint{margin-top:8px;height:46px;font-size:1rem}
+.pass .end-joint.sure{background:var(--danger);color:var(--ink)}
 .summary{border:2.5px dashed var(--line);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:.95rem;margin-top:18px}
 .summary b{color:var(--text)}
-.spacer{flex:1;min-height:20px}
-.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:10px;min-height:1.3em}
+.spacer{flex:1;min-height:8px}
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:4px;min-height:1.3em}
 
 /* ========== מסך משחק ========== */
 .gbar{display:flex;align-items:center;justify-content:space-between}
@@ -280,9 +267,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{width:min(70vw,272px);margin:44px auto 54px}
-.game .table .rug{top:-15%;bottom:-15%}
-.game .tag{max-width:62px}
+.game .table{margin:0 auto 42px;flex:none}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
@@ -292,23 +277,23 @@ svg{display:block}
 .rule b{font-family:var(--fun);font-weight:400;font-size:.72rem;margin-left:6px}
 
 .stage{flex:1;display:flex;flex-direction:column}
-.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px 0}
+.pass{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0}
 .sticker{
   font-family:var(--fun);font-size:1.2rem;background:var(--paper);color:var(--ink);padding:5px 16px 3px;border-radius:10px;
-  border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg);margin-bottom:14px;animation:wobble 1.8s ease-in-out infinite;
+  border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg);margin-bottom:6px;animation:wobble 1.8s ease-in-out infinite;
 }
 @keyframes wobble{50%{transform:rotate(4deg) scale(1.06)}}
 .pass .to{color:var(--muted);font-weight:700}
 .pass .who{
-  font-family:var(--display);font-size:clamp(2.8rem,14vw,3.8rem);line-height:1.1;margin:4px 0 8px;word-break:break-word;
+  font-family:var(--display);font-size:clamp(2.8rem,14vw,3.8rem);line-height:1.1;margin:0 0 2px;word-break:break-word;
   color:var(--ember);text-shadow:4px 4px 0 var(--ink);animation:smokeIn .8s var(--bounce);
 }
 @keyframes smokeIn{from{opacity:0;filter:blur(12px);transform:scale(.8)}to{opacity:1;filter:none;transform:none}}
-.pass p{color:var(--muted);max-width:290px;margin-bottom:22px}
+.pass p{color:var(--muted);max-width:290px;margin-bottom:10px;line-height:1.35}
 .pass .btn{width:100%;max-width:340px}
 
 /* ========== קלף ========== */
-.card-wrap{perspective:1200px;flex:1;display:flex;min-height:250px;margin-bottom:14px}
+.card-wrap{perspective:1200px;flex:1;display:flex;min-height:220px;margin-bottom:8px}
 .card{position:relative;flex:1;transform-style:preserve-3d;transition:transform .75s var(--bounce)}
 .card.flipped{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px 20px;display:flex;flex-direction:column;overflow:hidden;border:var(--b);box-shadow:6px 6px 0 var(--ink)}
@@ -348,7 +333,7 @@ svg{display:block}
 .actions .btn-line{flex:1}
 
 /* ========== סיום ========== */
-.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:18px 0 22px;height:200px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:4px 0 10px;height:190px}
 .pod{flex:1;max-width:110px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp .7s var(--bounce) both}
 .pod .pn{font-weight:800;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pod .bar{width:100%;border-radius:14px 14px 4px 4px;background:var(--surface);border:var(--b);box-shadow:var(--sh);display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-family:var(--fun);font-size:1.6rem}
@@ -357,13 +342,13 @@ svg{display:block}
 .pod.p3 .bar{height:70px}
 .pod.p1{order:2;animation-delay:.25s}.pod.p2{order:1;animation-delay:.1s}.pod.p3{order:3}
 .crown{width:34px;height:34px;color:var(--ember);filter:drop-shadow(2px 2px 0 var(--ink));animation:wobble 2s ease-in-out infinite}
-.board{list-style:none;display:flex;flex-direction:column;gap:10px}
-.board li{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:var(--surface);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.board{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.board li{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:12px;background:var(--surface);border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
 .board .rk{font-family:var(--fun);width:24px;color:var(--ember)}
 .board .bn{flex:1;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .board .bt{display:block;font-weight:600;font-size:.82rem;color:var(--muted)}
 .board .sc{font-family:var(--fun);font-size:1.2rem}
-.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 4px}
 .facts>div{text-align:center;font-size:.85rem;font-weight:700;color:var(--muted);border:2.5px dashed var(--line);border-radius:14px;padding:8px}
 .facts b{display:block;color:var(--text);font-family:var(--fun);font-size:1.5rem;font-weight:400}
 
@@ -443,8 +428,10 @@ svg{display:block}
         <input class="input" id="name-input" maxlength="14" autocomplete="off" placeholder="שם ואנטר" enterkeyhint="done">
         <button class="btn btn-primary" type="button" id="add-btn" aria-label="הוסף שחקן"><svg><use href="#i-plus"/></svg></button>
       </div>
+      <div class="names-wrap">
       <ul class="names" id="names" aria-live="polite"></ul>
       <button type="button" class="clear-all" id="clear-all" hidden><svg><use href="#i-x"/></svg><span>מחק הכל</span></button>
+      </div>
       <div class="spacer"></div>
       <button class="btn btn-primary" id="to-2" disabled>המשך לקלפים <svg><use href="#i-arrow"/></svg></button>
       <p class="hint" id="hint-1">צריך לפחות 2 שחקנים</p>
@@ -490,6 +477,7 @@ svg{display:block}
         </div>
         <p>רק כשהטלפון והג'וינט אצלך ביד – לוחצים. בלי להציץ.</p>
         <button class="btn btn-primary" id="ready-btn">אצלי. תביאו קלף</button>
+        <button class="btn btn-line end-joint" id="joint-out">נגמר הג'וינט · סיימנו לשחק</button>
       </div>
 
       <!-- מצב ב: קלף -->
@@ -665,7 +653,7 @@ const shuffleArr = a => { for(let i=a.length-1;i>0;i--){const j=Math.random()*(i
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const vibrate = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
 function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),2000); }
-function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id)); scrollTo({top:0}); }
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id)); scrollTo({top:0}); document.body.scrollTop=0; }
 function save(){ try{ localStorage.setItem("sevev-players",JSON.stringify(state.players.map(p=>p.name))); }catch(e){} }
 function load(){ try{ const n=JSON.parse(localStorage.getItem("sevev-players")||"[]"); if(Array.isArray(n)) state.players=n.slice(0,12).map(x=>({name:String(x)})); }catch(e){} }
 
@@ -849,14 +837,11 @@ function renderTable(el,{current=-1,next=-1,pointer=false}={}){
   let html='<div class="rug"><i class="fr l"></i><i class="fr r"></i></div><div class="rail"></div><div class="felt"></div>'+DECO;
   if(!n){ el.innerHTML=html; return; }
   list.forEach((p,i)=>{
-    const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=pointer?44:46, RT=pointer?57:64;
+    const deg=seatAngle(i), a=deg*Math.PI/180, c=Math.cos(a), sn=Math.sin(a), R=46, RT=64;
     const cls=i===current?" now":i===next?" next":"";
     html+=`<div class="seat${cls}" style="--rot:${deg-90}deg;left:${50+R*c}%;top:${50+R*sn}%"><div class="fig">${avatarSVG(p.name)}</div></div>`;
     html+=`<span class="tag${i===current?" now":""}" style="left:${50+RT*c}%;top:${50+RT*sn}%">${esc(p.name)}</span>`;
   });
-  if(pointer) html+=`<button type="button" class="ash-btn" id="joint-out" aria-label="נגמר הג'וינט – סיום המשחק">
-      <span class="ash">${ASHTRAY}</span><span class="lbl">נגמר הג'וינט</span>
-    </button>`;
   if(pointer) html+=`<div class="pointer" id="pointer" style="transform:rotate(${state.angle}deg)">${JOINT}</div>`;
   el.innerHTML=html;
 }
@@ -876,17 +861,32 @@ setInterval(()=>{
   if(Math.random()<.07) fx.ringAt(tx,ty-8);   // טבעת עשן קטנה, מדי פעם
 },260);
 
+/* זוכרים איפה השולחן יושב במסך הפתיחה, כדי לשים אותו בדיוק שם גם במסך המשחק */
+function docTop(el){ let y=0; while(el){ y+=el.offsetTop; el=el.offsetParent; } return y; }
+function rememberTableTop(){
+  const t=$("#setup-table"); if(!t || !t.offsetParent) return;
+  state.tableTop=docTop(t);
+}
+function placeGameTable(){
+  const g=$("#game-table"); if(state.tableTop==null) return;
+  g.style.marginTop="0px";
+  const diff=state.tableTop-docTop(g);
+  g.style.marginTop=Math.max(0,diff)+"px";
+}
+addEventListener("resize",()=>{ rememberTableTop(); if($("#game").classList.contains("active")) placeGameTable(); });
+
 /* ========== אשף ההגדרות ========== */
 function goStep(n){
   document.querySelectorAll(".step").forEach(s=>s.classList.toggle("active",+s.dataset.step===n));
   document.querySelectorAll(".steps span").forEach((s,i)=>s.classList.toggle("on",i<n));
+  if(n===1) requestAnimationFrame(rememberTableTop);
   scrollTo({top:0});
 }
 function renderNames(){
   $("#names").innerHTML=state.players.map((p,i)=>`
     <li><span class="n">${i+1}</span><span class="nm">${esc(p.name)}</span>
     <button type="button" data-i="${i}" aria-label="הסר את ${esc(p.name)}"><svg><use href="#i-x"/></svg></button></li>`).join("");
-  state.order=[]; renderTable($("#setup-table"));
+  state.order=[]; renderTable($("#setup-table")); rememberTableTop();
   const ok=state.players.length>=2;
   $("#clear-all").hidden=state.players.length<2; resetClear();
   $("#to-2").disabled=!ok;
@@ -939,7 +939,7 @@ function startGame(){
   state.players.forEach(p=>Object.assign(p,{score:0,done:0,pass:0}));
   state.order=state.shuffle?shuffleArr([...state.players.keys()]):[...state.players.keys()];
   spreadSeats=true; Object.assign(state,{idx:0,round:1,rules:[],stats:{cards:0,done:0,pass:0},angle:seatAngle(state.order[0])});
-  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); toPass();
+  buildDeck(); renderTable($("#game-table"),{pointer:true}); show("game"); placeGameTable(); toPass();
 }
 function refreshTable(){
   const cur=state.order[state.idx], nxt=state.order[(state.idx+1)%state.order.length];
@@ -1031,11 +1031,11 @@ $("#done-btn").addEventListener("click",()=>resolve(true));
 $("#skip-btn").addEventListener("click",()=>resolve(false));
 /* נגמר הג'וינט: לחיצה ראשונה מבקשת אישור, שנייה מסיימת ומציגה את התוצאות */
 let outTimer=null;
-function resetOut(){ clearTimeout(outTimer); const b=$("#joint-out"); if(!b) return; b.classList.remove("sure"); b.querySelector(".lbl").textContent="נגמר הג'וינט"; }
-$("#game-table").addEventListener("click",e=>{
-  const b=e.target.closest("#joint-out"); if(!b) return;
-  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.querySelector(".lbl").textContent="בטוח? לחצו שוב"; outTimer=setTimeout(resetOut,3000); return; }
-  fx.puff(b,14); resetOut(); endGame();
+function resetOut(){ clearTimeout(outTimer); const b=$("#joint-out"); b.classList.remove("sure"); b.textContent="נגמר הג'וינט · סיימנו לשחק"; }
+$("#joint-out").addEventListener("click",()=>{
+  const b=$("#joint-out");
+  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.textContent="בטוח? לחצו שוב לסיום"; outTimer=setTimeout(resetOut,3000); return; }
+  resetOut(); endGame();
 });
 $("#again-btn").addEventListener("click",startGame);
 $("#setup-btn").addEventListener("click",()=>{ renderNames(); goStep(1); show("setup"); });
