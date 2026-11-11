@@ -56,6 +56,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
+html{overflow-x:hidden}
+.app{overflow-x:clip}
 body{
   font-family:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;font-size:17px;line-height:1.5;
   color:var(--text);min-height:100dvh;overflow-x:hidden;
@@ -237,19 +239,19 @@ svg{display:block}
 .rounds button[aria-pressed="true"]{background:var(--ember);color:var(--ink);transform:rotate(-4deg) translateY(-3px)}
 /* פתק בכתב יד בצד השולחן: "המשחק נגמר כשנגמר הג'וינט" */
 .side-note{
-  position:absolute;z-index:5;left:112%;top:116%;width:44%;transform:translate(-50%,-50%) rotate(7deg);
+  position:absolute;z-index:2;left:72%;top:132%;width:64%;transform:translate(-50%,-50%) rotate(-4deg);
   background:#fff3a8;color:var(--ink);padding:9px 8px 7px;border:2px solid var(--ink);border-radius:3px;box-shadow:3px 3px 0 var(--ink);
-  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.05rem;line-height:1.05;text-align:center;
+  font-family:"Amatic SC","Secular One",sans-serif;font-weight:700;font-size:1.45rem;line-height:1;text-align:center;padding:11px 10px 8px;
   animation:noteSway 4s ease-in-out infinite;transform-origin:50% 0;pointer-events:none;
 }
 .side-note::before{ /* סלוטייפ */
   content:"";position:absolute;top:-9px;left:50%;width:38px;height:15px;margin-left:-19px;transform:rotate(-4deg);
   background:rgba(246,241,231,.75);border:1.5px solid rgba(22,16,31,.35);
 }
-@keyframes noteSway{50%{transform:translate(-50%,-50%) rotate(4deg)}}
+@keyframes noteSway{50%{transform:translate(-50%,-50%) rotate(-1.5deg)}}
 /* כפתור "נגמר הג'וינט": מאפרה שמכבים בה את הג'וינט */
 .ash-btn{
-  position:absolute;z-index:5;left:-14%;top:104%;width:34%;transform:translate(-50%,-50%);
+  position:absolute;z-index:5;left:34%;top:64%;width:22%;transform:translate(-50%,-50%);
   display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
 }
 .ash-btn .ash{width:100%;aspect-ratio:1;transition:transform .15s var(--bounce)}
@@ -257,7 +259,7 @@ svg{display:block}
 .ash-btn:hover .ash{transform:rotate(-8deg) scale(1.05)}
 .ash-btn:active .ash{transform:scale(.92)}
 .ash-btn .lbl{
-  font-weight:800;font-size:.72rem;line-height:1.1;white-space:nowrap;padding:3px 8px;border-radius:7px;
+  font-weight:800;font-size:.66rem;line-height:1.1;white-space:nowrap;padding:2px 7px;border-radius:7px;
   background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);transform:rotate(-3deg);
   transition:background .2s;
 }
@@ -276,7 +278,7 @@ svg{display:block}
 .icon-sq{width:46px;height:46px;border-radius:14px;background:var(--surface);border:var(--b);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .12s}
 .icon-sq:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .icon-sq svg{width:20px;height:20px}
-.game .table{width:min(52vw,200px);margin:48px auto 48px}
+.game .table{width:min(60vw,240px);margin:32px auto 108px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
   font-size:.86rem;font-weight:700;background:#fff3a8;color:var(--ink);padding:7px 10px;border:2px solid var(--ink);
