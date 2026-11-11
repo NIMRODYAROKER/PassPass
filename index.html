@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="build" content="20261111152503">
 <meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
@@ -1100,6 +1101,19 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape") closeSheet();
   if(e.key===" " && $("#turn").style.display==="flex" && !$("#card").classList.contains("flipped")){ e.preventDefault(); flipCard(); }
 });
+
+/* בדיקת עדכון: אם באתר יש גרסה חדשה יותר מזו שנפתחה מהזיכרון של הטלפון – טוענים מחדש פעם אחת */
+(async function checkUpdate(){
+  try{
+    const mine=document.querySelector('meta[name="build"]')?.content;
+    const res=await fetch(location.pathname+"?check="+Date.now(),{cache:"no-store"});
+    const latest=(await res.text()).match(/<meta name="build" content="([^"]+)"/)?.[1];
+    if(mine && latest && latest!==mine && sessionStorage.getItem("reloadedFor")!==latest){
+      sessionStorage.setItem("reloadedFor",latest);
+      location.replace(location.pathname+"?v="+latest);
+    }
+  }catch(e){}
+})();
 
 /* ========== אתחול ========== */
 load(); renderNames(); renderPacks();
