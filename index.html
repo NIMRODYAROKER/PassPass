@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261112043009">
+<meta name="build" content="20261112043653">
 <meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
@@ -230,8 +230,8 @@ svg{display:block}
 #packs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 #packs .opt{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:14px 6px 10px;text-align:center}
 #packs .opt .tx{display:flex;flex-direction:column;align-items:center}
-#packs .opt .ic{width:40px;height:40px;border-radius:11px}
-#packs .opt .ic svg{width:22px;height:22px}
+#packs .opt .ic,#packs .opt[aria-pressed="true"] .ic{width:40px;height:40px;background:none;border:0;box-shadow:none}
+#packs .opt .ic svg{width:32px;height:32px}
 #packs .opt .tx b{font-size:1rem;line-height:1.15}
 #packs .opt .tx small{display:block;font-size:.76rem;line-height:1.2}
 #packs .opt .cnt{display:block;margin:0;font-size:.7rem}
