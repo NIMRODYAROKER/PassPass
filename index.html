@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261112022700">
+<meta name="build" content="20261112043009">
 <meta name="theme-color" content="#2a1f18">
 <link rel="icon" type="image/png" sizes="192x192" href="leaf-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="leaf-180.png">
@@ -227,17 +227,17 @@ svg{display:block}
 .opt .cnt{font-size:.75rem;font-weight:700;opacity:.7;margin-right:6px}
 .opt[aria-pressed="true"]{background:var(--ember);color:var(--ink)}
 /* החבילות ברשת של שני טורים, כדי שהכול ייכנס במסך */
-#packs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-#packs .opt{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;padding:8px 8px 8px 30px;text-align:right}
-#packs .opt:last-child:nth-child(odd){grid-column:1 / -1}
-#packs .opt .ic{width:32px;height:32px;border-radius:9px}
-#packs .opt .ic svg{width:18px;height:18px}
+#packs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#packs .opt{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:14px 6px 10px;text-align:center}
+#packs .opt .tx{display:flex;flex-direction:column;align-items:center}
+#packs .opt .ic{width:40px;height:40px;border-radius:11px}
+#packs .opt .ic svg{width:22px;height:22px}
 #packs .opt .tx b{font-size:1rem;line-height:1.15}
 #packs .opt .tx small{display:block;font-size:.76rem;line-height:1.2}
 #packs .opt .cnt{display:block;margin:0;font-size:.7rem}
 #packs .opt .sw{display:none}
 #packs .opt{position:relative}
-#packs .opt::after{content:"";position:absolute;top:50%;margin-top:-9px;left:8px;width:18px;height:18px;border-radius:6px;border:2.5px solid var(--ink);background:var(--bg)}
+#packs .opt::after{content:"";position:absolute;top:7px;left:7px;width:18px;height:18px;border-radius:6px;border:2.5px solid var(--ink);background:var(--bg)}
 #packs .opt[aria-pressed="true"]::after{background:var(--ink);box-shadow:inset 0 0 0 3px var(--ember)}
 .opt[aria-pressed="true"] .tx small{color:#2c3b1e}
 .opt[aria-pressed="true"] .ic{background:var(--paper);color:var(--ink)}
@@ -287,6 +287,8 @@ svg{display:block}
 .game .table{margin:44px auto 44px;flex:none}
 #end .mid-gap{flex:.5 1 0;min-height:0;max-height:44px}
 #end .pad-top{flex:.6 1 0;min-height:0;max-height:70px}
+/* בשלב 2 התוכן קצר: חלק מהמקום הפנוי עובר למעלה, כדי שהכול יירד קצת ויתקרב לכפתורים */
+.step-push{flex:3 1 0;min-height:0;max-height:220px}
 #setup .pad-top{flex:.6 1 0;min-height:0;max-height:64px}
 .rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .rule{
@@ -519,6 +521,7 @@ svg{display:block}
 
     <!-- שלב 2: חבילות והתחלה -->
     <div class="step" data-step="2">
+      <div class="step-push"></div>
       <p class="eyebrow">שלב 2 מתוך 2</p>
       <h1 class="title">מה יוצא בקלפים?</h1>
       <p class="lead">מדליקים ומכבים. אפשר לשלב כמה שרוצים.</p>
